@@ -8,6 +8,10 @@ import Activities from '../views/Activities.vue'
 import UpdateProfile from '../views/UpdateProfile.vue'
 import MyExams from '../views/MyExams.vue'
 import Reports from '../views/Reports.vue'
+import QuizTemplate from '../views/QuizTemplate.vue'
+import QuizCode from '../views/QuizCode.vue'
+import QuizResult from '../views/QuizResult.vue'
+import QuizInstruction from '../views/QuizInstruction.vue'
 
 const routes = [
   {
@@ -15,6 +19,26 @@ const routes = [
     name: 'Home',
     component: Home,
     children: [
+      {
+        path: '/QuizTemplate',
+        name: 'QuizTemplate',
+        component: QuizTemplate
+      },
+      {
+        path: '/QuizCode',
+        name: 'QuizCode',
+        component: QuizCode
+      },
+      {
+        path: '/QuizResult',
+        name: 'QuizResult',
+        component: QuizResult
+      },
+      {
+        path: '/QuizInstruction',
+        name: 'QuizInstruction',
+        component: QuizInstruction
+      },
       {
         path: '/dashboard',
         name: 'Dashboard',
