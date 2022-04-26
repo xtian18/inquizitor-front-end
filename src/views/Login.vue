@@ -2,50 +2,56 @@
 <div class="container">
   <div class="form-container">
     <h1 class="text-center">Login</h1>
-    <form>
+    <form @submit.prevent="handleLogin">
       <div class="form-group pb-3">
         <label for="username">Username:</label>
-        <input type="text" id="username" placeholder="Enter email" v-model="username">
+        <input type="text" id="username" placeholder="Enter username" v-model="username">
       </div>
       <div class="form-group pb-3">
         <label for="password">Password:</label>
         <input type="password" id="password" placeholder="Password" v-model="password">
       </div>
       <div class="text-center pt-3">
-        <button class="btn" @click.prevent="handleLogin">Login</button>
+        <button class="btn" type="submit">Login</button>
       </div>
     </form>
+    <button @click="getUser">get user</button>
   </div>
 </div>
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      username: '',
-      password: ''
-    }
-  },
-  methods: {
-    handleLogin() {
-      const check_token =
-                fetch('http://localhost:8000/login/token', {
-					method: 'POST',
-					headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Credentials': 'true'},
-					credentials: 'include',
-          body: JSON.stringify({'username':this.username, 'password': this.password})}
-				).then(res => {
-                    console.log(res.status)
-                    console.log("logged")
+import { mapActions } from 'vuex'
 
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+  export default {
+    data() {
+      return {
+        username: '',
+        password: ''
+      }
+    },
+    methods: {
+      ...mapActions({
+        signIn: 'signIn'
+      }),
+      handleLogin() {  
+        let formData = new FormData();
+        formData.append('username', this.username)
+        formData.append('password', this.password)
+
+        this.signIn(formData)
+
+        // this.$router.push('/')
+        
+      },
+      getUser() {
+            fetch('http://localhost:8000/quizzes/')
+            .then(res => res.json())
+            .then(data => console.log(data))
+            .catch(err => console.log(err))
+      }
     }
   }
-}
 </script>
 
 <style>

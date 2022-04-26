@@ -1,13 +1,21 @@
 <template>
   <NavBar>
+    <!-- if logged in -->
     <ul class="navbar-nav">
-            <li class="nav-item">
-            <router-link :to="{name: 'LogIn'}" class="nav-link" aria-current="page">Login</router-link>
-            </li>
-            <li class="nav-item">
-            <router-link :to="{name: 'SignUp'}" class="nav-link" aria-current="page">Sign Up</router-link>
-            </li>
-        </ul>
+      <li class="nav-item">
+        <router-link :to="{name: 'LogIn'}" class="nav-link" aria-current="page">Login</router-link>
+      </li>
+      <li class="nav-item">
+        <router-link :to="{name: 'SignUp'}" class="nav-link" aria-current="page">Sign Up</router-link>
+      </li>
+    </ul>
+
+    <!-- <ul class="navbar-nav">
+      <li class="nav-item">
+        <a href="#" @click="handleLogout">Logout</a>
+      </li>
+    </ul> -->
+
   </NavBar>
   <router-view/>
 </template>
@@ -17,7 +25,19 @@ import "@/assets/main.css"
 import NavBar from '@/components/NavBar.vue'
 
 export default {
-  components: { NavBar }
+  components: { NavBar },
+  methods: {
+    handleLogout() {
+      const check_token =
+        fetch('http://localhost:8000/login/logout', {
+					method: 'POST',
+					credentials: 'include'
+          })
+          .then(res => res.json())
+          .then(data => console.log(data.msg))
+          .catch(err => console.log(err))
+    }
+  }
 }
 </script>
 

@@ -1,19 +1,11 @@
 <template>
   <div class="sidebar">
-    <div class="text-center">
-      <img src="@/assets/profile.jpg" alt="Profile Image">
-      <h5>Jaehyun</h5>
-    </div>
-    
     <div>
       <ul>
         <li>   
           <router-link :to="{name: 'Dashboard'}"><font-awesome-icon icon="house-chimney" />Dashboard</router-link>
         </li>
         <slot></slot>
-        <li>         
-          <router-link :to="{name: 'UpdateProfile'}"><font-awesome-icon icon="user" />Update Profile</router-link>
-        </li>
         </ul>
     </div>
   </div>
@@ -27,7 +19,7 @@ export default {
 
 <style>
 .sidebar {
-    padding-top: 100px;
+    padding-top: 50px;
     min-width: 350px;
     height: 100%;
     background-color: #3d3657;

@@ -3,11 +3,15 @@
     <h1>Activities</h1>
     <div class="exam-list">
       <div class="exam" v-for="exam in exams" :key="exam.id">
-        <div class="me-auto">
-          <h2>{{ exam.exam_name}}</h2>
-          <p>{{ exam.total_items }} Questions</p>
-        </div>
-        <p class="score my-auto">{{ exam.score }}/{{ exam.total_items }}</p>
+        <router-link :to="`/activities/${exam.id}`">
+          <div class="w-100 d-flex">
+            <div class="me-auto">
+              <h2>{{ exam.exam_name }}</h2>
+              <p>{{ exam.total_items }} Questions</p>
+            </div>
+            <p class="score my-auto ">{{ exam.score }}/{{ exam.total_items }}</p>
+          </div>
+        </router-link>
       </div>
     </div>
   </div>
@@ -19,31 +23,31 @@ export default {
     return {
       exams: [
         {
-          exam_name: 'Exam #1',
-          total_items: 30,
-          score: 25,
+          exam_name: 'Quiz #1',
+          total_items: 5,
+          score: 4,
           id: 1
         },
         {
-          exam_name: 'Exam #2',
+          exam_name: 'Quiz #2',
           total_items: 15,
           score: 12,
           id: 2
         },
         {
-          exam_name: 'Exam #3',
+          exam_name: 'Quiz #3',
           total_items: 20,
           score: 18,
           id: 3
         },
         {
-          exam_name: 'Exam #4',
+          exam_name: 'Quiz #4',
           total_items: 10,
           score: 8,
           id: 4
         },
         {
-          exam_name: 'Exam #5',
+          exam_name: 'Quiz #5',
           total_items: 30,
           score: 20,
           id: 5
@@ -79,9 +83,17 @@ export default {
 
 .exam-list .exam h2 {
   color: #f6a427 ;
+  text-decoration: none;
 }
 
 .exam-list .score {
   font-size: 2em;
+}
+a{
+  width: 100%;
+  text-decoration: none !important;
+}
+p {
+  color: black;
 }
 </style>

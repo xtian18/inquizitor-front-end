@@ -7,7 +7,11 @@ import TakeExam from '../views/TakeExam.vue'
 import Activities from '../views/Activities.vue'
 import UpdateProfile from '../views/UpdateProfile.vue'
 import MyExams from '../views/MyExams.vue'
+import CreateNew from '../views/CreateNew.vue'
+import UpdateQuiz from '../views/UpdateQuiz.vue'
 import Reports from '../views/Reports.vue'
+import QuizTemplate from '../views/QuizTemplate.vue'
+import QuizResult from '../views/QuizResult.vue'
 
 const routes = [
   {
@@ -18,12 +22,24 @@ const routes = [
       {
         path: '/dashboard',
         name: 'Dashboard',
-        component: Dashboard
+        component: Dashboard,
+        alias: '/'
       },
       {
         path: '/take-exam',
         name: 'TakeExam',
         component: TakeExam
+      },
+      {
+        path: '/take-exam/:id',
+        name: 'QuizTemplate',
+        component: QuizTemplate
+      },
+      {
+        path: '/take-exam/:id/result',
+        name: 'QuizResult',
+        component: QuizResult,
+        alias: '/activities/:id'
       },
       {
         path: '/activities',
@@ -38,7 +54,17 @@ const routes = [
       {
         path: '/my-exams',
         name: 'MyExams',
-        component: MyExams
+        component: MyExams,
+      },
+      {
+        path: '/my-exams/create-new',
+        name: 'CreateNew',
+        component: CreateNew
+      },
+      {
+        path: '/my-exams/:id',
+        name: 'UpdateQuiz',
+        component: UpdateQuiz,
       },
       {
         path: '/reports',
@@ -62,7 +88,8 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-  linkActiveClass: 'active'
+  linkActiveClass: 'active',
+  linkExactActiveClass: 'exact-active'
 })
 
 export default router

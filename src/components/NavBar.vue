@@ -24,4 +24,17 @@ export default {
     background-color: #564f6f;
 }
 
+.nav-item {
+  text-align: center;
+  width: 80px;
+}
+
+/* .navbar-nav:hover {
+    background-color: #564f6f;
+} */
+
+.nav-item a {
+  color: white;
+}
+
 </style>
