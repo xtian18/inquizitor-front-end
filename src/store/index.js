@@ -1,14 +1,16 @@
 import { createStore } from 'vuex'
-// import auth from './auth'
 
 export default createStore({
     state: {
-        msg: null,
-        user: null
+        msg: '',
+        user: ''
     },
     mutations: {
         SET_MSG(state, msg) {
             state.msg = msg
+        },
+        SET_USER(state, data) {
+            state.user = data
         }
     },
     actions: {
@@ -26,6 +28,23 @@ export default createStore({
         },
         attempt({ commit }, msg) {
             commit('SET_MSG', msg)
+
+            try {
+                fetch('http://localhost:8000/users/profile', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Credetials': 'true'
+                },
+                credentials: 'include'
+                })
+                .then(res => res.json())
+                .then(data => {
+                    commit('SET_USER', data)    
+                })
+            } catch(e) {
+                //
+            }
         }
     },
     modules: {

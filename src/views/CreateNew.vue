@@ -1,8 +1,9 @@
 <template>
   <div>
     <h1>My Quizzes > Create New</h1>
-    <button class="btn ms-2">Publish</button>
-    <button class="btn" @click="showModal = true">Add Question</button>
+    <p>new quiz id: {{ new_quiz_id }}</p>
+    <button class="btn btn-main ms-2">Publish</button>
+    <button class="btn btn-main" @click="showModal = true">Add Question</button>
 
     <div class="resultbox d-flex w-100">
       <div class="form-group me-4 quiz-name">
@@ -66,8 +67,8 @@
             </form>
           </div> 
           <div class="bottom">
-            <button class="btn ms-2">Save</button>
-            <button class="btn" @click="showModal = true">Cancel</button>
+            <button class="btn btn-main ms-2">Save</button>
+            <button class="btn btn-secondary" @click="showModal = true">Cancel</button>
           </div>
         </div>
       </div>
@@ -79,6 +80,8 @@
 export default {
   data() {
     return {
+      new_quiz_id: '',
+      quiz: [],
       showModal: false,
       new_question: '',
       new_choices: '',
@@ -97,6 +100,19 @@ export default {
     }
   },
   methods: {
+    loadQuiz() {
+      fetch("http://localhost:8000/quizzes/" + this.new_quiz_id, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Credetials": "true",
+        },
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then((data) => this.quiz = data)
+        .catch((err) => console.log(err));
+    },
     addChoice() {
       this.multiple_choice.push({ value: '' });
       console.log(this.multiple_choice)
@@ -116,6 +132,12 @@ export default {
       this.new_question = ''
     }
   },
+  created() {
+    this.new_quiz_id = this.$route.params.data
+  },
+  mounted() {
+    this.loadQuiz();
+  }
 }
 </script>
 

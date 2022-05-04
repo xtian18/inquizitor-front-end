@@ -12,10 +12,9 @@
         <input type="password" id="password" placeholder="Password" v-model="password">
       </div>
       <div class="text-center pt-3">
-        <button class="btn" type="submit">Login</button>
+        <button class="btn btn-main" type="submit">Login</button>
       </div>
     </form>
-    <button @click="getUser">get user</button>
   </div>
 </div>
 </template>
@@ -43,12 +42,6 @@ import { mapActions } from 'vuex'
 
         // this.$router.push('/')
         
-      },
-      getUser() {
-            fetch('http://localhost:8000/quizzes/')
-            .then(res => res.json())
-            .then(data => console.log(data))
-            .catch(err => console.log(err))
       }
     }
   }

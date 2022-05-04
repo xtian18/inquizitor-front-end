@@ -32,7 +32,7 @@
         </select>
       </div>
       <div class="text-center pt-2">
-        <button type="submit" class="btn">Sign Up</button>
+        <button type="submit" class="btn btn-main">Sign Up</button>
       </div>
     </form>
   </div>
