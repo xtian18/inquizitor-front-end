@@ -5,7 +5,7 @@
       <h3>Enter exam code:</h3>
       <form @submit.prevent="handleSubmit">
         <input type="text" class="mt-4 mb-3 text-center" v-model="code">
-        <button type="submit" class="btn">Enter</button>
+        <button type="submit" class="btn btn-main">Enter</button>
       </form>
     </div>
   </div>
@@ -37,16 +37,30 @@ export default {
     }
   },
   methods: {
-    handleSubmit() {
+    async handleSubmit() {
       console.log(this.code)
-      for(var i=0; i < this.quizzes.length; i++) {
-        if(this.quizzes[i].passcode === this.code) {
-          console.log("success")
-          this.$router.replace('/take-exam/' + this.quizzes[i].id);
-        } else {
-          console.log("failed")
-        }
+      try {
+        const response = await fetch("http://localhost:8000/quizzes/1", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credetials": "true",
+          },
+          credentials: "include",
+        });
+        const data = await response.json();
+        console.log(data)
+      } catch (e) {
+        console.log(e);
       }
+      // for(var i=0; i < this.quizzes.length; i++) {
+      //   if(this.quizzes[i].passcode === this.code) {
+      //     console.log("success")
+      //     this.$router.replace('/take-exam/' + this.quizzes[i].id);
+      //   } else {
+      //     console.log("failed")
+      //   }
+      // }
     }
   }
 }

@@ -14,36 +14,35 @@ export default createStore({
         }
     },
     actions: {
-        signIn({ dispatch }, credentials) {
-            let check_token =
-            fetch('http://localhost:8000/login/token', {
-            method: 'POST',
-            credentials: 'include',
-            body: credentials
-            })
-            .then(res => res.json())
-            .then(data => dispatch('attempt', data.msg))
-            .catch(err => console.log(err))
-
+        async signIn({ dispatch }, credentials) {
+            try {
+                const check_token = await fetch('http://localhost:8000/login/token', {
+                    method: 'POST',
+                    credentials: 'include',
+                    body: credentials
+                    });
+                const login = await check_token.json();
+                dispatch('attempt', login.msg);
+            } catch(e) {
+                console.log(e);
+            }
         },
-        attempt({ commit }, msg) {
+        async attempt({ commit }, msg) {
             commit('SET_MSG', msg)
 
             try {
-                fetch('http://localhost:8000/users/profile', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Credetials': 'true'
-                },
-                credentials: 'include'
-                })
-                .then(res => res.json())
-                .then(data => {
-                    commit('SET_USER', data)    
-                })
+                const response = await fetch('http://localhost:8000/users/profile', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Credetials': 'true'
+                    },
+                    credentials: 'include'
+                    });
+                    const data = await response.json();
+                    commit('SET_USER', data);
             } catch(e) {
-                //
+                console.log(e);
             }
         }
     },

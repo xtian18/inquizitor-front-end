@@ -7,8 +7,8 @@
     <button class="btn btn-main ms-2">Save</button>
     <button class="btn btn-main" @click="handleAdd">Add Question</button>
 
-    <!-- quiz information -->
     <div class="question-list">
+      <!-- quiz information -->
       <div class="resultbox d-flex">
         <div class="quiz-main me-3">
           <div class="form-group">
@@ -55,6 +55,8 @@
           </div>
         </div>
       </div>
+
+      <!-- questions -->
       <div class="question" v-for="(question, index) in this.questions" :key="question.id">
         <div class="d-flex">
           <h4>Question {{ index + 1 }}</h4>
@@ -409,18 +411,15 @@ export default {
       this.question_num = question_num;
 
       this.current_question = this.questions.filter(item => item.id == question_id)[0];
-
       this.new_question = this.current_question.content;
-      this.multiple_choice = this.current_question.choices;
+      this.multiple_choice = JSON.parse(JSON.stringify(this.current_question.choices));
+
       this.showModalUpdate = true;
 
-      for (const item of this.multiple_choice) {
-        this.temp_multiple_choice.push(item);
-      }
+      this.temp_multiple_choice = JSON.parse(JSON.stringify(this.multiple_choice));
       this.temp_selected = this.selected_choice;
 
       this.deleteChoice();
-      console.log(this.temp_multiple_choice);
     },
     async deleteQuestion() {
       try {
