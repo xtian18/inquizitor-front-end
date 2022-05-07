@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="text-center">Welcome, Jaehyun!</h1>
+    <h1 class="text-center">Welcome, {{user}}!</h1>
 
     <!-- if teacher -->
     <div class="card-wrapper d-flex" v-if="accountType === 'teacher'">
@@ -47,7 +47,12 @@ export default {
     return {
       accountType: 'teacher',
     }
-  }
+  },
+  computed: {
+    user() {
+      return this.$store.state.user.username;
+    },
+  },
 }
 </script>
 

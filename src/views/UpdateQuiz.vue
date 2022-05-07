@@ -1,28 +1,68 @@
 <template>
   <div>
-    <h1>My Quizzes > {{ this.quiz.name }}</h1>
+    <!-- header -->
+    <h1>My Quizzes > {{ this.name }}</h1>
+
+    <!-- buttons at the top -->
     <button class="btn btn-main ms-2">Save</button>
     <button class="btn btn-main" @click="handleAdd">Add Question</button>
 
+    <!-- quiz information -->
     <div class="question-list">
       <div class="resultbox d-flex">
-        <div class="form-group me-4 quiz-name">
-          <label for="username">Quiz Name:</label>
-          <input type="text" id="username" :value="this.quiz.name" />
+        <div class="quiz-main me-3">
+          <div class="form-group">
+            <label for="username">Quiz Name:</label>
+            <div class="d-flex">
+              <input type="text" id="username" v-model="quiz.name" :disabled="!isNameEnabled"/>
+              <button class="square" v-if="isNameEnabled" @click="quizNameToggle">
+                <font-awesome-icon icon="thumbs-up" />
+              </button>
+              <button class="square" v-else @click="isNameEnabled = !isNameEnabled">
+                <font-awesome-icon icon="pen-to-square" />
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="username">Quiz Description:</label>
+            <div class="d-flex">
+              <input type="text" id="username" v-model="quiz.desc" :disabled="!isDescEnabled"/>
+              <button class="square" v-if="isDescEnabled" @click="quizDescToggle">
+                <font-awesome-icon icon="thumbs-up" />
+              </button>
+              <button class="square" v-else @click="isDescEnabled = !isDescEnabled">
+                <font-awesome-icon icon="pen-to-square" />
+              </button>
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="password">Time Limit (min):</label>
-          <input type="text" id="password" value="30" />
+        <div>
+          <div class="form-group">
+            <label for="username">Due Date:</label>
+            <div class="d-flex">
+              <input type="datetime-local" id="due_date" v-model="quiz.due_date" :disabled="!isDueDateEnabled">
+              <button class="square" v-if="isDueDateEnabled" @click="quizDueDateToggle">
+                <font-awesome-icon icon="thumbs-up" />
+              </button>
+              <button class="square" v-else @click="isDueDateEnabled = !isDueDateEnabled">
+                <font-awesome-icon icon="pen-to-square" />
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="username">Quiz Code:</label>
+            <input type="text" id="username" :value="quiz.quiz_code" disabled/>
+          </div>
         </div>
       </div>
-      <div class="question w-100" v-for="(question, index) in this.questions" :key="question.id">
+      <div class="question" v-for="(question, index) in this.questions" :key="question.id">
         <div class="d-flex">
           <h4>Question {{ index + 1 }}</h4>
           <div class="exam-icon ms-auto">
-            <button class="btn-icon" @click="handleUpdate(question.choices[0].question_id, index+1)">
+            <button class="btn-icon" @click="handleUpdate(question.id, index+1)">
               <font-awesome-icon icon="pen-to-square" />
             </button>
-            <button class="btn-icon" @click="handleDelete(question.choices[0].question_id)">
+            <button class="btn-icon" @click="handleDelete(question.id)">
               <font-awesome-icon icon="trash-can" />
             </button>
           </div>
@@ -38,6 +78,7 @@
       </div>
     </div>
 
+    <!-- delete dialog box -->
     <DialogModal :showDialog="showDialog">
       <template v-slot:head>
         <h1>Delete Question</h1>
@@ -59,34 +100,32 @@
         <div class="modal-container">
           <div class="d-flex">
             <h1 class="me-auto">Question</h1>
-            <button type="button" class="btn-close" @click="showModal = !showModal"></button>
+            <button type="button" class="btn-close" @click="closeAddModal"></button>
           </div>
           <div class="modal-body">
             <form @submit.prevent="handleSubmit">
               <div class="form-group pb-2">
                 <div>
                   <label for="question" class="mt-3">Question:</label>
-                  <textarea name="question" id="question" cols="30" rows="30" v-model="new_question" :disabled="isQuestionDisabled"></textarea>
-                  <!-- <button class="ms-auto" @click="addQuestion">save question</button>
-                  <button class="ms-auto" @click="updateQuestion">update question</button> -->
+                  <textarea name="question" id="question" cols="30" rows="30" v-model="new_question" @keyup="enableSave"></textarea>
                 </div>
 
                 <!-- answers -->
                 <div>
-                  <label class="mt-3">Answer: {{ selected_choice }}</label>
+                  <label class="mt-3">Answer:</label>
                   <!-- multiple choice -->
                   <div class="w-100" v-if="question_type === 'a'">
                     <div class="w-100 d-flex" v-for="(item, index) in multiple_choice" :key="index" selected>
-                      <input type="radio" :id="index" name="choice" :value="index" v-model="selected_choice"/>
+                      <input type="radio" :id="index" name="choice" :value="index" v-model="selected_choice" @change="enableSave"/>
                       <label for="1" class="ms-2 w-100">
-                        <input type="text" v-model="item.content"/>
+                        <input type="text" v-model="item.content" @keyup="enableSave"/>
                       </label>
-                      <button class="round"  @click="removeChoice(index)" v-if="multiple_choice.length > 1">
+                      <button class="round"  @click="removeChoiceInput(index)" v-if="multiple_choice.length > 1">
                         <font-awesome-icon icon="trash-can" />
                       </button>
                     </div>
                     <div class="d-flex w-100">
-                      <button class="round mx-auto" @click="addChoice" v-if="multiple_choice.length < 4">+</button>
+                      <button class="round mx-auto" @click="addChoiceInput" v-if="multiple_choice.length < 4">+</button>
                     </div>
                   </div>
                 </div>
@@ -95,8 +134,9 @@
             </form>
           </div>
           <div class="bottom">
-            <button class="btn btn-main ms-2" @click="submitQuestion">Save</button>
-            <button class="btn btn-secondary" @click="showModal = false">Cancel</button>
+             <!-- :disabled="!isSaveEnabled" -->
+            <button class="btn btn-main ms-2" @click="submitQuestion" :disabled="!isSaveEnabled">Save</button>
+            <button class="btn btn-secondary" @click="closeAddModal">Cancel</button>
           </div>
         </div>
       </div>
@@ -108,14 +148,14 @@
         <div class="modal-container">
           <div class="d-flex">
             <h1 class="me-auto">Question {{ question_num }}</h1>
-            <button type="button" class="btn-close" @click="showModalUpdate = !showModalUpdate"></button>
+            <button type="button" class="btn-close" @click="cancelUpdate"></button>
           </div>
           <div class="modal-body">
             <form @submit.prevent="handleSubmit">
               <div class="form-group pb-2">
                 <div>
                   <label for="question" class="mt-3">Question:</label>
-                  <textarea name="question" id="question" cols="30" rows="30" v-model="new_question"></textarea>
+                  <textarea name="question" id="question" cols="30" rows="30" v-model="new_question" @keyup="enableSave"></textarea>
                 </div>
 
                 <!-- answers -->
@@ -124,17 +164,17 @@
                   <!-- multiple choice -->
                   <div class="w-100" v-if="question_type === 'a'">
                     <div class="w-100 d-flex" v-for="(item, index) in multiple_choice" :key="index" selected>
-                      <input type="radio" :id="index" name="choice" :value="index" v-model="selected_choice" :checked="item.is_correct" />
+                      <input type="radio" :id="index" name="choice" :value="index" v-model="selected_choice" :checked="item.is_correct"  @click="enableSave"/>
                       <label for="1" class="ms-2 w-100">
-                        <input type="text" v-model="item.content"/>
+                        <input type="text" v-model="item.content" @keyup="enableSave"/>
                       </label>
 
-                      <button class="round"  @click="removeChoice(index)" v-if="multiple_choice.length > 1">
+                      <button class="round"  @click="removeChoiceInput(index)" v-if="multiple_choice.length > 1">
                         <font-awesome-icon icon="trash-can" />
                       </button>
                     </div>
                     <div class="d-flex w-100">
-                      <button class="round mx-auto" @click="addChoice" v-if="multiple_choice.length < 4">+</button>
+                      <button class="round mx-auto" @click="addChoiceInput" v-if="multiple_choice.length < 4">+</button>
                     </div>
                   </div>
                 </div>
@@ -143,8 +183,9 @@
             </form>
           </div>
           <div class="bottom">
-            <button class="btn btn-main ms-2" @click="submitUpdated">Save</button>
-            <button class="btn btn-secondary" @click="showModalUpdate = false">Cancel</button>
+             <!-- :disabled="!isSaveEnabled" -->
+            <button class="btn btn-main ms-2" @click="submitUpdate">Save</button>
+            <button class="btn btn-secondary" @click="cancelUpdate">Cancel</button>
           </div>
         </div>
       </div>
@@ -160,75 +201,195 @@ export default {
   components: { DialogModal },
   data() {
     return {
+      //current quiz information
+      id: '',
       quiz: [],
       questions: [],
       questions_id: [],
+      name: '',
+      number_of_questions: '',
+
+      //selected question information
       current_question_id: '',
       current_question: '',
       question_num: '',
+
+      //question moodal information
+      question_type: 'a',
       new_question: '',
       points: '1',
       new_choice: '',
       selected_choice: '',
-      new_fill: '',
-      showModal: false,
-      showModalUpdate: false,
-      showDialog: false,
-      isQuestionDisabled: false,
-      showChoice: false,
-      question_type: 'a',
+      temp_selected: '',
       multiple_choice: [
         {
           content: '',
         }
       ],
-      fill_in_the_blank: [''],
-      id: '',
-      exam_name: '',
+      temp_multiple_choice: [
+        {
+          content: '',
+        }
+      ],
+
+      //modal and button values
+      showModal: false,
+      showModalUpdate: false,
+      showDialog: false,
+      isSaveEnabled: false,
+      isNameEnabled: false,
+      isDescEnabled: false,
+      isDueDateEnabled: false,
     };
   },
   computed: {
+    user_id() {
+      return this.$store.state.user.id;
+    },
+    // name() {
+    //   return this.quiz.name;
+    // },
+    desc() {
+      return this.quiz.desc;
+    },
+    // created_at() {
+    //   return this.quiz.created_at;
+    // },
+    due_date() {
+      return this.quiz.due_date;
+    },
+    // quiz_code() {
+    //   return this.quiz.quiz_code;
+    // },
     order() {
       return this.quiz.questions.length;
-    },
+    }
   },
   methods: {
-    test() {
-      console.log(this.multiple_choice);
-    },
-    loadQuiz() {
-      fetch("http://localhost:8000/quizzes/" + this.id, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Credetials": "true",
-        },
-        credentials: "include",
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          this.quiz = data;
-          this.quiz.questions.forEach((question) =>
-            this.questions_id.push(question.id)
-          );
-          this.loadQuestions();
-        })
-        .catch((err) => console.log(err));
-    },
-    loadQuestions() {
-      this.questions_id.forEach((id) => {
-        fetch("http://localhost:8000/quizzes/" + this.id + "/questions/" + id, {
+    async loadQuiz() {
+      this.quiz = [];
+      this.questions_id = [];
+      this.questions = [];
+
+      try {
+        const response = await fetch("http://localhost:8000/quizzes/" + this.id, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Credetials": "true",
           },
           credentials: "include",
-        })
-          .then((res) => res.json())
-          .then((data) => this.questions.push(data))
-          .catch((err) => console.log(err));
-      });
+        });
+        const loadQuiz = await response.json();
+        this.quiz = loadQuiz;
+
+        for (const question of this.quiz.questions) {
+          await this.questions_id.push(question.id)
+        }
+        this.loadQuestions();
+
+      } catch(e) {
+        console.log(e)
+      }
+    },
+    async loadQuestions() {
+      try {
+        for (const id of this.questions_id) {
+          const response = await fetch("http://localhost:8000/quizzes/" + this.id + "/questions/" + id, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Credetials": "true",
+            },
+            credentials: "include"
+          });
+          const loadQuestions = await response.json();
+          this.questions.push(loadQuestions);
+        }
+        const result = await this.updateQuiz();
+      } catch(e) {
+        console.log(e);
+      }
+    },
+    async updateQuiz() {
+      this.number_of_questions = this.order;
+
+      const formData = new FormData();
+
+      formData.append("name", this.quiz.name);
+      formData.append("desc", this.quiz.desc);
+      formData.append("number_of_questions", this.number_of_questions);
+      formData.append("created_at", this.quiz.created_at);
+      formData.append("due_date", this.quiz.due_date);
+      formData.append("quiz_code", this.quiz.quiz_code);
+      formData.append("teacher_id", this.user_id);
+
+      const data = {};
+      formData.forEach((value, key) => (data[key] = value));
+
+      try {
+        const response = await fetch("http://localhost:8000/quizzes/" + this.id, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credetials": "true",
+          },
+          credentials: "include",
+          body: JSON.stringify(data),
+        });
+        const updated = await response.json();
+      } catch(e) {
+        console.log(e);
+      }
+    },
+    quizNameToggle() {
+      this.isNameEnabled = !this.isNameEnabled;
+      this.name = this.quiz.name;
+      this.updateQuiz();
+    },
+    quizDescToggle() {
+      this.isDescEnabled = !this.isDescEnabled;
+      this.updateQuiz();
+    },
+    quizDueDateToggle() {
+      this.isDueDateEnabled = !this.isDueDateEnabled;
+      this.updateQuiz();
+    },
+    resetValues() {
+      this.isSaveEnabled = false;
+      this.new_question = '';
+      this.new_choice = '';
+      this.selected_choice = '';
+      this.temp_selected = '';
+      this.multiple_choice = [
+        {
+          content: '',
+        }
+      ];
+      this.temp_multiple_choice = [
+        {
+          content: '',
+        }
+      ]
+    },
+    closeAddModal() {
+      this.showModal = false;
+      this.resetValues();
+    },
+    async cancelUpdate() {
+      const result = await this.addChoice(this.temp_multiple_choice, this.temp_selected);
+      this.showModalUpdate = false;
+      this.resetValues();
+      const result2 = await this.loadQuiz();
+    },
+    enableSave() {
+      if(this.selected_choice === '') {
+        this.isSaveEnabled = false;
+      } else if (this.new_question && this.multiple_choice) {
+        this.isSaveEnabled = true;
+      } else {
+        this.isSaveEnabled = false;
+      }
     },
     handleAdd() {
       this.showModal = true;
@@ -241,61 +402,56 @@ export default {
       this.showDialog = true;
       this.current_question_id = question_id;
     },
-    async handleUpdate(question_id, question_num) {
+    handleUpdate(question_id, question_num) {
+      this.temp_multiple_choice = [];
+      this.temp_selected = '',
       this.current_question_id = question_id;
       this.question_num = question_num;
 
-      await fetch("http://localhost:8000/quizzes/" + this.id + "/questions/" + question_id, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Credetials": "true",
-        },
-        credentials: "include",
-      })
-        .then((res) => res.json())
-        .then((data) => this.current_question = data)
-        .catch((err) => console.log(err));
+      this.current_question = this.questions.filter(item => item.id == question_id)[0];
 
       this.new_question = this.current_question.content;
       this.multiple_choice = this.current_question.choices;
       this.showModalUpdate = true;
+
+      for (const item of this.multiple_choice) {
+        this.temp_multiple_choice.push(item);
+      }
+      this.temp_selected = this.selected_choice;
+
+      this.deleteChoice();
+      console.log(this.temp_multiple_choice);
     },
-    deleteQuestion() {
-      fetch("http://localhost:8000/quizzes/" + this.id + "/questions/" + this.current_question_id, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Credetials": "true",
-        },
-        credentials: "include",
-      })
-        .then((res) => res.json())
-        .then((data) => console.log(data))
-        .catch((err) => console.log(err));
-      this.showDialog = false
-      window.location.reload()
-    },
-    resolve() {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve('resolved');
-        }, 500);
-      });
+    async deleteQuestion() {
+      try {
+        const response = await fetch("http://localhost:8000/quizzes/" + this.id + "/questions/" + this.current_question_id, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credetials": "true",
+          },
+          credentials: "include",
+        });
+        this.showDialog = false;
+        await this.loadQuiz();
+      } catch(e) {
+        console.log(e)
+      }
     },
     async submitQuestion() {
-      this.addQuestion()
-      const result = await this.resolve(); //to wait to finish adding questions
-      this.postChoice();
-      this.showModal = false;
-      // window.location.reload()
+      const result = await this.addQuestion();
+      const result2 = await this.addChoice(this.multiple_choice, this.selected_choice);
+      this.closeAddModal();
+      this.loadQuiz();
     },
-    submitUpdated() {
-      this.updateQuestion();
-      this.updateChoice();
+    async submitUpdate() {
+      const result = await this.updateQuestion();
+      const result2 = await this.addChoice(this.multiple_choice, this.selected_choice);
       this.showModalUpdate = false;
+      this.resetValues();
+      this.loadQuiz();
     },
-    addQuestion() {
+    async addQuestion() {
       const formData = new FormData();
 
       formData.append("content", this.new_question);
@@ -306,69 +462,8 @@ export default {
       const data = {};
       formData.forEach((value, key) => (data[key] = value));
 
-      fetch("http://localhost:8000/quizzes/" + this.id + "/questions/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Credetials": "true",
-        },
-        credentials: "include",
-        body: JSON.stringify(data),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          this.showChoice = true;
-          this.current_question_id = data.id;
-          console.log(this.current_question_id);
-          this.isQuestionDisabled = true;
-        })
-        .catch((err) => console.log(err));
-    },
-    updateQuestion() {
-      const formData = new FormData();
-
-      formData.append("content", this.new_question);
-      formData.append("points", this.points);
-      formData.append("order", this.order);
-      formData.append("quiz_id", this.id);
-
-      const data = {};
-      formData.forEach((value, key) => (data[key] = value));
-
-      console.log(data)
-      fetch("http://localhost:8000/quizzes/" + this.id + "/questions/" + this.current_question_id, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Credetials": "true",
-        },
-        credentials: "include",
-        body: JSON.stringify(data),
-      })
-        .then((res) => res.json())
-        .then((data) => this.isQuestionDisabled = true)
-        .catch((err) => console.log(err));
-    },
-    postChoice() {
-      this.multiple_choice.forEach((choice, index) => {
-        if(index == this.selected_choice) {
-          choice.is_correct = true;
-        } else {
-          choice.is_correct = false;
-        }       
-      })
-      
-      this.multiple_choice.forEach(choice => {   
-        const formData = new FormData();
-
-        formData.append("content", choice.content)
-        formData.append("is_correct", choice.is_correct)
-        formData.append("question_id", this.current_question_id)
-
-        const data = {};
-        formData.forEach((value, key) => (data[key] = value));
-
-        fetch("http://localhost:8000/quizzes/" + this.id + "/questions/" + this.current_question_id, {
+      try{
+        const response = await fetch("http://localhost:8000/quizzes/" + this.id + "/questions/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -376,37 +471,26 @@ export default {
           },
           credentials: "include",
           body: JSON.stringify(data),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(data)
-          })
-          .catch((err) => console.log(err));
-      })
+        });
+        const addQuestion = await response.json();
+        this.current_question_id = addQuestion.id;
+      } catch(e) {
+        console.log(e)
+      }
     },
-    addChoice() {
-      this.multiple_choice.push({ value: "" });
-    },
-    updateChoice() {
-      this.multiple_choice.forEach((choice, index) => {
-        if(index == this.selected_choice) {
-          choice.is_correct = true;
-        } else {
-          choice.is_correct = false;
-        }       
-      })
-      
-      this.multiple_choice.forEach(choice => {   
-        const formData = new FormData();
+    async updateQuestion() {
+      const formData = new FormData();
 
-        formData.append("content", choice.content)
-        formData.append("is_correct", choice.is_correct)
-        formData.append("question_id", this.current_question_id)
+      formData.append("content", this.new_question);
+      formData.append("points", this.points);
+      formData.append("order", this.order);
+      formData.append("quiz_id", this.id);
 
-        const data = {};
-        formData.forEach((value, key) => (data[key] = value));
+      const data = {};
+      formData.forEach((value, key) => (data[key] = value));
 
-        fetch("http://localhost:8000/quizzes/" + this.id + "/questions/" + this.current_question_id + "/choices/" + choice.id, {
+      try {
+        const response = await fetch("http://localhost:8000/quizzes/" + this.id + "/questions/" + this.current_question_id, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -414,32 +498,79 @@ export default {
           },
           credentials: "include",
           body: JSON.stringify(data),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(data)
-          })
-          .catch((err) => console.log(err));
-      })
+        });
+      } catch(e) {
+        console.log(e);
+      }
     },
-    deleteChoice() {
+    async addChoice(choices,answer) {
+      try {
+        for (let index=0; index<choices.length; index++) {
+          if(index == answer) {
+            choices.is_correct = true;
+          } else {
+            choices.is_correct = false;
+          }   
+        
+        const formData = new FormData();
+       
+        formData.append("content", choices[index].content)
+        formData.append("is_correct", choices.is_correct)
+        formData.append("question_id", this.current_question_id)
 
+        const data = {};
+        formData.forEach((value, key) => (data[key] = value));
+
+
+        const response = await fetch("http://localhost:8000/quizzes/" + this.id + "/questions/" + this.current_question_id, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credetials": "true",
+          },
+          credentials: "include",
+          body: JSON.stringify(data),
+        });
+        }
+      } catch(e) {
+        console.log(e);
+      }
     },
-    removeChoice(index) {
+    addChoiceInput() {
+      this.multiple_choice.push({ value: "" });
+    },
+    async deleteChoice() {
+      try {
+        console.log()
+        const choice_array = this.questions[this.question_num-1].choices;
+
+        for (const choice of choice_array) {
+        const response = await fetch("http://localhost:8000/quizzes/" + this.id + "/questions/" + this.current_question_id + "/choices/" + choice.id, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credetials": "true",
+          },
+          credentials: "include"
+        });
+        }
+      } catch(e) {
+        console.log(e);
+      }
+    },
+    removeChoiceInput(index) {
       this.multiple_choice.splice(index, 1);
+      console.log(this.multiple_choice);
+      console.log(this.temp_multiple_choice);
     },
     addAnswer() {
       this.fill_in_the_blank.push("");
-    },
-    resetModal() {
-      this.question_type = "a";
-      this.fill_in_the_blank = [];
-      this.new_question = "";
-    },
+    }
   },
-  created() {
+  async created() {
     this.id = this.$route.params.id;
-    this.loadQuiz();
+    const result = await this.loadQuiz();
+    this.name = this.quiz.name;
   },
 };
 </script>
@@ -458,7 +589,7 @@ export default {
   font-weight: 700;
   text-align: center;
 }
-.quiz-name {
+.quiz-main {
   width: 70%;
 }
 .btn-main {
@@ -571,6 +702,16 @@ input[type="radio"]:checked:after {
   width: 32px;
   height: 32px;
   border-radius: 50%;
+  border: none;
+  text-align: center;
+}
+.square {
+  margin-left: 3px;
+  background-color: #3d3657;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
   border: none;
   text-align: center;
 }

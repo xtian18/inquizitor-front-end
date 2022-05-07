@@ -1,23 +1,21 @@
 <template>
-  <NavBar>
-    <!-- if logged in -->
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <router-link :to="{name: 'LogIn'}" class="nav-link" aria-current="page">Login</router-link>
-      </li>
-      <li class="nav-item">
-        <router-link :to="{name: 'SignUp'}" class="nav-link" aria-current="page">Sign Up</router-link>
-      </li>
-    </ul>
-
-    <!-- <ul class="navbar-nav">
-      <li class="nav-item">
-        <a href="#" @click="handleLogout">Logout</a>
-      </li>
-    </ul> -->
-
-  </NavBar>
-  <router-view/>
+    <NavBar>
+      <!-- if logged in -->
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <router-link :to="{name: 'LogIn'}" class="nav-link" aria-current="page">Login</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link :to="{name: 'SignUp'}" class="nav-link" aria-current="page">Sign Up</router-link>
+        </li>
+      </ul>
+      <!-- <ul class="navbar-nav">
+        <li class="nav-item">
+          <a href="#" @click="handleLogout">Logout</a>
+        </li>
+      </ul> -->
+    </NavBar>
+    <router-view/>
 </template>
 
 <script>
@@ -36,7 +34,26 @@ export default {
           .then(res => res.json())
           .then(data => console.log(data.msg))
           .catch(err => console.log(err))
+    },
+    async getUser() {
+      try {
+        const response = await fetch('http://localhost:8000/users/profile', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Credetials': 'true'
+          },
+          credentials: 'include'
+          });
+          const current_user = await response.json();
+          this.$store.commit('SET_USER', current_user);
+      } catch(e) {
+        console.log(e);
+      }
     }
+  },
+  created() {
+    this.getUser();
   }
 }
 </script>

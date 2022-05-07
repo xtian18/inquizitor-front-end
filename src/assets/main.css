@@ -41,6 +41,7 @@ body {
 input[type=text],
 input[type=password],
 input[type=email],
+input[type=datetime-local],
 select {
     width: 100%;
     height: 50px;
