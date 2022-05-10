@@ -17,7 +17,7 @@
               <td>{{ report.examName }}</td>
               <td>{{ report.code }}</td>
               <td>{{ report.numOfParticipant }}</td>
-              <td><button class="btn" @click="showModal = true">View</button></td>
+              <td><button class="btn btn-main" @click="showModal = true">View</button></td>
             </tr>
           </tbody>
         </table>
@@ -32,159 +32,42 @@
             <h1 class="me-auto">Quiz #1</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="showModal = !showModal"></button>
           </div>
-          <div class="student-list">
-            <div class="student-report" style="cursor: pointer;" @click="isFolding(-1)">
-              <!-- visible content -->
-              <div class="d-flex w-100">
-                <div class="me-auto">
-                  <h3>Nico</h3>
-                  <p>Score: 21/30</p>
-                </div>
-              </div>
-              <!-- hidden content -->
-              <div class="d-flex w-100" v-if="-1 == isOpenIndex">
-                <div class="me-3 text-center" width="50%">
-                  <p class="percentage mx-2">12%</p>
-                  <p class="cheating">Possibility of Cheating</p>
-                </div>
-                <div width="50%">
-                  <div class="w-100 d-flex">
-                    <div class="ms-auto me-2"><strong>Time Taken:</strong></div>
-                    <div> 26 mins</div>
-                  </div>
-                  <table class="table table-striped table-hover mouse-data">
-                    <thead>
-                       <tr>
-                        <th width="20%"></th>
-                        <th>Focus</th>
-                        <th>Blur</th>
-                        <th>Copy</th>
-                        <th>Paste</th>
-                        <th>Left Click</th>
-                        <th>Right CLick</th>
-                        <th>Double Click</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Frequency</td>
-                        <td>2</td>
-                        <td>2</td>
-                        <td>1</td>
-                        <td>0</td>
-                        <td>101</td>
-                        <td>56</td>
-                        <td>35</td>
-                      </tr>
-                      <tr>
-                        <td>Average Frequency of Non-Cheating Students</td>
-                        <td>2</td>
-                        <td>2</td>
-                        <td>3</td>
-                        <td>5</td>
-                        <td>75</td>
-                        <td>50</td>
-                        <td>85</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+
+          <div class="report-modal-container d-flex">
+            <div class="left-container">
+              <div class="me-3 text-center">
+                <p class="percentage mx-2">24</p>
+                <p class="cheating">out of <strong>30</strong> average score</p>
               </div>
             </div>
-            <div class="student-report" v-for="(student, index) in students" :key="student.id" style="cursor: pointer;" @click="isFolding(index)">
-              <!-- visible content -->
-              <div class="d-flex w-100">
-                <div class="me-auto">
-                  <h3>{{ student.full_name }}</h3>
-                  <p>Score: {{ student.score }}/{{ student.total_items }}</p>
-                </div>
-                <div v-show="is_cheating=true">
-                  <h3><strong>Cheating Detected!</strong></h3>
-                </div>
-              </div>
-              <!-- hidden content -->
-              <div class="d-flex w-100" v-if="index == isOpenIndex">
-                <div class="me-3 text-center" width="50%">
-                  <p class="percentage mx-2">{{ student.mouse_data.percentage }}</p>
-                  <p class="cheating">Possibility of Cheating</p>
-                </div>
-                <div width="50%">
-                  <div class="w-100 d-flex">
-                    <div class="ms-auto me-2"><strong>Time Taken:</strong></div>
-                    <div> 26 mins</div>
-                  </div>
-                  <table class="table table-striped table-hover mouse-data">
-                    <thead>
-                       <tr>
-                        <th width="20%"></th>
-                        <th>Focus</th>
-                        <th>Blur</th>
-                        <th>Copy</th>
-                        <th>Paste</th>
-                        <th>Left Click</th>
-                        <th>Right CLick</th>
-                        <th>Double Click</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Frequency</td>
-                        <td>{{ student.mouse_data.focus }}</td>
-                        <td>{{ student.mouse_data.blur }}</td>
-                        <td>{{ student.mouse_data.copy }}</td>
-                        <td>{{ student.mouse_data.paste }}</td>
-                        <td>{{ student.mouse_data.left_click }}</td>
-                        <td>{{ student.mouse_data.right_click }}</td>
-                        <td>{{ student.mouse_data.double_click }}</td>
-                      </tr>
-                      <tr>
-                        <td>Average Frequency of Non-Cheating Students</td>
-                        <td>{{ reports[1].average_mouse_data.focus }}</td>
-                        <td>{{ reports[1].average_mouse_data.blur }}</td>
-                        <td>{{ reports[1].average_mouse_data.copy }}</td>
-                        <td>{{ reports[1].average_mouse_data.paste }}</td>
-                        <td>{{ reports[1].average_mouse_data.left_click }}</td>
-                        <td>{{ reports[1].average_mouse_data.right_click }}</td>
-                        <td>{{ reports[1].average_mouse_data.double_click }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+
+            <div class="right-container">
+              <div class="table-wrapper">
+                <table class="table table-striped table-hover">
+                  <thead>
+                    <tr>
+                      <th>Student Name</th>
+                      <th>Score</th>
+                      <th>???</th>
+                      <th>???</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="report in reports" :key="report.id">
+                      <td>{{ report.examName }}</td>
+                      <td>{{ report.code }}</td>
+                      <td>{{ report.numOfParticipant }}</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
-          </div> 
+
+          </div>
         </div>
       </div>
     </teleport>
-
-    <!-- modal -->
-    <!-- <teleport to="#app">
-      <div>
-        <transition name="fade" appear>
-          <div class="modal-overlay" v-if="showModal" @click="showModal = false"></div>
-        </transition>
-        <transition name="slide">
-          <div class="modal-container">
-            <h1>Lorem Ipsum</h1>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex velit veniam cupiditate at maiores doloremque laboriosam neque perspiciatis quis mollitia.</p>
-            <button class="btn" v-if="showModal" @click="showModal = false">close</button>
-          </div>
-        </transition>
-      </div>
-    </teleport> -->
-      <!-- <div>
-          <div class="modal-overlay">
-            <div class="modal">
-              <h1>Exam #1 Report</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex velit veniam cupiditate at maiores doloremque laboriosam neque perspiciatis quis mollitia.</p>
-              <button class="btn">close</button>
-            </div>
-          </div>
-
-          
-      </div> -->
-    
 
   </div>
 </template>
@@ -550,8 +433,18 @@ p.cheating {
   border-radius: 10px;
   margin-top: 40px;
   padding: 20px;
+  width: auto;
   height: 72%;
   max-height: 72%;
+}
+
+.report-modal-container {
+  height: 90%;
+}
+
+.left-container {
+  height: 100%;
+  margin: 0 40px;
 }
 
 .table-wrapper {
@@ -569,7 +462,7 @@ table {
 th{
   position: sticky;
   top: 0;
-  background-color: #3d3657 !important;
+  background-color: #272A3F !important;
   color: white;
 }
 

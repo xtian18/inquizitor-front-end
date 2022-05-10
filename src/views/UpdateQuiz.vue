@@ -4,7 +4,7 @@
     <h1>My Quizzes > {{ this.name }}</h1>
 
     <!-- buttons at the top -->
-    <button class="btn btn-main ms-2">Save</button>
+    <!-- <button class="btn btn-main ms-2">Save</button> -->
     <button class="btn btn-main" @click="handleAdd">Add Question</button>
 
     <div class="question-list">
@@ -559,8 +559,6 @@ export default {
     },
     removeChoiceInput(index) {
       this.multiple_choice.splice(index, 1);
-      console.log(this.multiple_choice);
-      console.log(this.temp_multiple_choice);
     },
     addAnswer() {
       this.fill_in_the_blank.push("");
@@ -613,7 +611,7 @@ export default {
 
 .question {
   background-color: white;
-  margin-bottom: 10px;
+  margin-top: 10px;
   margin-right: 10px;
   padding: 20px 30px;
   height: auto;
@@ -685,7 +683,7 @@ input[type="radio"]:checked:after {
   top: -4px;
   left: -2px;
   position: relative;
-  background-color: #3d3657;
+  background-color: #272A3F;
   content: "";
   display: inline-block;
   visibility: visible;
@@ -696,7 +694,7 @@ input[type="radio"]:checked:after {
 }
 .round {
   margin-left: 10px;
-  background-color: #3d3657;
+  background-color: #272A3F;
   color: white;
   width: 32px;
   height: 32px;
@@ -706,7 +704,7 @@ input[type="radio"]:checked:after {
 }
 .square {
   margin-left: 3px;
-  background-color: #3d3657;
+  background-color: #272A3F;
   color: white;
   width: 40px;
   height: 40px;

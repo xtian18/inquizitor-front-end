@@ -22,7 +22,7 @@ export default {
     padding-top: 50px;
     min-width: 350px;
     height: 100%;
-    background-color: #3d3657;
+    background-color: #272A3F;
 }
 
 .sidebar img {
@@ -61,11 +61,11 @@ export default {
 }
 
 .sidebar a:hover {
-    background-color: #595078;
+    background-color: #2F324C;
     color: white;
 }
 
 .sidebar .active {
-    background-color: #595078;
+    background-color: #363A59;
 }
 </style>

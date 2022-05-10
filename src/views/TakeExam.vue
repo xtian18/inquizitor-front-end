@@ -1,8 +1,9 @@
 <template>
   <div>
-    <h1>Take Exam</h1>
+    <h1>Take Quiz</h1>
     <div class="form-container">
-      <h3>Enter exam code:</h3>
+      <h3>Enter quiz code:</h3>
+      4AqLwb
       <form @submit.prevent="handleSubmit">
         <input type="text" class="mt-4 mb-3 text-center" v-model="code">
         <button type="submit" class="btn btn-main">Enter</button>
@@ -12,7 +13,7 @@
 </template>
 
 <script>
-import QuizTemplateVue from './QuizTemplate.vue'
+
 export default {
   data() {
     return {
@@ -38,9 +39,8 @@ export default {
   },
   methods: {
     async handleSubmit() {
-      console.log(this.code)
       try {
-        const response = await fetch("http://localhost:8000/quizzes/1", {
+        const response = await fetch("http://localhost:8000/quizzes/" + this.code, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -49,18 +49,10 @@ export default {
           credentials: "include",
         });
         const data = await response.json();
-        console.log(data)
+        this.$router.push(`/take-quiz/${data.quiz_code}`);
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
-      // for(var i=0; i < this.quizzes.length; i++) {
-      //   if(this.quizzes[i].passcode === this.code) {
-      //     console.log("success")
-      //     this.$router.replace('/take-exam/' + this.quizzes[i].id);
-      //   } else {
-      //     console.log("failed")
-      //   }
-      // }
     }
   }
 }

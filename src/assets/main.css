@@ -59,14 +59,35 @@ textarea {
     border-radius: 10px !important;
 }
 
+select,textarea,input:focus {
+    border: 3px solid #b8c0cc !important;
+    box-shadow: 0 0 5px 0 #eee !important;
+    outline: none !important;
+}
+
 .btn {
     width: 200px;
     height: 50px;
     border-radius: 50px !important;
+    font-weight: 600 !important;
 }
+
+.btn:active, .btn:focus {
+    box-shadow: none !important;
+    outline: none !important;
+}
+
 .btn-main {
-    background-color: #f6a427 !important;
+    background-color: #EA526F !important;
     color: white !important;
+}
+
+.btn-main:hover {
+    background-color: #E63757 !important;
+}
+
+.btn-main:active {
+    background-color: #DA1B3E !important;
 }
 
 .modal-overlay {
@@ -87,8 +108,10 @@ textarea {
     background-color: white;
     padding: 20px;
     width: 90%;
-    height: 82%;
+    height: 650px;
+    max-height: 650px;
     border-radius: 20px;
+    /* overflow: hidden; */
 }
 
 .btn-icon {
@@ -102,4 +125,9 @@ textarea {
     top: 0;
     right: 0;
     margin: 20px;
+}
+
+.btn-close:active, .btn-close:focus {
+    box-shadow: none !important;
+    outline: none !important;
 }

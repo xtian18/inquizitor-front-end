@@ -4,7 +4,7 @@
     <!-- Side bar if account tyoe is student -->
     <SideBar v-if="accountType === 'student'">
       <li>
-        <router-link :to="{name: 'TakeExam'}" :class="{active: this.$route.path.slice(0,11) === '/take-exam/'}"><font-awesome-icon icon="file-signature" />Take Quiz</router-link>
+        <router-link :to="{name: 'TakeQuiz'}" :class="{active: this.$route.path.slice(0,11) === '/take-quiz/'}"><font-awesome-icon icon="file-signature" />Take Quiz</router-link>
       </li>
       <li>
         <router-link :to="{name: 'Activities'}" :class="{active: this.$route.path.slice(0,12) === '/activities/'}"><font-awesome-icon icon="folder-open" />Activities</router-link>
@@ -13,7 +13,7 @@
     <!-- Side bar if account tyoe is teacher -->
     <SideBar v-else>
       <li>
-        <router-link :to="{name: 'MyExams'}" :class="{active: this.$route.path.slice(0,10) === '/my-exams/'}"><font-awesome-icon icon="server" />My Quizzes</router-link>
+        <router-link :to="{name: 'MyQuizzes'}" :class="{active: this.$route.path.slice(0,12) === '/my-quizzes/'}"><font-awesome-icon icon="server" />My Quizzes</router-link>
       </li>
       <li>
         <router-link :to="{name: 'Reports'}"><font-awesome-icon icon="line-chart" />Reports</router-link>
@@ -29,7 +29,7 @@
       <div class="home-content">
         <p class="title">Welcome!</p>
         <p class="subtitle">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique distinctio esse corporis consectetur, repellat quis accusantium eveniet sapiente sint dolor!</p>
-        <button class="btn" @click="this.$router.push('/signup')">Get Started</button>
+        <button class="btn btn-main" @click="this.$router.push('/signup')">Get Started</button>
       </div>
     </div>
   </div>

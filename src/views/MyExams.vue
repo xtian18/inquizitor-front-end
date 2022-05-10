@@ -9,7 +9,7 @@
           <p>{{ quiz.number_of_questions }} Questions</p>
         </div>
         <div class="exam-icon mb-auto">
-          <router-link :to="`/my-exams/${quiz.id}`"
+          <router-link :to="`/my-quizzes/${quiz.id}`"
             ><font-awesome-icon icon="pen-to-square"
           /></router-link>
           <button class="btn-icon" @click="handleDelete(quiz.id)">
@@ -129,7 +129,7 @@ export default {
           body: JSON.stringify(data)
         });
         const newQuiz = await postQuiz.json();
-        this.$router.push(`/my-exams/${newQuiz.id}`);
+        this.$router.push(`/my-quizzes/${newQuiz.id}`);
       } catch (e) {
         console.log(e);
       }

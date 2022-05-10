@@ -4,7 +4,7 @@
 
     <!-- if teacher -->
     <div class="card-wrapper d-flex" v-if="accountType === 'teacher'">
-      <div class="card me-auto" style="width:400px" @click="this.$router.push('/my-exams')">
+      <div class="card me-auto" style="width:400px" @click="this.$router.push('/my-quizzes')">
         <img class="card-img-top" src="@/assets/card1.png" alt="Card image">
         <div class="card-body">
           <h4 class="card-title text-center">My Quizzes</h4>
@@ -21,7 +21,7 @@
     </div>
     <!-- if student -->
     <div class="card-wrapper d-flex" v-else>
-      <div class="card me-auto" style="width:400px" @click="this.$router.push('/take-exam')">
+      <div class="card me-auto" style="width:400px" @click="this.$router.push('/take-quiz')">
         <img class="card-img-top" src="@/assets/card1.png" alt="Card image">
         <div class="card-body">
           <h4 class="card-title text-center">Take Quiz</h4>

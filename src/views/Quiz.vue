@@ -1,41 +1,44 @@
 <template>
   <div class="container">
+    <!-- header -->
     <div class="titlebox">
       <h1>{{ quiz.name }}</h1>
     </div>
-    <!-- <button @click="test">test</button> -->
 
+    <!-- <button @click="test">test</button> -->
+    <!-- {{current_question}} -->
+
+    <!-- quiz -->
     <div class="quiz-container">
-      <div class="quizbox mt-3">
+      <div class="quizbox">
+
         <div class="bar">
           <div class="quiz-progress" :style="{ width: progress + '%' }"></div>
         </div>
 
         <div class="question">
-          <p>Question {{ question_num }}/{{ quiz.number_of_questions }} </p>
+          <p>Question {{ current_question.order + 1 }}/{{ quiz.number_of_questions }}</p>
           <div>
             <p>{{ current_question.content }}</p>
           </div>
         </div>
 
         <div class="answer-list">
-          <div class="answers" v-for="(choice,index) in current_question.choices" :key="choice.id">
-            <input type="radio" default="none" name="sample" :id="choice.id" :value="index" @click="isAnswered=true" v-model="user_answer"/>
-            <label :for="choice.id">{{ choice.content }}</label>
+          <div class="answers" v-for="(choice, index) in current_question.choices" :key="choice.id">
+              <input type="radio" default="none" :id="choice.id" :name="current_question_id" :value="index" v-model="user_answer" @click="answerQuestion">
+              <label :for="choice.id">{{choice.content}}</label>
           </div>
         </div>
 
       </div>
 
       <div class="bottom">
-        <input type="submit" v-if:="current_question_id == quiz.number_of_questions - 1" class="btn btn-main" @click="handleSubmit" :disabled="!isAnswered"/>
-        <button class="btn btn-main" v-if="current_question_id < quiz.number_of_questions - 1" @click="checkAnswer($event, currentIndex)" :disabled="!isAnswered">
-          Next
-        </button>
+        <button class="btn btn-main" v-if="current_question_id == quiz.number_of_questions-1">Submit</button>
+        <button class="btn btn-main" v-else :disabled="!isAnswered" @click="handleNext($event, current_question_id)">Next</button>
       </div>
       
     </div>
-
+    
   </div>
 </template>
 
@@ -43,102 +46,36 @@
 export default {
   data() {
     return {
-      progress: 0,
-      user_answer: '',
-      isAnswered: false,
-      points: 0,
-      //Quiz Data
-      code: '',
+      //quiz information
+      code: "",
       quiz: [],
       questions_id: [],
       questions: [],
-      current_question: '',
       current_question_id: 0,
-      quix: [
-        {
-          question:
-            "Which of the following attacks require a carrier file to replicate?",
-          answer: "a",
-          options: { a: "Virus", b: "Trojan", c: "Worm", d: "Adware" },
-          isAnswered: false,
-          id: 1,
-        },
-        {
-          question:
-            "What wireless protocols is designed for transmitting data over short distances?",
-          answer: ["bluetooth"],
-          options: {},
-          isAnswered: false,
-          id: 2,
-        },
-        {
-          question:
-            "What technology can collect information to make decisions, reach conclusions, and combine information in new ways?",
-          answer: "c",
-          options: {
-            a: "Virtual Reality",
-            b: "Embedded Computers",
-            c: "Artificial Intelligence",
-            d: "Robotics",
-          },
-          isAnswered: false,
-          id: 3,
-        },
-        {
-          question: "What types of activities are ideal for a robot to perform",
-          answer: "c",
-          options: {
-            a: "Creative Design Work",
-            b: "Critical Thinking",
-            c: "Repetitive Tasks",
-            d: "Group Interaction",
-          },
-          isAnswered: false,
-          id: 4,
-        },
-        {
-          question:
-            "During the encapsulation process, what occurs at the data link layer?",
-          answer: "c",
-          options: {
-            a: "No address is added.",
-            b: "The logical address is added",
-            c: "The physical address is added",
-            d: "The process port number is added.",
-          },
-          isAnswered: false,
-          id: 5,
-        },
-      ],
+      current_question: '',
+      //others
+      user_answer: '',
+      progress: 0,
+      isAnswered: false
     };
   },
   computed: {
-    question_num() {
-      return this.current_question_id + 1;
-    },
     user_id() {
       return this.$store.state.user.id;
     },
   },
   methods: {
-    // test() {
-    //   this.clearSelection('sample');
-    //   this.current_question_id++;
-    //   this.setCurrentQuestion();
-    // },
     async loadQuiz() {
       this.quiz = [];
       this.questions_id = [];
       this.questions = [];
 
       try {
-        const response = await fetch(
-          "http://localhost:8000/quizzes/" + this.code,
-          {
+        const response = await fetch("http://localhost:8000/quizzes/" + this.code,{
             method: "GET",
             headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Credetials": "true",
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Credetials": "true",
             },
             credentials: "include",
           }
@@ -157,29 +94,36 @@ export default {
     async loadQuestions() {
       try {
         for (const id of this.questions_id) {
-          const response = await fetch("http://localhost:8000/quizzes/" + this.code + "/questions/" + id, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Credetials": "true",
-            },
-            credentials: "include"
-          });
+          const response = await fetch(
+            "http://localhost:8000/quizzes/" + this.code + "/questions/" + id,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Credetials": "true",
+              },
+              credentials: "include",
+            }
+          );
           const loadQuestions = await response.json();
           this.questions.push(loadQuestions);
           this.setCurrentQuestion();
         }
-      } catch(e) {
+      } catch (e) {
         console.log(e);
       }
     },
     setCurrentQuestion() {
       this.current_question = this.questions.filter(item => item.order == this.current_question_id)[0];
     },
-    isEmpty() {
-      if (this.field != "") {
-        this.quix[this.currentIndex].isAnswered = true;
-      }
+    answerQuestion() {
+      this.isAnswered = true;
+    },
+    async handleNext(e, name) {
+      // const result = await this.updateAnswer();
+      this.progress = this.progress + 100 / this.quiz.number_of_questions;
+      this.clearSelection(name);
+      this.current_question_id++;
     },
     async updateAnswer() {
       const formData = new FormData();
@@ -202,25 +146,27 @@ export default {
             credentials: "include",
             body: JSON.stringify(data),
         });
-        const check_answer = await response.json();
-        console.log(check_answer);
+        const data = await response.json();
+        console.log(data);
       } catch(e) {
         console.log(e);
       }
     },
-    // answered(e) {
-    //   this.user_answer = e.target.value;
-    // },
-    async checkAnswer(e, name) {   
-      const result = await this.updateAnswer();
-      this.progress = this.progress + 100 / this.quiz.number_of_questions;
-      this.clearSelection(name);
-      this.current_question_id++;
-      this.setCurrentQuestion();
-    },
-    handleSubmit() {
-      console.log(this.points);
-      this.$router.replace(this.$route.path + "/result");
+    async finishQuiz() {
+      try {
+        const response = await fetch("http://localhost:8000/quizzes/1/finish", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Credetials": "true",
+            },
+            credentials: "include",
+        });
+        const data = await response.json();
+        console.log(data);
+      } catch(e) {
+        console.log(e)
+      }
     },
     clearSelection(name) {
       const radio_btn = document.querySelectorAll(
@@ -233,9 +179,9 @@ export default {
       });
     },
   },
-  async created() {
+  created() {
     this.code = this.$route.params.id;
-    const result = await this.loadQuiz();
+    this.loadQuiz();
   },
 };
 </script>
@@ -353,4 +299,4 @@ input[type="radio"] {
 input[type="radio"]:checked + label {
   background-color: #d1d7e0;
 }
-</style> 
+</style>
