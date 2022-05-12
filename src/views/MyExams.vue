@@ -48,8 +48,8 @@
                 <input type="text" id="name" placeholder="Enter quiz name" v-model="name" @keyup="enableButton"/>
               </div>
               <div class="form-group pb-3">
-                <label for="desc">Quiz Description:</label>
-                <input type="text" id="desc" placeholder="Enter quiz description" v-model="desc" @keyup="enableButton"/>
+                <label for="desc">Subject:</label>
+                <input type="text" id="desc" placeholder="Enter subject" v-model="desc" @keyup="enableButton"/>
               </div>
               <div>
                 <label for="due_date">Due Date:</label><br>

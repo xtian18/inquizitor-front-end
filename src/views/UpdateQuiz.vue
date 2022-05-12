@@ -59,7 +59,11 @@
       <!-- questions -->
       <div class="question" v-for="(question, index) in this.questions" :key="question.id">
         <div class="d-flex">
-          <h4>Question {{ index + 1 }}</h4>
+          <div class="d-flex">
+            <h4>Question {{ index + 1 }} </h4>
+            <span class="points" v-if="question.points==1">({{ question.points }} point)</span>
+            <span class="points" v-else>({{ question.points }} points)</span>
+          </div>
           <div class="exam-icon ms-auto">
             <button class="btn-icon" @click="handleUpdate(question.id, index+1)">
               <font-awesome-icon icon="pen-to-square" />
@@ -107,6 +111,13 @@
           <div class="modal-body">
             <form @submit.prevent="handleSubmit">
               <div class="form-group pb-2">
+                <!-- points -->
+                <div>
+                  <label for="question" class="mt-3">Points:</label><br>
+                  <input type="number" min="1" v-model="points" @change="enableSave"/>
+                </div>
+
+                <!-- question -->
                 <div>
                   <label for="question" class="mt-3">Question:</label>
                   <textarea name="question" id="question" cols="30" rows="30" v-model="new_question" @keyup="enableSave"></textarea>
@@ -155,6 +166,13 @@
           <div class="modal-body">
             <form @submit.prevent="handleSubmit">
               <div class="form-group pb-2">
+                <!-- points -->
+                <div>
+                  <label for="question" class="mt-3">Points:</label><br>
+                  <input type="number" min="1" v-model="points" @change="enableSave"/>
+                </div>
+
+                <!-- questions -->
                 <div>
                   <label for="question" class="mt-3">Question:</label>
                   <textarea name="question" id="question" cols="30" rows="30" v-model="new_question" @keyup="enableSave"></textarea>
@@ -309,6 +327,7 @@ export default {
           this.questions.push(loadQuestions);
         }
         const result = await this.updateQuiz();
+        console.log(this.quiz)
       } catch(e) {
         console.log(e);
       }
@@ -359,6 +378,7 @@ export default {
     },
     resetValues() {
       this.isSaveEnabled = false;
+      this.points = '1';
       this.new_question = '';
       this.new_choice = '';
       this.selected_choice = '';
@@ -387,7 +407,7 @@ export default {
     enableSave() {
       if(this.selected_choice === '') {
         this.isSaveEnabled = false;
-      } else if (this.new_question && this.multiple_choice) {
+      } else if (this.new_question && this.multiple_choice && this.points) {
         this.isSaveEnabled = true;
       } else {
         this.isSaveEnabled = false;
@@ -411,6 +431,7 @@ export default {
       this.question_num = question_num;
 
       this.current_question = this.questions.filter(item => item.id == question_id)[0];
+      this.points = this.current_question.points;
       this.new_question = this.current_question.content;
       this.multiple_choice = JSON.parse(JSON.stringify(this.current_question.choices));
 
@@ -473,6 +494,7 @@ export default {
         });
         const addQuestion = await response.json();
         this.current_question_id = addQuestion.id;
+        console.log(addQuestion)
       } catch(e) {
         console.log(e)
       }
@@ -607,6 +629,14 @@ export default {
   margin-top: 70px;
   height: 72%;
   overflow: auto;
+}
+
+.points {
+  font-size: 16px;
+  font-style: italic;
+  color: gray;
+  margin: 3px 0px 0px 3px;
+
 }
 
 .question {

@@ -1,16 +1,16 @@
 <template>
   <div>
     <h1>Activities</h1>
-    <button @click="test">test</button>
+    <!-- <button @click="test">test</button> -->
     <div class="exam-list">
-      <div class="exam" v-for="exam in exams" :key="exam.id">
-        <router-link :to="`/activities/${exam.id}`">
+      <div class="exam" v-for="quiz in quizzes" :key="quiz.id">
+        <router-link :to="`/activities/${quiz.id}`">
           <div class="w-100 d-flex">
             <div class="me-auto">
-              <h2>{{ exam.exam_name }}</h2>
-              <p>{{ exam.total_items }} Questions</p>
+              <h2>{{ quiz.name }}</h2>
+              <p>{{ quiz.number_of_questions }} Questions</p>
             </div>
-            <p class="score my-auto ">{{ exam.score }}/{{ exam.total_items }}</p>
+            <p class="score my-auto ">?/?</p>
           </div>
         </router-link>
       </div>
@@ -22,6 +22,7 @@
 export default {
   data() {
     return {
+      quizzes: [],
       exams: [
         {
           exam_name: 'Quiz #1',
@@ -59,7 +60,7 @@ export default {
   methods: {
     async test() {
       try {
-        const response = await fetch("http://localhost:8000/", {
+        const response = await fetch("http://localhost:8000/quizzes/11/scores", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -68,11 +69,32 @@ export default {
           credentials: "include",
         });
         const data = await response.json();
-        console.log(data);
+        // this.quizzes = data;
+        console.log(data)
+      } catch(e) {
+        console.log(e);
+      }
+    },
+    async loadQuizzes() {
+      try {
+        const response = await fetch("http://localhost:8000/quizzes/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credetials": "true",
+          },
+          credentials: "include",
+        });
+        const data = await response.json();
+        this.quizzes = data;
+        console.log(data)
       } catch(e) {
         console.log(e);
       }
     }
+  },
+  async created() {
+    const result = await this.loadQuizzes();
   }
 }
 </script>
@@ -101,7 +123,7 @@ export default {
 }
 
 .exam-list .exam h2 {
-  color: #EA526F ;
+  color: #3EB489 ;
   text-decoration: none;
   font-weight: 600;
 }

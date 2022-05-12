@@ -3,7 +3,7 @@
     <h1>Take Quiz</h1>
     <div class="form-container">
       <h3>Enter quiz code:</h3>
-      4AqLwb
+      <!-- 4AqLwb -->
       <form @submit.prevent="handleSubmit">
         <input type="text" class="mt-4 mb-3 text-center" v-model="code">
         <button type="submit" class="btn btn-main">Enter</button>

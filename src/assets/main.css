@@ -42,8 +42,18 @@ input[type=text],
 input[type=password],
 input[type=email],
 input[type=datetime-local],
+input[type=number],
 select {
     width: 100%;
+    height: 50px;
+    padding: 10px;
+    border: 3px solid #d1d7e0 !important;
+    border-radius: 10px !important;
+}
+
+input[type=number] {
+    width: 10%;
+    min-width: 100px;
     height: 50px;
     padding: 10px;
     border: 3px solid #d1d7e0 !important;
@@ -78,16 +88,16 @@ select,textarea,input:focus {
 }
 
 .btn-main {
-    background-color: #EA526F !important;
+    background-color: #3EB489 !important;
     color: white !important;
 }
 
 .btn-main:hover {
-    background-color: #E63757 !important;
+    background-color: #39A77F !important;
 }
 
 .btn-main:active {
-    background-color: #DA1B3E !important;
+    background-color: #349873 !important;
 }
 
 .modal-overlay {

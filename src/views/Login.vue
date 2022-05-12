@@ -9,8 +9,8 @@
       </div>
       <div class="form-group pb-3">
         <label for="password">Password:</label>
-        <input type="password" id="password" placeholder="Password" v-model="password">
-        superstudent superteacher
+        <input type="password" id="password" placeholder="Enter Password" v-model="password">
+        <!-- superstudent superteacher -->
       </div>
       <div class="text-center pt-3">
         <button class="btn btn-main" type="submit">Login</button>

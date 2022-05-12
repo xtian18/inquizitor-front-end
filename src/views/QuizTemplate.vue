@@ -1,5 +1,23 @@
 <template>
   <div class="container">
+
+    <!-- instruction modal -->
+    <teleport to="#app">
+      <div class="modal-overlay" v-if="showInstruction">
+        <div class="modal-container d-flex flex-column">
+            <div class="modal-head text-center">
+            <h1 class="me-auto">Instructions</h1>
+            </div>
+            <div class="modal-body text-center">
+            <p>Choose the best answer for each question. Once you click next, you can no longer go back to the previous questions. Good Luck!</p>
+            </div>
+            <div class="modal-foot text-center">
+                <button class="btn btn-main" @click="showInstruction=false">I understand</button>
+            </div>
+        </div>
+      </div>
+    </teleport>
+
     <div class="titlebox">
       <h1>{{ quiz.name }}</h1>
     </div>
@@ -14,14 +32,14 @@
         <div class="question">
           <p>Question {{ question_num }}/{{ quiz.number_of_questions }} </p>
           <div>
-            <p>{{ current_question.content }}</p>
+            <p class="text-wrap text-break">{{ current_question.content }}</p>
           </div>
         </div>
 
         <div class="answer-list">
           <div class="answers" v-for="(choice,index) in current_question.choices" :key="choice.id">
             <input type="radio" default="none" name="sample" :id="choice.id" :value="index" @click="isAnswered=true" v-model="user_answer"/>
-            <label :for="choice.id">{{ choice.content }}</label>
+            <label :for="choice.id" class="text-wrap text-break">{{ choice.content }}</label>
           </div>
         </div>
 
@@ -43,6 +61,7 @@
 export default {
   data() {
     return {
+      showInstruction: true,
       progress: 0,
       user_answer: '',
       isAnswered: false,
@@ -121,11 +140,6 @@ export default {
     },
   },
   methods: {
-    // test() {
-    //   this.clearSelection('sample');
-    //   this.current_question_id++;
-    //   this.setCurrentQuestion();
-    // },
     async loadQuiz() {
       this.quiz = [];
       this.questions_id = [];
@@ -193,7 +207,7 @@ export default {
       formData.forEach((value, key) => (data[key] = value));
 
       try {
-        const response = await fetch("http://localhost:8000/quizzes/" + this.quiz.id + "/questions/" + this.current_question_id + "/answer", {
+        const response = await fetch("http://localhost:8000/quizzes/" + this.quiz.id + "/questions/" + this.questions[this.current_question_id].id + "/answer", {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -208,6 +222,24 @@ export default {
         console.log(e);
       }
     },
+    async finishQuiz() {
+      try {
+        const response = await fetch("http://localhost:8000/quizzes/" + this.quiz.id + "/finish",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Credetials": "true",
+            },
+            credentials: "include",
+          }
+        );
+        const finish = await response.json();
+        console.log(finish)
+      } catch (e) {
+        console.log(e);
+      }
+    },
     // answered(e) {
     //   this.user_answer = e.target.value;
     // },
@@ -218,9 +250,10 @@ export default {
       this.current_question_id++;
       this.setCurrentQuestion();
     },
-    handleSubmit() {
-      console.log(this.points);
-      this.$router.replace(this.$route.path + "/result");
+    async handleSubmit() {
+      const result = await this.updateAnswer();
+      this.progress = this.progress + 100 / this.quiz.number_of_questions;
+      const result2 = await this.finishQuiz();
     },
     clearSelection(name) {
       const radio_btn = document.querySelectorAll(
@@ -316,7 +349,7 @@ export default {
   flex-direction: column;
   background-color: white;
   padding: 20px 30px;
-  height: 120px;
+  min-height: 120px;
   border-radius: 10px;
   transition: 0.3s;
   border: 1px solid rgba(0, 0, 0, 0.2);
@@ -332,6 +365,7 @@ export default {
   margin-top: 20px;
 }
 .answers {
+  min-height: 10px;
   padding: 3px;
   margin: 2px 0px;
 }

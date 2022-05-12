@@ -44,7 +44,7 @@ export default {
   data() {
     return {
       isLoggedIn: true, //testing
-      accountType: 'teacher' //testing
+      accountType: 'student' //testing
     }
   }
 }

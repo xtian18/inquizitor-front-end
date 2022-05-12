@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>Reports</h1>
+    <!-- <button @click="test">test</button> -->
     <div class="report-container">
       <div class="table-wrapper">
         <table class="table table-striped table-hover">
@@ -33,35 +34,50 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="showModal = !showModal"></button>
           </div>
 
+          
+
           <div class="report-modal-container d-flex">
-            <div class="left-container">
+            <!-- <div class="left-container">
               <div class="me-3 text-center">
                 <p class="percentage mx-2">24</p>
                 <p class="cheating">out of <strong>30</strong> average score</p>
               </div>
-            </div>
+            </div> -->
 
             <div class="right-container">
-              <div class="table-wrapper">
+              <div class="d-flex">
+                <div>
+                  <p><strong>Examiner:</strong> Juan dela Cruz</p>
+                  <p><strong>Subject:</strong> Science</p>
+                </div>
+                <div style="margin-left: 300px;">
+                  <p><strong>Average Score:</strong> 24/30</p>
+                  <p><strong>Date Created:</strong> 05/06/2022</p>
+                </div>
+              </div>
+
+              
+              <div class="table-wrapper2">
                 <table class="table table-striped table-hover">
                   <thead>
                     <tr>
                       <th>Student Name</th>
                       <th>Score</th>
-                      <th>???</th>
-                      <th>???</th>
+                      <th>Date Taken</th>
+                      <th>Time (mins)</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="report in reports" :key="report.id">
-                      <td>{{ report.examName }}</td>
-                      <td>{{ report.code }}</td>
-                      <td>{{ report.numOfParticipant }}</td>
-                      <td></td>
+                    <tr v-for="(student, index) in students" :key="index">
+                      <td>{{ student.full_name }}</td>
+                      <td>{{ student.score }}</td>
+                      <td>{{ student.date }}</td>
+                      <td>{{ student.time }}</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
+              <button class="btn btn-main ms-auto" style="float:right;">Export as Excel File</button>
             </div>
 
           </div>
@@ -280,97 +296,98 @@ export default {
           full_name: 'Maria',
           score: '24',
           total_items: '30',
-          is_cheating: true,
-          mouse_data: {
-            percentage: '85%',
-            focus: 25,
-            blur: 25,
-            copy: 12,
-            paste: 11,
-            left_click: 259,
-            right_click: 195,
-            double_click: 280
-          }
+          date: '05/07/2022',
+          time: '30',
         },
         {
           full_name: 'Pedro',
           score: '25',
           total_items: '30',
-          is_cheating: true,
-          mouse_data: {
-            percentage: '75%',
-            focus: 19,
-            blur: 19,
-            copy: 4,
-            paste: 3,
-            left_click: 208,
-            right_click: 168,
-            double_click: 106
-          }
+          date: '05/07/2022',
+          time: '20',
         },
         {
           full_name: 'Simon',
           score: '20',
           total_items: '30',
-          is_cheating: false,
-          mouse_data: {
-            percentage: '35%',
-            focus: 2,
-            blur: 2,
-            copy: 4,
-            paste: 1,
-            left_click: 156,
-            right_click: 89,
-            double_click: 67
-          }
+          date: '05/08/2022',
+          time: '32',
         },
         {
           full_name: 'Nena',
           score: '19',
           total_items: '30',
-          is_cheating: false,
-          mouse_data: {
-            percentage: '20%',
-            focus: 2,
-            blur: 2,
-            copy: 3,
-            paste: 3,
-            left_click: 89,
-            right_click: 56,
-            double_click: 67
-          }
+          date: '05/07/2022',
+          time: '28',
         },
         {
           full_name: 'Juan',
           score: '29',
           total_items: '30',
-          is_cheating: true,
-          mouse_data: {
-            percentage: '88%',
-            focus: 34,
-            blur: 34,
-            copy: 12,
-            paste: 11,
-            left_click: 230,
-            right_click: 200,
-            double_click: 280
-          }
+          date: '05/07/2022',
+          time: '33',
         },
         {
           full_name: 'Anna',
           score: '30',
           total_items: '30',
-          is_cheating: true,
-          mouse_data: {
-            percentage: '78%',
-            focus: 19,
-            blur: 19,
-            copy: 4,
-            paste: 6,
-            left_click: 198,
-            right_click: 123,
-            double_click: 99
-          }
+          date: '05/06/2022',
+          time: '25',
+        },
+        {
+          full_name: 'Ryan',
+          score: '28',
+          total_items: '30',
+          date: '05/06/2022',
+          time: '25',
+        },
+        {
+          full_name: 'Lyn',
+          score: '30',
+          total_items: '30',
+          date: '05/06/2022',
+          time: '25',
+        },        {
+          full_name: 'Meg',
+          score: '20',
+          total_items: '30',
+          date: '05/06/2022',
+          time: '21',
+        },
+        {
+          full_name: 'Anna',
+          score: '30',
+          total_items: '30',
+          date: '05/06/2022',
+          time: '25',
+        },
+        {
+          full_name: 'Anna',
+          score: '30',
+          total_items: '30',
+          date: '05/06/2022',
+          time: '25',
+        },
+        {
+          full_name: 'Anna',
+          score: '30',
+          total_items: '30',
+          date: '05/06/2022',
+          time: '25',
+        },
+        {
+          full_name: 'Anna',
+          score: '30',
+          total_items: '30',
+          date: '05/06/2022',
+          time: '25',
+        },
+        {
+          full_name: 'Anna',
+          score: '30',
+          total_items: '30',
+          date: '05/06/2022',
+          time: '25',
         },
       ]
     }
@@ -382,6 +399,22 @@ export default {
     }
   },
   methods: {
+    async test() {
+      try {
+        const response = await fetch("http://localhost:8000/quizzes/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credetials": "true",
+          },
+          credentials: "include",
+        });
+        const data = await response.json();
+        console.log(data);
+      } catch(e) {
+        console.log(e);
+      }
+    },
     isFolding(index) {
       this.isOpen = index
       console.log(this.isOpen)
@@ -391,6 +424,9 @@ export default {
 </script>
 
 <style>
+.modal-container {
+  width: 75% !important;
+}
 .student-list {
   height: 90%;
   overflow: auto;
@@ -450,6 +486,14 @@ p.cheating {
 .table-wrapper {
   padding-right: 5px;
   max-height: 100%;
+  overflow: auto;
+}
+
+.table-wrapper2 {
+  margin-top: 10px;
+  padding-right: 5px;
+  max-height: 78%;
+  margin-bottom: 10px;
   overflow: auto;
 }
 

@@ -1,19 +1,19 @@
 <template>
     <NavBar>
       <!-- if logged in -->
-      <ul class="navbar-nav">
+      <!-- <ul class="navbar-nav">
         <li class="nav-item">
           <router-link :to="{name: 'LogIn'}" class="nav-link" aria-current="page">Login</router-link>
         </li>
         <li class="nav-item">
           <router-link :to="{name: 'SignUp'}" class="nav-link" aria-current="page">Sign Up</router-link>
         </li>
-      </ul>
-      <!-- <ul class="navbar-nav">
+      </ul> -->
+      <ul class="navbar-nav">
         <li class="nav-item">
           <a href="#" @click="handleLogout">Logout</a>
         </li>
-      </ul> -->
+      </ul>
     </NavBar>
     <router-view/>
 </template>
@@ -70,6 +70,6 @@ export default {
   display: flex;
   flex-direction: column;
   background-color: #d1d7e0;
-  color: #2a1b3d;
+  color: #272A3F;
 }
 </style>
