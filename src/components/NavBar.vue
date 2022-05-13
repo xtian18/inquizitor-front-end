@@ -37,6 +37,10 @@ export default {
   color: white;
 }
 
+.nav-item a:hover {
+  color: #d1d7e0;
+}
+
 .logo {
   width: auto;
   height: 28px;
