@@ -22,6 +22,7 @@ export default createStore({
                     body: credentials
                     });
                 const login = await check_token.json();
+                console.log(login)
                 dispatch('attempt', login.msg);
             } catch(e) {
                 console.log(e);

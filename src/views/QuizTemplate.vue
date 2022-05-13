@@ -21,7 +21,6 @@
     <div class="titlebox">
       <h1>{{ quiz.name }}</h1>
     </div>
-    <!-- <button @click="test">test</button> -->
 
     <div class="quiz-container">
       <div class="quizbox mt-3">
@@ -189,6 +188,7 @@ export default {
       const result = await this.updateAnswer();
       this.progress = this.progress + 100 / this.quiz.number_of_questions;
       this.clearSelection(name);
+      this.user_answer = '';
       this.current_question_id++;
       this.setCurrentQuestion();
     },

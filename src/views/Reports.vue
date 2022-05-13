@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Reports</h1>
-    <!-- <button @click="test">test</button> -->
+    <button @click="test">test</button>
     <div class="report-container">
       <div class="table-wrapper">
         <table class="table table-striped table-hover">
@@ -31,7 +31,7 @@
         <div class="modal-container">
           <div class="d-flex">
             <h1 class="me-auto">Quiz #1</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="showModal = !showModal"></button>
+            <button type="button" class="btn-close" @click="showModal = !showModal"></button>
           </div>
 
           

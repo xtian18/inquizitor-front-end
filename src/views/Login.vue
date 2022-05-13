@@ -34,15 +34,50 @@ import { mapActions } from 'vuex'
       ...mapActions({
         signIn: 'signIn'
       }),
-      handleLogin() {  
+      async handleLogin() {  
         let formData = new FormData();
         formData.append('username', this.username)
         formData.append('password', this.password)
 
         this.signIn(formData)
 
+        // try {
+        //   const check_token = await fetch('http://localhost:8000/login/token', {
+        //     method: 'POST',
+        //     credentials: 'include',
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //       "Access-Control-Allow-Credetials": "true",
+        //     },
+        //     body: credentials
+        //   });
+        //   const login = await check_token.json();
+        //   console.log(login)
+        //   const user = await this.getUser();
+        //   // console.log(user)
+          
+        //   // dispatch('attempt', login.msg);
+        // } catch(e) {
+        //   console.log(e);
+        // }
         // this.$router.push('/')
         
+      },
+      async getUser() {
+        try {
+          const response = await fetch('http://localhost:8000/users/profile', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Credetials': 'true'
+            },
+            credentials: 'include'
+            });
+            const data = await response.json();
+            console.log(data)
+        } catch(e) {
+          console.log(e);
+        }
       }
     }
   }

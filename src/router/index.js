@@ -10,7 +10,6 @@ import MyExams from '../views/MyExams.vue'
 import CreateNew from '../views/CreateNew.vue'
 import UpdateQuiz from '../views/UpdateQuiz.vue'
 import Reports from '../views/Reports.vue'
-import Quiz from '../views/Quiz.vue'
 import QuizTemplate from '../views/QuizTemplate.vue'
 import QuizResult from '../views/QuizResult.vue'
 
