@@ -4,13 +4,13 @@
     <!-- <button @click="test">test</button> -->
     <div class="exam-list">
       <div class="exam" v-for="quiz in quizzes" :key="quiz.id">
-        <router-link :to="`/activities/${quiz.id}`">
+        <router-link :to="`/activities/${quiz.quiz_code}`">
           <div class="w-100 d-flex">
             <div class="me-auto">
               <h2>{{ quiz.name }}</h2>
               <p>{{ quiz.number_of_questions }} Questions</p>
             </div>
-            <p class="score my-auto ">?/?</p>
+            <p class="score my-auto ">{{ quiz.score }}/{{ quiz.total}}</p>
           </div>
         </router-link>
       </div>
@@ -22,6 +22,7 @@
 export default {
   data() {
     return {
+      total_point: 0,
       quizzes: [],
       exams: [
         {
@@ -59,21 +60,7 @@ export default {
   },
   methods: {
     async test() {
-      try {
-        const response = await fetch("http://localhost:8000/quizzes/11/scores", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Credetials": "true",
-          },
-          credentials: "include",
-        });
-        const data = await response.json();
-        // this.quizzes = data;
-        console.log(data)
-      } catch(e) {
-        console.log(e);
-      }
+      console.log(this.quizzes)
     },
     async loadQuizzes() {
       try {
@@ -87,14 +74,26 @@ export default {
         });
         const data = await response.json();
         this.quizzes = data;
-        console.log(data)
+        console.log(this.quizzes)
       } catch(e) {
         console.log(e);
       }
+    },
+    computeTotal(index) {
+      this.total_point = 0;
+      this.quizzes[index].questions.forEach(question => {
+        this.total_point += question.points;
+      });
     }
   },
   async created() {
     const result = await this.loadQuizzes();
+    let index = 0;
+    for(const quiz of this.quizzes){
+      this.computeTotal(index);
+      this.quizzes[index].total = this.total_point
+      index++;
+    }
   }
 }
 </script>

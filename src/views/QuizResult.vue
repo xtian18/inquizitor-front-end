@@ -5,24 +5,21 @@
     </div>
 
     <div class="resultbox">
-      <h3 id="results">You got 4 out of 5 for this quiz!</h3>
+      <h3 id="results">You got {{ current_quiz.score }} out of {{ current_quiz.total }} for this quiz!</h3>
     </div>
 
-    <div class="question-list" v-if="this.$route.path.slice(0, 12) === '/activities/'">
-      <div class="question" v-for="question in questions" :key="question.id">
+    <div class="question-list" v-if="is_due_date">
+      <div class="question" v-for="(question,index) in questions" :key="question.id">
         <div class="d-flex">
-          <h4>Question {{ question.id }}</h4>
+          <h4>Question {{ index + 1 }}</h4>
+          <span class="points" v-if="question.points==1">({{ question.points }} point)</span>
+          <span class="points" v-else>({{ question.points }} points)</span>
         </div>
-        <p>{{ question.question }}</p>
+        <p>{{ question.content }}</p>
         <div class="ms-3">
-          <div v-if="question.choices.length === 0">
-            <div v-for="fill in question.fill" :key="fill">
-              <div class="choices answer">{{ fill }}</div>
-            </div>
-          </div>
           <div v-for="item in question.choices" :key="item.id">
-            <div class="choices" :class="{answer: item.is_correct, wrong: item.choice === 'Virus',}">
-              {{ item.choice }}
+            <div class="choices" :class="{wrong: item.is_answer, answer: item.is_correct,}">
+              {{ item.content }}
             </div>
           </div>
         </div>
@@ -36,77 +33,28 @@ export default {
   data() {
     return {
         id: '',
+        code: '',
+        total_point: '',
         quizzes: [],
+        current_quiz: [],
+        questions_id: [],
         questions: [],
-    //   questions: [
-    //     {
-    //       id: 1,
-    //       question:
-    //         "Which of the following attacks require a carrier file to replicate?",
-    //       choices: [
-    //         { id: 1, choice: "Virus", is_correct: false },
-    //         { id: 1, choice: "Trojan", is_correct: true },
-    //         { id: 1, choice: "Worm", is_correct: false },
-    //         { id: 1, choice: "Adware", is_correct: false },
-    //       ],
-    //     },
-    //     {
-    //       id: 2,
-    //       question:
-    //         "What wireless protocols is designed for transmitting data over short distances?",
-    //       choices: [],
-    //       fill: ["bluetooth"],
-    //     },
-    //     {
-    //       id: 3,
-    //       question:
-    //         "What technology can collect information to make decisions, reach conclusions, and combine information in new ways?",
-    //       choices: [
-    //         { id: 1, choice: "Virtual Reality", is_correct: false },
-    //         { id: 1, choice: "Embedded Computers", is_correct: false },
-    //         { id: 1, choice: "Artificial Intelligence", is_correct: true },
-    //         { id: 1, choice: "Robotics", is_correct: false },
-    //       ],
-    //     },
-    //     {
-    //       id: 4,
-    //       question:
-    //         "What types of activities are ideal for a robot to perform?",
-    //       choices: [
-    //         { id: 1, choice: "Creative Design Work", is_correct: false },
-    //         { id: 1, choice: "Critical Thinking", is_correct: false },
-    //         { id: 1, choice: "Repetitive Tasks", is_correct: true },
-    //         { id: 1, choice: "Group Interaction", is_correct: false },
-    //       ],
-    //     },
-    //     {
-    //       id: 5,
-    //       question:
-    //         "During the encapsulation process, what occurs at the data link layer?",
-    //       choices: [
-    //         { id: 1, choice: "No address is added.", is_correct: false },
-    //         {
-    //           id: 1,
-    //           choice: "The logical address is added",
-    //           is_correct: false,
-    //         },
-    //         {
-    //           id: 1,
-    //           choice: "The physical address is added",
-    //           is_correct: true,
-    //         },
-    //         {
-    //           id: 1,
-    //           choice: "The process port number is added.",
-    //           is_correct: false,
-    //         },
-    //       ],
-    //     },
-    //   ],
+        current_question : [],
+        is_due_date: false
     };
   },
   methods: {
-    async loadQuizzes() {
+    getDate() {
+      var due = new Date(this.current_quiz.due_date);
+      var currentDate = new Date();
+
+      if(currentDate >= due) {
+        this.is_due_date = true
+      } else {
+        this.is_due_date = false
+      }
+    },
+    async loadQuizzesResult() {
       try {
         const response = await fetch("http://localhost:8000/quizzes/", {
           method: "GET",
@@ -118,16 +66,74 @@ export default {
         });
         const data = await response.json();
         this.quizzes = data;
-        console.log(this.quizzes)
+
+        this.getCurrentQuiz();
+        this.id = this.current_quiz.id;
+
+        for (const question of this.current_quiz.questions) {
+          this.questions_id.push(question.id);
+        }
+
+        const result = await this.loadQuestions();
+
+        this.setUserAnswer();
         
       } catch(e) {
         console.log(e);
       }
+    }, 
+    getCurrentQuiz() {
+      try {
+        this.current_quiz = this.quizzes.filter(item => item.quiz_code == this.code)[0];
+      } catch(e) {
+        console.log(e)
+      }
+    },
+    setUserAnswer() {
+      for(const answer of this.current_quiz.answers) {
+        this.current_question = this.questions.filter(question => question.id == answer.question_id)[0];
+        for(const choice of this.current_question.choices) {
+          const a = choice.id;
+          const b = answer.choice_id;
+          if(a == b) {
+            choice.is_answer = true;
+          } else {
+            choice.is_answer = false;
+          }
+        }
+      }
+    },
+    async loadQuestions() {
+      try {
+        for (const id of this.questions_id) {
+          const response = await fetch("http://localhost:8000/quizzes/" + this.id + "/questions/" + id, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Credetials": "true",
+            },
+            credentials: "include"
+          });
+          const loadQuestions = await response.json();
+          this.questions.push(loadQuestions);
+        }
+      } catch(e) {
+        console.log(e);
+      }
+    },
+    computeTotal() {
+      this.total_point = 0;
+      this.current_quiz.questions.forEach(question => {
+        this.total_point += question.points;
+      });
     }
   },
-  created() {
-      this.id = this.$route.params.id;
-      this.loadQuizzes();
+  async created() {
+      this.code = this.$route.params.id;
+      const result = await this.loadQuizzesResult();
+      this.computeTotal();
+      this.current_quiz.total = this.total_point
+      this.getDate();
   }
 };
 </script>
@@ -176,6 +182,13 @@ export default {
   transition: 0.3s;
 }
 
+.points {
+  font-size: 16px;
+  font-style: italic;
+  color: gray;
+  margin: 3px 0px 0px 3px;
+}
+
 .choices {
   width: 100%;
   position: relative;
@@ -186,13 +199,13 @@ export default {
   margin: 5px 0px;
 }
 
-.answer {
-  background-color: rgb(105, 210, 105);
+.wrong {
+  background-color: rgb(210, 105, 105);
   color: white;
 }
 
-.wrong {
-  background-color: rgb(210, 105, 105);
+.answer{
+  background-color: rgb(105, 210, 105);
   color: white;
 }
 </style> 

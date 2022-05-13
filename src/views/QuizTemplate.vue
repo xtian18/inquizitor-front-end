@@ -73,62 +73,6 @@ export default {
       questions: [],
       current_question: '',
       current_question_id: 0,
-      quix: [
-        {
-          question:
-            "Which of the following attacks require a carrier file to replicate?",
-          answer: "a",
-          options: { a: "Virus", b: "Trojan", c: "Worm", d: "Adware" },
-          isAnswered: false,
-          id: 1,
-        },
-        {
-          question:
-            "What wireless protocols is designed for transmitting data over short distances?",
-          answer: ["bluetooth"],
-          options: {},
-          isAnswered: false,
-          id: 2,
-        },
-        {
-          question:
-            "What technology can collect information to make decisions, reach conclusions, and combine information in new ways?",
-          answer: "c",
-          options: {
-            a: "Virtual Reality",
-            b: "Embedded Computers",
-            c: "Artificial Intelligence",
-            d: "Robotics",
-          },
-          isAnswered: false,
-          id: 3,
-        },
-        {
-          question: "What types of activities are ideal for a robot to perform",
-          answer: "c",
-          options: {
-            a: "Creative Design Work",
-            b: "Critical Thinking",
-            c: "Repetitive Tasks",
-            d: "Group Interaction",
-          },
-          isAnswered: false,
-          id: 4,
-        },
-        {
-          question:
-            "During the encapsulation process, what occurs at the data link layer?",
-          answer: "c",
-          options: {
-            a: "No address is added.",
-            b: "The logical address is added",
-            c: "The physical address is added",
-            d: "The process port number is added.",
-          },
-          isAnswered: false,
-          id: 5,
-        },
-      ],
     };
   },
   computed: {
@@ -163,7 +107,7 @@ export default {
         for (const question of this.quiz.questions) {
           this.questions_id.push(question.id);
         }
-        this.loadQuestions();
+        const result = await this.loadQuestions();
       } catch (e) {
         console.log(e);
       }
@@ -202,6 +146,7 @@ export default {
       formData.append("is_correct", this.current_question.choices[this.user_answer].is_correct);
       formData.append("student_id", this.user_id);
       formData.append("choice_id", this.current_question.choices[this.user_answer].id);
+      formData.append("question_id", this.current_question.id);
 
       const data = {};
       formData.forEach((value, key) => (data[key] = value));
@@ -240,9 +185,6 @@ export default {
         console.log(e);
       }
     },
-    // answered(e) {
-    //   this.user_answer = e.target.value;
-    // },
     async checkAnswer(e, name) {   
       const result = await this.updateAnswer();
       this.progress = this.progress + 100 / this.quiz.number_of_questions;
@@ -254,6 +196,7 @@ export default {
       const result = await this.updateAnswer();
       this.progress = this.progress + 100 / this.quiz.number_of_questions;
       const result2 = await this.finishQuiz();
+      this.$router.push({ path: `/take-quiz/${this.code}/result` })
     },
     clearSelection(name) {
       const radio_btn = document.querySelectorAll(

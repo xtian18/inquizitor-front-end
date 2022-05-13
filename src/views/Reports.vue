@@ -63,16 +63,16 @@
                     <tr>
                       <th>Student Name</th>
                       <th>Score</th>
-                      <th>Date Taken</th>
-                      <th>Time (mins)</th>
+                      <!-- <th>Date Taken</th>
+                      <th>Time (mins)</th> -->
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="(student, index) in students" :key="index">
                       <td>{{ student.full_name }}</td>
                       <td>{{ student.score }}</td>
-                      <td>{{ student.date }}</td>
-                      <td>{{ student.time }}</td>
+                      <!-- <td>{{ student.date }}</td>
+                      <td>{{ student.time }}</td> -->
                     </tr>
                   </tbody>
                 </table>
@@ -425,7 +425,7 @@ export default {
 
 <style>
 .modal-container {
-  width: 75% !important;
+  width: 55% !important;
 }
 .student-list {
   height: 90%;

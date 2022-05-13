@@ -4,19 +4,19 @@
     <!-- Side bar if account tyoe is student -->
     <SideBar v-if="accountType === 'student'">
       <li>
-        <router-link :to="{name: 'TakeQuiz'}" :class="{active: this.$route.path.slice(0,11) === '/take-quiz/'}"><font-awesome-icon icon="file-signature" />Take Quiz</router-link>
+        <router-link :to="{name: 'TakeQuiz'}" :class="{active: this.$route.path.slice(0,11) === '/take-quiz/'}"><font-awesome-icon icon="file-signature" title="Take Quiz" /><span>Take Quiz</span></router-link>
       </li>
       <li>
-        <router-link :to="{name: 'Activities'}" :class="{active: this.$route.path.slice(0,12) === '/activities/'}"><font-awesome-icon icon="folder-open" />Activities</router-link>
+        <router-link :to="{name: 'Activities'}" :class="{active: this.$route.path.slice(0,12) === '/activities/'}"><font-awesome-icon icon="folder-open" title="Activities" /><span>Activities</span></router-link>
       </li>
     </SideBar>
     <!-- Side bar if account tyoe is teacher -->
     <SideBar v-else>
       <li>
-        <router-link :to="{name: 'MyQuizzes'}" :class="{active: this.$route.path.slice(0,12) === '/my-quizzes/'}"><font-awesome-icon icon="server" />My Quizzes</router-link>
+        <router-link :to="{name: 'MyQuizzes'}" :class="{active: this.$route.path.slice(0,12) === '/my-quizzes/'}"><font-awesome-icon icon="server" title="My Quizzes" /><span>My Quizzes</span></router-link>
       </li>
       <li>
-        <router-link :to="{name: 'Reports'}"><font-awesome-icon icon="line-chart" />Reports</router-link>
+        <router-link :to="{name: 'Reports'}"><font-awesome-icon icon="line-chart" title="Reports" /><span>Reports</span></router-link>
       </li>
     </SideBar>
     <router-view class="main-content"/>
@@ -51,6 +51,23 @@ export default {
 </script>
 
 <style>
+@media only screen and (max-width: 992px){
+    .sidebar{
+        min-width: 100px;
+        font-size: 25px;
+        text-align: center;
+    }
+
+    .sidebar li{
+        margin-left: -50px;
+        margin-top: 30px;
+    }
+
+    .sidebar span{
+        display: none;
+    }
+}
+
 .page-content {
   height: 100%;
 }

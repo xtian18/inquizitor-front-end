@@ -266,21 +266,12 @@ export default {
     user_id() {
       return this.$store.state.user.id;
     },
-    // name() {
-    //   return this.quiz.name;
-    // },
     desc() {
       return this.quiz.desc;
     },
-    // created_at() {
-    //   return this.quiz.created_at;
-    // },
     due_date() {
       return this.quiz.due_date;
     },
-    // quiz_code() {
-    //   return this.quiz.quiz_code;
-    // },
     order() {
       return this.quiz.questions.length;
     }
@@ -636,7 +627,6 @@ export default {
   font-style: italic;
   color: gray;
   margin: 3px 0px 0px 3px;
-
 }
 
 .question {

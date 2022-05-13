@@ -3,7 +3,7 @@
     <div>
       <ul>
         <li>   
-          <router-link :to="{name: 'Dashboard'}"><font-awesome-icon icon="house-chimney" />Dashboard</router-link>
+          <router-link :to="{name: 'Dashboard'}"><font-awesome-icon icon="house-chimney" /><span>Dashboard</span></router-link>
         </li>
         <slot></slot>
         </ul>
@@ -23,6 +23,18 @@ export default {
     min-width: 350px;
     height: 100%;
     background-color: #272A3F;
+    transition: 0.5s;
+    transition-property: min-width font-size;
+}
+
+@media only screen and (max-width: 992px){
+    .sidebar{
+        min-width: 100px;
+        font-size: 20px;
+    }
+    .sidebar span{
+        display: none;
+    }
 }
 
 .sidebar img {
