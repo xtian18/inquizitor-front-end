@@ -99,7 +99,7 @@ export default {
 
       formData.append('username', this.username)
       formData.append('email', this.email)
-      formData.append('full_name', this.first_name + " " + this.last_name)
+      formData.append('full_name', this.last_name + "' " + this.first_name)
       formData.append('is_superuser', false)
       formData.append('last_name', this.last_name)
       formData.append('first_name', this.first_name)

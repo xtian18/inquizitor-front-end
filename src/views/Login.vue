@@ -10,7 +10,7 @@
       <div class="form-group pb-3">
         <label for="password">Password:</label>
         <input type="password" id="password" placeholder="Enter Password" v-model="password">
-        <!-- superstudent superteacher -->
+        <!-- {{ this.$store.state.msg.detail }} -->
       </div>
       <div class="text-center pt-3">
         <button class="btn btn-main" type="submit">Login</button>
@@ -40,28 +40,16 @@ import { mapActions } from 'vuex'
         formData.append('password', this.password)
 
         this.signIn(formData)
-
-        // try {
-        //   const check_token = await fetch('http://localhost:8000/login/token', {
-        //     method: 'POST',
-        //     credentials: 'include',
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //       "Access-Control-Allow-Credetials": "true",
-        //     },
-        //     body: credentials
-        //   });
-        //   const login = await check_token.json();
-        //   console.log(login)
-        //   const user = await this.getUser();
-        //   // console.log(user)
-          
-        //   // dispatch('attempt', login.msg);
-        // } catch(e) {
-        //   console.log(e);
-        // }
+        this.checkMessage();
         // this.$router.push('/')
         
+      },
+      checkMessage() {
+        // if(this.$store.state.message.msg = 'Successfully logged in.') {
+        //   console.log('Successfully logged in.')
+        // } else if(this.$store.state.message.detail == 'Incorrent user or password') {
+        //   console.log('Incorrent user or password')
+        // }
       },
       async getUser() {
         try {

@@ -25,15 +25,18 @@ import NavBar from '@/components/NavBar.vue'
 export default {
   components: { NavBar },
   methods: {
-    handleLogout() {
-      const check_token =
-        fetch('http://localhost:8000/login/logout', {
-					method: 'POST',
-					credentials: 'include'
-          })
-          .then(res => res.json())
-          .then(data => console.log(data.msg))
-          .catch(err => console.log(err))
+    async handleLogout() {
+      try {
+        const check_token = await fetch('http://localhost:8000/login/logout', {
+          method: 'POST',
+          credentials: 'include'
+          });
+        const data = await check_token.json();
+        this.$router.push('/');
+        console.log(data);
+      } catch(e) {
+
+      }
     },
     async getUser() {
       try {
@@ -46,7 +49,7 @@ export default {
           credentials: 'include'
           });
           const current_user = await response.json();
-          this.$store.commit('SET_USER', current_user);
+          this.$store.commit('SET_USER', current_user); 
       } catch(e) {
         console.log(e);
       }

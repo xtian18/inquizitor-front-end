@@ -1,7 +1,6 @@
 <template>
   <div>
     <h1>Reports</h1>
-    <button @click="test">test</button>
     <div class="report-container">
       <div class="table-wrapper">
         <table class="table table-striped table-hover">
@@ -14,11 +13,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="report in reports" :key="report.id">
-              <td>{{ report.examName }}</td>
-              <td>{{ report.code }}</td>
-              <td>{{ report.numOfParticipant }}</td>
-              <td><button class="btn btn-main" @click="showModal = true">View</button></td>
+            <tr v-for="(quiz,index) in quizzes" :key="quiz.id">
+              <td>{{ quiz.name }}</td>
+              <td>{{ quiz.quiz_code }}</td>
+              <td>{{ quiz.number_of_participants }}</td>
+              <td><button class="btn btn-main" @click="openModal(index)">View</button></td>
             </tr>
           </tbody>
         </table>
@@ -30,54 +29,42 @@
       <div class="modal-overlay" v-if="showModal">
         <div class="modal-container">
           <div class="d-flex">
-            <h1 class="me-auto">Quiz #1</h1>
+            <h1 class="me-auto">{{ quiz_name }}</h1>
             <button type="button" class="btn-close" @click="showModal = !showModal"></button>
           </div>
 
-          
-
           <div class="report-modal-container d-flex">
-            <!-- <div class="left-container">
-              <div class="me-3 text-center">
-                <p class="percentage mx-2">24</p>
-                <p class="cheating">out of <strong>30</strong> average score</p>
-              </div>
-            </div> -->
-
             <div class="right-container">
+
               <div class="d-flex">
-                <div>
-                  <p><strong>Examiner:</strong> Juan dela Cruz</p>
-                  <p><strong>Subject:</strong> Science</p>
+                <div class="w-50">
+                  <p><strong>Examiner:</strong> {{ examiner }}</p>
+                  <p><strong>Subject:</strong> {{ subject }}</p>
                 </div>
-                <div style="margin-left: 300px;">
-                  <p><strong>Average Score:</strong> 24/30</p>
-                  <p><strong>Date Created:</strong> 05/06/2022</p>
+                <div class="w-50">
+                  <p><strong>Average Score:</strong> {{ average_score }}/{{ total_score }}</p>
+                  <p><strong>Date Created:</strong> {{ date_created }}</p>
                 </div>
               </div>
 
               
               <div class="table-wrapper2">
-                <table class="table table-striped table-hover">
+                <table class="table table-striped table-hover" id="table">
                   <thead>
                     <tr>
                       <th>Student Name</th>
                       <th>Score</th>
-                      <!-- <th>Date Taken</th>
-                      <th>Time (mins)</th> -->
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="(student, index) in students" :key="index">
-                      <td>{{ student.full_name }}</td>
+                      <td>{{ student.participant_name }}</td>
                       <td>{{ student.score }}</td>
-                      <!-- <td>{{ student.date }}</td>
-                      <td>{{ student.time }}</td> -->
                     </tr>
                   </tbody>
                 </table>
               </div>
-              <button class="btn btn-main ms-auto" style="float:right;">Export as Excel File</button>
+              <button class="btn btn-main ms-auto" style="float:right;" @click="downloadPDF">Export as Excel File</button>
             </div>
 
           </div>
@@ -89,317 +76,32 @@
 </template>
 
 <script>
+import { jsPDF } from "jspdf";
+import autoTable from 'jspdf-autotable';
+
 export default {
   data() {
     return {
       showModal: false,
-      isOpen: -2,
-      reports: [
-        {
-          examName: 'Quiz #1',
-          code: '12JDG46E',
-          numOfParticipant: 20,
-          id: 1,
-          average_mouse_data: {
-            focus: 2,
-            blur: 2,
-            copy: 3,
-            paste: 5,
-            left_click: 75,
-            right_click: 50,
-            double_click: 85
-          }
-        },
-        {
-          examName: 'Quiz #2',
-          code: '2S4AG7TG',
-          numOfParticipant: 15,
-          id: 2,
-          average_mouse_data: {
-            focus: 2,
-            blur: 2,
-            copy: 3,
-            paste: 5,
-            left_click: 75,
-            right_click: 50,
-            double_click: 85
-          }
-        },
-        {
-          examName: 'Quiz #3',
-          code: '1L4JG85H',
-          numOfParticipant: 30,
-          id: 3,
-          average_mouse_data: {
-            focus: 2,
-            blur: 2,
-            copy: 3,
-            paste: 5,
-            left_click: 75,
-            right_click: 50,
-            double_click: 85
-          }
-        },
-        {
-          examName: 'Quiz #4',
-          code: '0GKTU8S6',
-          numOfParticipant: 36,
-          id: 4,
-          average_mouse_data: {
-            focus: 2,
-            blur: 2,
-            copy: 3,
-            paste: 5,
-            left_click: 75,
-            right_click: 50,
-            double_click: 85
-          }
-        },
-        {
-          examName: 'Quiz #5',
-          code: '12JDG46E',
-          numOfParticipant: 40,
-          id: 5,
-          average_mouse_data: {
-            focus: 2,
-            blur: 2,
-            copy: 3,
-            paste: 5,
-            left_click: 75,
-            right_click: 50,
-            double_click: 85
-          }
-        },
-        {
-          examName: 'Quiz #6',
-          code: '0GHT6ED6',
-          numOfParticipant: 16,
-          id: 6,
-          average_mouse_data: {
-            focus: 2,
-            blur: 2,
-            copy: 3,
-            paste: 5,
-            left_click: 75,
-            right_click: 50,
-            double_click: 85
-          }
-        },
-        {
-          examName: 'Quiz #7',
-          code: 'S9A7D5A2D',
-          numOfParticipant: 10,
-          id: 7,
-          average_mouse_data: {
-            focus: 2,
-            blur: 2,
-            copy: 3,
-            paste: 5,
-            left_click: 75,
-            right_click: 50,
-            double_click: 85
-          }
-        },
-        {
-          examName: 'Quiz #8',
-          code: '0GHT87DR',
-          numOfParticipant: 45,
-          id: 8,
-          average_mouse_data: {
-            focus: 2,
-            blur: 2,
-            copy: 3,
-            paste: 5,
-            left_click: 75,
-            right_click: 50,
-            double_click: 85
-          }
-        },
-        {
-          examName: 'Quiz #9',
-          code: '0GHT6ED6',
-          numOfParticipant: 16,
-          id: 9,
-          average_mouse_data: {
-            focus: 2,
-            blur: 2,
-            copy: 3,
-            paste: 5,
-            left_click: 75,
-            right_click: 50,
-            double_click: 85
-          }
-        },
-        {
-          examName: 'Quiz #10',
-          code: '0GHT6ED6',
-          numOfParticipant: 16,
-          id: 10,
-          average_mouse_data: {
-            focus: 2,
-            blur: 2,
-            copy: 3,
-            paste: 5,
-            left_click: 75,
-            right_click: 50,
-            double_click: 85
-          }
-        },
-        {
-          examName: 'Quiz #11',
-          code: '0GHT6ED6',
-          numOfParticipant: 16,
-          id: 11,
-          average_mouse_data: {
-            focus: 2,
-            blur: 2,
-            copy: 3,
-            paste: 5,
-            left_click: 75,
-            right_click: 50,
-            double_click: 85
-          }
-        },
-        {
-          examName: 'Quiz #12',
-          code: '0GHT6ED6',
-          numOfParticipant: 16,
-          id: 12,
-          average_mouse_data: {
-            focus: 2,
-            blur: 2,
-            copy: 3,
-            paste: 5,
-            left_click: 75,
-            right_click: 50,
-            double_click: 85
-          }
-        },
-        {
-          examName: 'Quiz #13',
-          code: '0GHT6ED6',
-          numOfParticipant: 16,
-          id: 13,
-          average_mouse_data: {
-            focus: 2,
-            blur: 2,
-            copy: 3,
-            paste: 5,
-            left_click: 75,
-            right_click: 50,
-            double_click: 85
-          }
-        }
-      ],
-      students: [
-        {
-          full_name: 'Maria',
-          score: '24',
-          total_items: '30',
-          date: '05/07/2022',
-          time: '30',
-        },
-        {
-          full_name: 'Pedro',
-          score: '25',
-          total_items: '30',
-          date: '05/07/2022',
-          time: '20',
-        },
-        {
-          full_name: 'Simon',
-          score: '20',
-          total_items: '30',
-          date: '05/08/2022',
-          time: '32',
-        },
-        {
-          full_name: 'Nena',
-          score: '19',
-          total_items: '30',
-          date: '05/07/2022',
-          time: '28',
-        },
-        {
-          full_name: 'Juan',
-          score: '29',
-          total_items: '30',
-          date: '05/07/2022',
-          time: '33',
-        },
-        {
-          full_name: 'Anna',
-          score: '30',
-          total_items: '30',
-          date: '05/06/2022',
-          time: '25',
-        },
-        {
-          full_name: 'Ryan',
-          score: '28',
-          total_items: '30',
-          date: '05/06/2022',
-          time: '25',
-        },
-        {
-          full_name: 'Lyn',
-          score: '30',
-          total_items: '30',
-          date: '05/06/2022',
-          time: '25',
-        },        {
-          full_name: 'Meg',
-          score: '20',
-          total_items: '30',
-          date: '05/06/2022',
-          time: '21',
-        },
-        {
-          full_name: 'Anna',
-          score: '30',
-          total_items: '30',
-          date: '05/06/2022',
-          time: '25',
-        },
-        {
-          full_name: 'Anna',
-          score: '30',
-          total_items: '30',
-          date: '05/06/2022',
-          time: '25',
-        },
-        {
-          full_name: 'Anna',
-          score: '30',
-          total_items: '30',
-          date: '05/06/2022',
-          time: '25',
-        },
-        {
-          full_name: 'Anna',
-          score: '30',
-          total_items: '30',
-          date: '05/06/2022',
-          time: '25',
-        },
-        {
-          full_name: 'Anna',
-          score: '30',
-          total_items: '30',
-          date: '05/06/2022',
-          time: '25',
-        },
-      ]
+      quizzes: [],
+      participants: [],
+      quiz_name: '',
+      subject: '',
+      date_created: '',
+      average: '',
+      average_score: '',
+      total_point: '',
+      total_score: '',
+      students: [],
     }
   },
   computed: {
-    isOpenIndex() {
-      console.log(this.isOpen)
-      return this.isOpen
+    examiner() {
+      return this.$store.state.user.full_name;
     }
   },
   methods: {
-    async test() {
+    async loadQuizzes() {
       try {
         const response = await fetch("http://localhost:8000/quizzes/", {
           method: "GET",
@@ -410,15 +112,99 @@ export default {
           credentials: "include",
         });
         const data = await response.json();
-        console.log(data);
+        this.quizzes = data;
+        // console.log(this.quizzes)
       } catch(e) {
         console.log(e);
       }
     },
-    isFolding(index) {
-      this.isOpen = index
-      console.log(this.isOpen)
+    async loadParticipants() {
+      let index = 0;
+      for(const quiz of this.quizzes) {
+        try {
+          const response = await fetch("http://localhost:8000/quizzes/" + quiz.id + "/results", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Credetials": "true",
+            },
+            credentials: "include",
+          });
+          const data = await response.json();
+          this.participants[index] = data;
+          this.quizzes[index].number_of_participants = data.length;
+          this.getAverage(index);
+          this.quizzes[index].average = this.average;
+          this.computeTotal(index);
+          this.quizzes[index].total = this.total_point;
+          index++;
+        } catch(e) {
+          console.log(e);
+        }
+      }
+      // console.log(this.participants);
+    },
+    getAverage(index) {
+      let total = 0;
+      this.average = 0;
+      this.participants[index].forEach(participant => {
+        total += participant.score;
+      });
+      
+      if(this.participants[index].length) {
+        this.average = Math.round(total/this.participants[index].length);
+      } else {
+        this.average = 0;
+      }
+    },
+    computeTotal(index) {
+      this.total_point = 0;
+      this.quizzes[index].questions.forEach(question => {
+        this.total_point += question.points;
+      });
+    },
+    openModal(index){
+      this.resetValues();
+      this.quiz_name = this.quizzes[index].name;
+      this.subject = this.quizzes[index].desc;
+      this.average_score = this.quizzes[index].average;
+      this.total_score = this.quizzes[index].total;
+      this.date_created = this.quizzes[index].created_at.slice(0,10).replace(/-/g,"/");
+      this.students = this.participants[index];
+      this.showModal = true;
+    },
+    resetValues() {
+      this.quiz_name = '';
+      this.subject = '';
+      this.average_score = '';
+      this.total_score = '';
+      this.date_created = '';
+      this.students = [];
+    },
+    downloadPDF() {
+      const doc = new jsPDF('p', 'mm', 'letter');
+      doc.setFontSize(24);
+      doc.text(this.quiz_name + " Report", 108, 25.4, 'center');
+      
+      doc.setFontSize(12);
+      doc.text("Examiner: ", 25.4, 40);
+      doc.text("Average Score: ", 108, 40);
+      doc.text("Subject: ", 25.4, 47);
+      doc.text("Date Created: ", 108, 47);
+
+      doc.text(this.examiner, 45.4, 40);
+      doc.text(this.average_score + "/" + this.total_score, 138, 40);
+      doc.text(this.subject, 42, 47);
+      doc.text(this.date_created, 135, 47);
+
+      doc.autoTable({ html: '#table', startY: 55, margin: 25.4})
+
+      doc.save(this.quiz_name + " Report.pdf");
     }
+  },
+  async created() {
+    const result = await this.loadQuizzes();
+    const result2 = await this.loadParticipants();
   }
 }
 </script>
@@ -426,6 +212,7 @@ export default {
 <style>
 .modal-container {
   width: 55% !important;
+  min-width: 500px;
 }
 .student-list {
   height: 90%;
@@ -478,11 +265,6 @@ p.cheating {
   height: 90%;
 }
 
-.left-container {
-  height: 100%;
-  margin: 0 40px;
-}
-
 .table-wrapper {
   padding-right: 5px;
   max-height: 100%;
@@ -490,9 +272,11 @@ p.cheating {
 }
 
 .table-wrapper2 {
+  width: 100%;
   margin-top: 10px;
   padding-right: 5px;
-  max-height: 78%;
+  height: auto;
+  max-height: 400px;
   margin-bottom: 10px;
   overflow: auto;
 }

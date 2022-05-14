@@ -118,7 +118,7 @@ select,textarea,input:focus {
     background-color: white;
     padding: 20px;
     width: 90%;
-    height: 650px;
+    height: auto;
     max-height: 650px;
     border-radius: 20px;
     /* overflow: hidden; */

@@ -2,12 +2,12 @@ import { createStore } from 'vuex'
 
 export default createStore({
     state: {
-        msg: '',
+        message: '',
         user: ''
     },
     mutations: {
         SET_MSG(state, msg) {
-            state.msg = msg
+            state.message = msg
         },
         SET_USER(state, data) {
             state.user = data
@@ -23,7 +23,7 @@ export default createStore({
                     });
                 const login = await check_token.json();
                 console.log(login)
-                dispatch('attempt', login.msg);
+                dispatch('attempt', login);
             } catch(e) {
                 console.log(e);
             }
