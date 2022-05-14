@@ -1,6 +1,6 @@
 <template>
   <teleport to="#app">
-    <div class="modal-overlay" v-if="showDialog">
+    <div class="modal-overlay" v-if="showHelp">
       <div class="modal-container d-flex flex-column">
         <div class="modal-head">
           <slot name="head">Header</slot>
@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  props: ["showDialog"],
+  props: ["showHelp"],
   data() {
     return {};
   },
@@ -28,7 +28,7 @@ export default {
 <style scoped>
 .modal-container {
   padding: 20px 50px;
-  width: auto !important;
+  width: 80%;
   height: auto;
 }
 .modal-head {

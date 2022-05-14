@@ -24,8 +24,9 @@ export default createStore({
                 const login = await check_token.json();
                 console.log(login)
                 dispatch('attempt', login);
+                console.log('success')
             } catch(e) {
-                console.log(e);
+                console.log('error')
             }
         },
         async attempt({ commit }, msg) {

@@ -27,7 +27,7 @@ export default {
     transition-property: min-width font-size;
 }
 
-@media only screen and (max-width: 992px){
+@media only screen and (max-width: 768px){
     .sidebar{
         min-width: 100px;
         font-size: 20px;

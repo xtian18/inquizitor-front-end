@@ -44,27 +44,35 @@ export default {
   data() {
     return {
       isLoggedIn: true, //testing
-      accountType: 'student' //testing
+      accountType: 'teacher' //testing
     }
   }
 }
 </script>
 
 <style>
-@media only screen and (max-width: 992px){
+@media only screen and (max-width: 992px) {
+    .main-content {
+      width: 100%;
+      padding: 20px 10px !important;
+    }
+}
+
+@media only screen and (max-width: 768px){
+
     .sidebar{
-        min-width: 100px;
-        font-size: 25px;
-        text-align: center;
+      min-width: 100px;
+      font-size: 25px;
+      text-align: center;
     }
 
     .sidebar li{
-        margin-left: -50px;
-        margin-top: 30px;
+      margin-left: -50px;
+      margin-top: 30px;
     }
 
     .sidebar span{
-        display: none;
+      display: none;
     }
 }
 
@@ -73,6 +81,7 @@ export default {
 }
 .main-content {
   width: 100%;
+  /* min-width: 800px; */
   position: relative;
   padding: 20px 120px 20px 60px;
 }

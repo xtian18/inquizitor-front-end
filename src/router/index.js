@@ -7,7 +7,6 @@ import TakeExam from '../views/TakeExam.vue'
 import Activities from '../views/Activities.vue'
 import UpdateProfile from '../views/UpdateProfile.vue'
 import MyExams from '../views/MyExams.vue'
-import CreateNew from '../views/CreateNew.vue'
 import UpdateQuiz from '../views/UpdateQuiz.vue'
 import Reports from '../views/Reports.vue'
 import QuizTemplate from '../views/QuizTemplate.vue'
@@ -55,11 +54,6 @@ const routes = [
         path: '/my-quizzes',
         name: 'MyQuizzes',
         component: MyExams,
-      },
-      {
-        path: '/my-quizzes/create-new',
-        name: 'CreateNew',
-        component: CreateNew
       },
       {
         path: '/my-quizzes/:id',

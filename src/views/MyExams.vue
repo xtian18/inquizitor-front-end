@@ -1,6 +1,9 @@
 <template>
   <div>
     <h1>My Quizzes</h1>
+
+    <a class="help" @click="showHelp=true">Help <font-awesome-icon icon="circle-question" /></a>
+
     <button class="btn btn-main" @click="showModal = true">Create new</button>
     <div class="exam-list">
       <div class="exam" v-for="quiz in quizzes" :key="quiz.id">
@@ -10,9 +13,9 @@
         </div>
         <div class="exam-icon mb-auto">
           <router-link :to="`/my-quizzes/${quiz.id}`"
-            ><font-awesome-icon icon="pen-to-square"
+            ><font-awesome-icon icon="pen-to-square" class="action"
           /></router-link>
-          <button class="btn-icon" @click="handleDelete(quiz.id)">
+          <button class="btn-icon action" @click="handleDelete(quiz.id)">
             <font-awesome-icon icon="trash-can" />
           </button>
         </div>
@@ -22,7 +25,7 @@
     <DialogModal :showDialog="showDialog">
       <template v-slot:head>
         <h1>Delete Quiz</h1>
-        <button type="button" class="btn-close" @click="showDialog=false">
+        <button type="button" class="btn-close action" @click="showDialog=false">
         </button>
       </template>
       <template v-slot:body>
@@ -34,12 +37,27 @@
       </template>
     </DialogModal>
 
+    <HelpModal :showHelp="showHelp">
+      <template v-slot:head>
+        <h1>Need Help?</h1>
+        <button type="button" class="btn-close action" @click="showHelp=false">
+        </button>
+      </template>
+      <template v-slot:body>
+        <p>Content here</p>
+      </template>
+      <template v-slot:foot>
+        <button class="btn btn-main" @click="showHelp=false">OK</button>
+      </template>
+    </HelpModal>
+
     <!-- create quiz modal -->
     <teleport to="#app">
       <div class="modal-overlay" v-if="showModal">
         <div class="modal-container d-flex flex-column">
-          <div class="modal-head text-center">
+          <div class="modal-head">
             <h1 class="me-auto">Create New Quiz</h1>
+            <button type="button" class="btn-close action" @click="showModal = !showModal"></button>
           </div>
           <div class="modal-body text-center">
             <form>
@@ -57,9 +75,9 @@
               </div>
             </form>
           </div>
-          <div class="modal-foot text-center">
+          <div class="modal-foot">
             <button class="btn btn-main" @click="createQuiz" :disabled="!isButtonEnabled">Create new</button>
-            <button class="btn btn-secondary me-3" @click="closeModal">Cancel</button>
+            <button class="btn btn-secondary me-3" style="float: right;" @click="closeModal">Cancel</button>
           </div>
         </div>
       </div>
@@ -69,15 +87,17 @@
 </template>
 
 <script>
-import DialogModal from "@/components/DialogModal.vue";
+import DialogModal from "@/components/DialogModal.vue"
+import HelpModal from "@/components/HelpModal.vue"
 
 export default {
-  components: { DialogModal },
+  components: { DialogModal, HelpModal },
   data() {
     return {
       selected_quiz_id: '',
       showModal: false,
       showDialog: false,
+      showHelp: false,
       isButtonEnabled: false,
       name: "",
       desc: "",
@@ -182,7 +202,7 @@ export default {
 </script>
 
 <style scoped>
-.btn {
+.btn-main {
   float: right;
 }
 .exam-icon {

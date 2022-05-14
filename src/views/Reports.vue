@@ -30,7 +30,7 @@
         <div class="modal-container">
           <div class="d-flex">
             <h1 class="me-auto">{{ quiz_name }}</h1>
-            <button type="button" class="btn-close" @click="showModal = !showModal"></button>
+            <button type="button" class="btn-close action" @click="showModal = !showModal"></button>
           </div>
 
           <div class="report-modal-container d-flex">

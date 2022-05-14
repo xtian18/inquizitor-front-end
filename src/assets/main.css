@@ -141,3 +141,30 @@ select,textarea,input:focus {
     box-shadow: none !important;
     outline: none !important;
 }
+
+.help {
+    position: absolute;
+    padding: inherit;
+    width: auto;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+  
+    color: #272A3F;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+  
+.help:hover {
+    color: #1F2233;
+    transform: scale(1.1); 
+}
+
+.action {
+    transition: all .2s ease-in-out;
+}
+
+.action:hover {
+    transform: scale(1.1); 
+}

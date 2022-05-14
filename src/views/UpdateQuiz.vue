@@ -3,14 +3,14 @@
     <!-- header -->
     <h1>My Quizzes > {{ this.name }}</h1>
 
-    <!-- buttons at the top -->
-    <!-- <button class="btn btn-main ms-2">Save</button> -->
+    <a class="help" @click="showHelp=true">Help <font-awesome-icon icon="circle-question" /></a>
+
     <button class="btn btn-main" @click="handleAdd">Add Question</button>
 
     <div class="question-list">
       <!-- quiz information -->
       <div class="resultbox d-flex">
-        <div class="quiz-main me-3">
+        <div class="me-3 w-50">
           <div class="form-group">
             <label for="username">Quiz Name:</label>
             <div class="d-flex">
@@ -36,7 +36,7 @@
             </div>
           </div>
         </div>
-        <div>
+        <div class="w-50">
           <div class="form-group">
             <label for="username">Due Date:</label>
             <div class="d-flex">
@@ -65,10 +65,10 @@
             <span class="points" v-else>({{ question.points }} points)</span>
           </div>
           <div class="exam-icon ms-auto">
-            <button class="btn-icon" @click="handleUpdate(question.id, index+1)">
+            <button class="btn-icon action" @click="handleUpdate(question.id, index+1)">
               <font-awesome-icon icon="pen-to-square" />
             </button>
-            <button class="btn-icon" @click="handleDelete(question.id)">
+            <button class="btn-icon action" @click="handleDelete(question.id)">
               <font-awesome-icon icon="trash-can" />
             </button>
           </div>
@@ -88,7 +88,7 @@
     <DialogModal :showDialog="showDialog">
       <template v-slot:head>
         <h1>Delete Question</h1>
-        <button type="button" class="btn-close" @click="showDialog=false">
+        <button type="button" class="btn-close action" @click="showDialog=false">
         </button>
       </template>
       <template v-slot:body>
@@ -99,6 +99,20 @@
         <button class="btn btn-danger" @click="deleteQuestion()">Delete</button>
       </template>
     </DialogModal>
+
+    <HelpModal :showHelp="showHelp">
+      <template v-slot:head>
+        <h1>Need Help?</h1>
+        <button type="button" class="btn-close action" @click="showHelp=false">
+        </button>
+      </template>
+      <template v-slot:body>
+        <p>Content here</p>
+      </template>
+      <template v-slot:foot>
+        <button class="btn btn-main" @click="showHelp=false">OK</button>
+      </template>
+    </HelpModal>
 
     <!-- new question modal -->
     <teleport to="#app">
@@ -215,10 +229,11 @@
 </template>
 
 <script>
-import DialogModal from "@/components/DialogModal.vue";
+import DialogModal from "@/components/DialogModal.vue"
+import HelpModal from "@/components/HelpModal.vue"
 
 export default {
-  components: { DialogModal },
+  components: { DialogModal, HelpModal },
   data() {
     return {
       //current quiz information
@@ -256,6 +271,7 @@ export default {
       showModal: false,
       showModalUpdate: false,
       showDialog: false,
+      showHelp: false,
       isSaveEnabled: false,
       isNameEnabled: false,
       isDescEnabled: false,
@@ -598,9 +614,6 @@ export default {
 #results {
   font-weight: 700;
   text-align: center;
-}
-.quiz-main {
-  width: 70%;
 }
 .btn-main {
   float: right;
