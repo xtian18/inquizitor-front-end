@@ -4,8 +4,14 @@
 
     <a class="help" @click="showHelp=true">Help <font-awesome-icon icon="circle-question" /></a>
 
-    <button class="btn btn-main" @click="showModal = true">Create new</button>
-    <div class="exam-list">
+    <div v-if="showEmptyPage" class="empty-page text-center">
+      <img class="" src="@/assets/empty-page.png" alt="">
+      <h3>You haven't created any quizzes yet</h3>
+      <h2 class="empty" @click="showModal = true">Create your first one now!</h2>
+    </div>
+
+    <button class="btn btn-main" @click="showModal = true" v-else>Create new</button>
+    <div class="exam-list" v-if="!showEmptyPage">
       <div class="exam" v-for="quiz in quizzes" :key="quiz.id">
         <div class="me-auto">
           <h2>{{ quiz.name }}</h2>
@@ -21,6 +27,8 @@
         </div>
       </div>
     </div>
+
+
 
     <DialogModal :showDialog="showDialog">
       <template v-slot:head>
@@ -98,6 +106,7 @@ export default {
       showModal: false,
       showDialog: false,
       showHelp: false,
+      showEmptyPage: false,
       isButtonEnabled: false,
       name: "",
       desc: "",
@@ -110,8 +119,12 @@ export default {
     };
   },
   methods: {
-    test() {
-      console.log('hello')
+    setEmptyPage() {
+      if(this.quizzes.length){
+        this.showEmptyPage = false;
+      } else {
+        setTimeout(() => this.showEmptyPage = true, 100)
+      }
     },
     async loadQuizzes() {
       try {
@@ -171,6 +184,7 @@ export default {
         
         this.showDialog = false;
         await this.loadQuizzes();
+        this.setEmptyPage();
       } catch(e) {
         console.log(e)
       }
@@ -195,8 +209,9 @@ export default {
       return this.$store.state.user.id;
     },
   },
-  mounted() {
-    this.loadQuizzes();
+  async created() {
+    const result = await this.loadQuizzes();
+    this.setEmptyPage();
   },
 };
 </script>

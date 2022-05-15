@@ -1,15 +1,16 @@
 <template>
     <NavBar>
       <!-- if logged in -->
-      <!-- <ul class="navbar-nav">
+      <ul class="navbar-nav" v-if="!this.$store.state.authenticated">
         <li class="nav-item">
           <router-link :to="{name: 'LogIn'}" class="nav-link" aria-current="page">Login</router-link>
         </li>
         <li class="nav-item">
           <router-link :to="{name: 'SignUp'}" class="nav-link" aria-current="page">Sign Up</router-link>
         </li>
-      </ul> -->
-      <ul class="navbar-nav">
+      </ul>
+      <!-- if logged out -->
+      <ul class="navbar-nav" v-else>
         <li class="nav-item">
           <a href="#" @click="handleLogout">Logout</a>
         </li>
@@ -32,8 +33,9 @@ export default {
           credentials: 'include'
           });
         const data = await check_token.json();
+        this.$store.commit('SET_MSG', data.msg);
+        this.$store.commit('SET_AUTHENTICATED', false);
         this.$router.push('/');
-        console.log(data);
       } catch(e) {
 
       }
@@ -48,8 +50,17 @@ export default {
           },
           credentials: 'include'
           });
-          const current_user = await response.json();
-          this.$store.commit('SET_USER', current_user); 
+           
+          if(response.ok){
+            this.$store.commit('SET_AUTHENTICATED', true);
+            const current_user = await response.json();
+            console.log(current_user)
+            this.$store.commit('SET_USER', current_user);
+            console.log('logged in')
+          }else{
+            console.log('logged out')
+            this.$store.commit('SET_AUTHENTICATED', false);
+          }
       } catch(e) {
         console.log(e);
       }

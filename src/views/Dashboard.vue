@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h1 class="text-center">Welcome, {{user}}!</h1>
+    <h1 class="text-center">Welcome {{user.full_name}}!</h1>
 
     <!-- if teacher -->
-    <div class="card-wrapper d-flex" v-if="accountType === 'teacher'">
+    <div class="card-wrapper d-flex" v-if="user.is_teacher">
       <div class="card me-auto" style="width:400px" @click="this.$router.push('/my-quizzes')">
         <img class="card-img-top" src="@/assets/card1.png" alt="Card image">
         <div class="card-body">
@@ -20,7 +20,7 @@
       </div>
     </div>
     <!-- if student -->
-    <div class="card-wrapper d-flex" v-else>
+    <div class="card-wrapper d-flex" v-if="user.is_student">
       <div class="card me-auto" style="width:400px" @click="this.$router.push('/take-quiz')">
         <img class="card-img-top" src="@/assets/card1.png" alt="Card image">
         <div class="card-body">
@@ -50,7 +50,7 @@ export default {
   },
   computed: {
     user() {
-      return this.$store.state.user.username;
+      return this.$store.state.user;
     },
   },
 }

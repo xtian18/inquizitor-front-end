@@ -29,7 +29,7 @@ export default {
 
 @media only screen and (max-width: 768px){
     .sidebar{
-        min-width: 100px;
+        min-width: 80px;
         font-size: 20px;
     }
     .sidebar span{

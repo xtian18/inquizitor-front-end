@@ -51,6 +51,13 @@ select {
     border-radius: 10px !important;
 }
 
+input[type=text].invalid,
+input[type=password].invalid,
+input[type=email].invalid,
+select.invalid {
+    border: 3px solid #db3743 !important;
+}
+
 input[type=number] {
     width: 10%;
     min-width: 100px;
@@ -167,4 +174,31 @@ select,textarea,input:focus {
 
 .action:hover {
     transform: scale(1.1); 
+}
+
+span.text-invalid {
+    color: #db3743;
+    font-size: .9em;
+}
+
+.empty-page {
+    margin-top: 30px;
+    height: 65%;
+}
+
+.empty-page > img{
+    /* width: 100%; */
+    height: 80%;
+}
+
+h2.empty {
+    color: #3EB489; 
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+}
+
+h2.empty:hover {
+    color: #3EB489; 
+    transform: scale(1.1);
 }

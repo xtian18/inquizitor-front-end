@@ -11,14 +11,14 @@ export default {
 
 <style>
 .error {
-    background-color: #efb5b5;
-    padding: 2px;
-    border: 1px solid #740505;
-    border-radius: 5px;
+    background-color: #f5cfcf;
+    padding: 10px;
+    /* border: 1px solid #740505; */
+    /* border-radius: 5px; */
 }
 
 .error p {
-    color: #740505;
-    font-weight: 600;
+    color: #db3743;
+    font-weight: 500;
 }
 </style>

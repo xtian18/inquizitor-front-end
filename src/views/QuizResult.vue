@@ -25,6 +25,12 @@
         </div>
       </div>
     </div>
+
+    <div v-else class="empty-page text-center">
+      <img class="" src="@/assets/empty-page.png" alt="">
+      <h3>Answer key is unvailable until</h3>
+      <h2 style="color: #3EB489; font-weight: 700">{{due_date}}</h2>
+    </div>
   </div>
 </template>
 
@@ -40,12 +46,14 @@ export default {
         questions_id: [],
         questions: [],
         current_question : [],
-        is_due_date: false
+        is_due_date: false,
+        due_date: ''
     };
   },
   methods: {
     getDate() {
       var due = new Date(this.current_quiz.due_date);
+      this.due_date = due.toString().substr(4,17);
       var currentDate = new Date();
 
       if(currentDate >= due) {
