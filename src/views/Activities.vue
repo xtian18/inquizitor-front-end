@@ -2,12 +2,14 @@
   <div>
     <h1>Activities</h1>
 
+    <!-- show if no activites -->
     <div v-if="showEmptyPage" class="empty-page text-center">
       <img class="" src="@/assets/empty-page.png" alt="">
       <h3>You haven't answered any quizzes yet</h3>
       <h2 class="empty" @click="() => this.$router.push('/take-quiz')">Take a quiz now!</h2>
     </div>
 
+    <!-- activity list -->
     <div class="exam-list" v-else>
       <div class="exam" v-for="quiz in quizzes" :key="quiz.id">
         <router-link :to="`/activities/${quiz.quiz_code}`">
@@ -23,8 +25,6 @@
     </div>
 
   </div>
-
-
 </template>
 
 <script>
@@ -33,39 +33,7 @@ export default {
     return {
       showEmptyPage: false,
       total_point: 0,
-      quizzes: [],
-      exams: [
-        {
-          exam_name: 'Quiz #1',
-          total_items: 5,
-          score: 4,
-          id: 1
-        },
-        {
-          exam_name: 'Quiz #2',
-          total_items: 15,
-          score: 12,
-          id: 2
-        },
-        {
-          exam_name: 'Quiz #3',
-          total_items: 20,
-          score: 18,
-          id: 3
-        },
-        {
-          exam_name: 'Quiz #4',
-          total_items: 10,
-          score: 8,
-          id: 4
-        },
-        {
-          exam_name: 'Quiz #5',
-          total_items: 30,
-          score: 20,
-          id: 5
-        }
-      ]
+      quizzes: []
     }
   },
   methods: {

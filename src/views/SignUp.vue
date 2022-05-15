@@ -10,11 +10,11 @@
       </div>
       <div class="form-group pb-2">
         <label for="username">Username: <span class="text-invalid" v-if="user_missing">(required)</span></label>
-        <input v-model="username" type="text" class="form-control" id="username" placeholder="Enter username" :class="{invalid: user_missing}">
+        <input v-model="username" type="text" class="form-control" id="username" placeholder="Enter username" :class="{invalid: user_missing, invalid: user_exist}">
       </div>
       <div class="form-group pb-2">
         <label for="email">Email: <span class="text-invalid" v-if="email_missing">(required)</span></label>
-        <input v-model="email" type="email" class="form-control" id="email" placeholder="Enter email" :class="{invalid: email_missing}">
+        <input v-model="email" type="email" class="form-control" id="email" placeholder="Enter email" :class="{invalid: email_missing, invalid: email_exist}">
       </div>
       <div class="d-flex w-100">
         <div class="flex-fill form-group pb-2">
@@ -29,11 +29,11 @@
       <div class="d-flex w-100">
         <div class="flex-fill form-group pb-2">
           <label for="password">Password: <span class="text-invalid" v-if="password_missing">(required)</span></label>
-          <input v-model="password" type="password" class="form-control" id="password" placeholder="Enter password" :class="{invalid: password_missing}">
+          <input v-model="password" type="password" class="form-control" id="password" placeholder="Enter password" :class="{invalid: password_missing, invalid: not_match}">
         </div>
         <div class="flex-fill form-group pb-2 ms-2">
           <label for="confirm_password">Confirm Password: <span class="text-invalid" v-if="confirm_missing">(required)</span></label>
-          <input v-model="confirm_password" type="password" class="form-control" id="confirm_password" placeholder="Confirm password" :class="{invalid: confirm_missing}">
+          <input v-model="confirm_password" type="password" class="form-control" id="confirm_password" placeholder="Confirm password" :class="{invalid: confirm_missing, invalid: not_match}">
           
         </div>
       </div>
@@ -101,19 +101,73 @@ export default {
       confirm_password: '',
       accountType: '',
 
-      is_invalid: true,
-      user_missing: true,
-      email_missing: true,
-      fname_missing: true,
-      lname_missing: true,
-      password_missing: true,
-      confirm_missing: true,
-      type_missing: true,
-      message: 'Invalid'
+      is_invalid: false,
+      not_match: false,
+      user_missing: false,
+      user_exist: false,
+      email_missing: false,
+      email_exist: false,
+      fname_missing: false,
+      lname_missing: false,
+      password_missing: false,
+      confirm_missing: false,
+      type_missing: false,
+      message: ''
     }
   },
   methods: {
     async handleSubmit() {
+      this.reset();
+      //check for empty fields
+      if (!this.username) {
+        this.is_invalid = true;
+        this.message = "Incomplete details. Please fill out all necessary information."
+        this.user_missing = true;
+      }
+      if (!this.email) {
+        this.is_invalid = true;
+        this.message = "Incomplete details. Please fill out all necessary information."
+        this.email_missing = true;
+      }
+      if (!this.first_name) {
+        this.is_invalid = true;
+        this.message = "Incomplete details. Please fill out all necessary information."
+        this.fname_missing = true;
+      }
+      if (!this.last_name) {
+        this.is_invalid = true;
+        this.message = "Incomplete details. Please fill out all necessary information."
+        this.lname_missing = true;
+      }
+      if (!this.password) {
+        this.is_invalid = true;
+        this.message = "Incomplete details. Please fill out all necessary information."
+        this.password_missing = true;
+      }
+      if (!this.confirm_password) {
+        this.is_invalid = true;
+        this.message = "Incomplete details. Please fill out all necessary information."
+        this.confirm_missing = true;
+      }
+      if (!this.accountType) {
+        this.is_invalid = true;
+        this.message = "Incomplete details. Please fill out all necessary information."
+        this.type_missing = true;
+      }
+      //check for password
+      if (!this.is_invalid) {
+        if (this.password != this.confirm_password) {
+          this.is_invalid = true;
+          this.not_match = true;
+          this.message = 'Please make sure your password match.'
+        }
+      }
+      //register
+      if (!this.is_invalid) {
+        const result = await this.register();
+      }
+    },
+    async register() {
       const formData = new FormData();
 
       formData.append('username', this.username)
@@ -142,21 +196,35 @@ export default {
           body: JSON.stringify(data)
         });
         const new_user = await response.json();
+        
+        if(response.ok) {
+          this.$router.push('/login')
+        } else {
+          this.is_invalid = true;
+          this.message = new_user.detail;
+          if (this.message.charAt(19) == 'u') {
+            this.user_exist = true;
+          } else if (this.message.charAt(19) == 'e') {
+            this.email_exist = true;
+          }
+        }
         console.log(new_user);
       } catch(e) {
 
       }
-      // const response =
-      //   fetch('http://localhost:8000/users/', {
-			// 		method: 'POST',
-			// 		credentials: 'include',
-      //     headers: {'Content-Type': 'application/json'},
-      //     body: JSON.stringify(data)
-      //     })
-      //     .then(res => res.json())
-      //     .then(data => console.log(data))
-      //     .catch(err => console.log(err))
-      
+    },
+    reset() {
+      this.is_invalid = false;
+      this.not_match = false;
+      this.user_missing = false;
+      this.user_exist = false;
+      this.email_missing = false;
+      this.email_exist = false;
+      this.fname_missing = false;
+      this.lname_missing = false;
+      this.password_missing = false;
+      this.confirm_missing = false;
+      this.type_missing = false;
     }
   }
 }
