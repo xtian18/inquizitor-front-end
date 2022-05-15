@@ -273,7 +273,7 @@ p.cheating {
   margin-top: 40px;
   padding: 20px;
   width: auto;
-  height: auto;
+  height: 72%;
   max-height: 72%;
 }
 
