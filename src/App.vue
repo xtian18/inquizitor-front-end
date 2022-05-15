@@ -54,15 +54,12 @@ export default {
           if(response.ok){
             this.$store.commit('SET_AUTHENTICATED', true);
             const current_user = await response.json();
-            console.log(current_user)
             this.$store.commit('SET_USER', current_user);
-            console.log('logged in')
           }else{
-            console.log('logged out')
             this.$store.commit('SET_AUTHENTICATED', false);
           }
       } catch(e) {
-        console.log(e);
+        // console.log(e);
       }
     }
   },

@@ -108,7 +108,7 @@ export default {
         }
         const result = await this.loadQuestions();
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     },
     async loadQuestions() {
@@ -127,7 +127,7 @@ export default {
           this.setCurrentQuestion();
         }
       } catch(e) {
-        console.log(e);
+        // console.log(e);
       }
     },
     setCurrentQuestion() {
@@ -161,9 +161,8 @@ export default {
             body: JSON.stringify(data),
         });
         const check_answer = await response.json();
-        console.log(check_answer);
       } catch(e) {
-        console.log(e);
+        // console.log(e);
       }
     },
     async finishQuiz() {
@@ -179,9 +178,8 @@ export default {
           }
         );
         const finish = await response.json();
-        console.log(finish)
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     },
     async checkAnswer(e, name) {   

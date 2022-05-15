@@ -24,7 +24,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="username">Quiz Description:</label>
+            <label for="username">Subject</label>
             <div class="d-flex">
               <input type="text" id="username" v-model="quiz.desc" :disabled="!isDescEnabled"/>
               <button class="square" v-if="isDescEnabled" @click="quizDescToggle">
@@ -103,11 +103,75 @@
     <HelpModal :showHelp="showHelp">
       <template v-slot:head>
         <h1>Need Help?</h1>
-        <button type="button" class="btn-close action" @click="showHelp=false">
+        <button type="button" class="btn-close action" @click="showHelp=false,isOpen=0">
         </button>
       </template>
       <template v-slot:body>
-        <p>Content here</p>
+        <div class="help-body">
+          <div class="help-expand" @click="setOpen(1)">
+            <!-- visible -->
+            <div>
+              <p class="help-question"><font-awesome-icon icon="pen-to-square" /> How to update quiz information?</p>
+            </div>
+            <!-- hidden -->
+            <div v-if="isOpen==1" class="mt-3">
+              <ol>
+                <li>At the upper part of the page, you will see a box with the quiz information including its name, subject, due date and code.</li><br>
+                <li>You can update the quiz name, subject or due date by clicking the <strong><font-awesome-icon icon="pen-to-square" /> button</strong> beside the text boxes.</li><br>
+                <li>After clicking the button, the corresponding text box will be available where you can change the information written.</li><br>
+                <li>Once you finish changing the information, you can click the <strong><font-awesome-icon icon="thumbs-up" /> button</strong> to save the changes.</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="help-expand" @click="setOpen(2)">
+            <!-- visible -->
+            <div>
+              <p class="help-question"><font-awesome-icon icon="circle-plus" /> How to add questions?</p>
+            </div>
+            <!-- hidden -->
+            <div v-if="isOpen==2" class="mt-3">
+              <ol>
+                <li>If you want to add questions, click the <strong>"Add Question"</strong> button at the upper right corner.</li><br>
+                <li>After clicking the button, a window will pop-up where you can enter the question information.</li><br>
+                <li>The first text box is where you need the put the equivalent points of the question. The second text box is where you need to put the question itself. Below them is where you need to put the choices and the correct answer.</li><br>
+                <li>If you need more choices, click the <strong><font-awesome-icon icon="circle-plus" /> button</strong> below to add up to four choices. To delete a choice, click <strong><font-awesome-icon icon="trash-can" /> button</strong> on the right side of the choice you want to remove. To select the correct answer, click the <strong>circular button</strong> on the left side of the corresponding choice.</li><br>
+                <li>Once you completed all the necessary information, the <strong>"Save"</strong> button will be available so that you can finally add the question to the quiz.</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="help-expand" @click="setOpen(3)">
+            <!-- visible -->
+            <div>
+              <p class="help-question"><font-awesome-icon icon="pen-to-square" /> How to update a question?</p>
+            </div>
+            <!-- hidden -->
+            <div v-if="isOpen==3" class="mt-3">
+              <ol>
+                <li>In each question, there will be two buttons on the upper right corner of the box. Just click the <strong><font-awesome-icon icon="pen-to-square" /> button</strong> if you want to update or edit a particular question.</li><br>
+                <li>After clicking the button, a window will pop-up (similar when adding questions) containing the question information. Here you will be able to the edit points, question, choices and correct answer. Just change the particular question information in the corresponding text boxes you want to update.</li><br>
+                <li>Once you are finished, click the <strong>"Save"</strong> button to save the changes.</li>
+
+              </ol>
+            </div>
+          </div>
+
+          <div class="help-expand" @click="setOpen(4)">
+            <!-- visible -->
+            <div>
+              <p class="help-question"><font-awesome-icon icon="trash-can" /> How to delete a question?</p>
+            </div>
+            <!-- hidden -->
+            <div v-if="isOpen==4" class="mt-3">
+              <ol>
+                <li>In each question, there will be two buttons on the upper right corner of the box. Just click the <strong><font-awesome-icon icon="trash-can" /> button</strong> if you want to delete a particular question.</li><br>
+                <li>After clicking the button, a dialog box will pop-up asking for a confirmation before deleting the question.</li><br>
+                <li>Click the <strong>"Delete"</strong> button if you are sure you want to delete the question.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
       </template>
       <template v-slot:foot>
         <button class="btn btn-main" @click="showHelp=false">OK</button>
@@ -272,6 +336,7 @@ export default {
       showModalUpdate: false,
       showDialog: false,
       showHelp: false,
+      isOpen: 0,
       isSaveEnabled: false,
       isNameEnabled: false,
       isDescEnabled: false,
@@ -293,6 +358,9 @@ export default {
     }
   },
   methods: {
+    setOpen(index) {
+      this.isOpen = index;
+    },
     async loadQuiz() {
       this.quiz = [];
       this.questions_id = [];
@@ -316,7 +384,7 @@ export default {
         this.loadQuestions();
 
       } catch(e) {
-        console.log(e)
+        // console.log(e)
       }
     },
     async loadQuestions() {
@@ -334,9 +402,8 @@ export default {
           this.questions.push(loadQuestions);
         }
         const result = await this.updateQuiz();
-        console.log(this.quiz)
       } catch(e) {
-        console.log(e);
+        // console.log(e);
       }
     },
     async updateQuiz() {
@@ -367,7 +434,7 @@ export default {
         });
         const updated = await response.json();
       } catch(e) {
-        console.log(e);
+        // console.log(e);
       }
     },
     quizNameToggle() {
@@ -462,7 +529,7 @@ export default {
         this.showDialog = false;
         await this.loadQuiz();
       } catch(e) {
-        console.log(e)
+        // console.log(e)
       }
     },
     async submitQuestion() {
@@ -501,9 +568,8 @@ export default {
         });
         const addQuestion = await response.json();
         this.current_question_id = addQuestion.id;
-        console.log(addQuestion)
       } catch(e) {
-        console.log(e)
+        // console.log(e)
       }
     },
     async updateQuestion() {
@@ -528,7 +594,7 @@ export default {
           body: JSON.stringify(data),
         });
       } catch(e) {
-        console.log(e);
+        // console.log(e);
       }
     },
     async addChoice(choices,answer) {
@@ -561,7 +627,7 @@ export default {
         });
         }
       } catch(e) {
-        console.log(e);
+        // console.log(e);
       }
     },
     addChoiceInput() {
@@ -569,7 +635,6 @@ export default {
     },
     async deleteChoice() {
       try {
-        console.log()
         const choice_array = this.questions[this.question_num-1].choices;
 
         for (const choice of choice_array) {
@@ -583,7 +648,7 @@ export default {
         });
         }
       } catch(e) {
-        console.log(e);
+        // console.log(e);
       }
     },
     removeChoiceInput(index) {

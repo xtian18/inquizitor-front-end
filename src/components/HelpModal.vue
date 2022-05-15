@@ -2,10 +2,10 @@
   <teleport to="#app">
     <div class="modal-overlay" v-if="showHelp">
       <div class="modal-container d-flex flex-column">
-        <div class="modal-head">
+        <div class="modal-head text-center">
           <slot name="head">Header</slot>
         </div>
-        <div class="modal-body text-center">
+        <div class="modal-body">
           <slot name="body">Body</slot>
         </div>
         <div class="modal-foot">
@@ -27,8 +27,8 @@ export default {
 
 <style scoped>
 .modal-container {
-  padding: 20px 50px;
-  width: 80%;
+  padding: 20px 10px;
+  width: 70% !important;
   height: auto;
 }
 .modal-head {
@@ -36,6 +36,7 @@ export default {
 }
 .modal-body {
   width: 100%;
+  padding: 0.5rem !important;
 }
 .modal-foot {
   width: 100%;

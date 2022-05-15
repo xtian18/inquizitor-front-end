@@ -88,9 +88,8 @@ export default {
         });
         const data = await response.json();
         this.quizzes = data;
-        console.log(this.quizzes)
       } catch(e) {
-        console.log(e);
+        // console.log(e);
       }
     },
     computeTotal(index) {

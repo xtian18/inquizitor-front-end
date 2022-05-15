@@ -2,13 +2,13 @@
   <teleport to="#app">
     <div class="modal-overlay" v-if="showDialog">
       <div class="modal-container d-flex flex-column">
-        <div class="modal-head">
+        <div class="modal-head text-center">
           <slot name="head">Header</slot>
         </div>
         <div class="modal-body text-center">
           <slot name="body">Body</slot>
         </div>
-        <div class="modal-foot">
+        <div class="modal-foot text-center">
           <slot name="foot">Footer</slot>
         </div>
       </div>

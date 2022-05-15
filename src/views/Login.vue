@@ -60,16 +60,14 @@ export default {
         });
         const login = await check_token.json();
         if(check_token.ok) {
-          const response = await this.attempt(login)
-          this.$router.push('/')
-          console.log(this.$store.state.user.is_teacher)
+          const response = await this.attempt(login);
+          this.$router.push('/');
         } else if(check_token.status == 400) {
           this.is_invalid = true;
           this.message = login.detail;
         } else if(check_token.status == 422) {
           this.is_invalid = true;
           this.message = 'Incomplete details';
-          console.log(login.detail)
           if (login.detail.filter(e => e.loc[1] === 'username').length > 0) {
             this.user_missing = true;
           }

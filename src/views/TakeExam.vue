@@ -42,16 +42,6 @@ export default {
     }
   },
   methods: {
-    getDate() {
-      var due = new Date(this.quiz.due_date);
-      var currentDate = new Date();
-
-      if(currentDate >= due) {
-        this.is_due_date = true
-      } else {
-        this.$router.push(`/take-quiz/${this.quiz.quiz_code}`);
-      }
-    },
     async handleSubmit() {
       if(this.code) {
         try {
@@ -65,10 +55,12 @@ export default {
           });
           const data = await response.json();
           this.quiz = data;
-          if(data.detail == 'Quiz not found') {
+          if(response.ok) {
+            this.$router.push(`/take-quiz/${this.quiz.quiz_code}`);
+          } else if(data.detail == 'Quiz not found') {
             this.is_invalid = true;
-          } else {
-            this.getDate();
+          } else if(response.status == 400) {
+            this.is_due_date = true
           }
         } catch (e) {
           // console.log(e);

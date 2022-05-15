@@ -41,7 +41,7 @@
           </div>
 
           <div class="report-modal-container d-flex">
-            <div class="right-container">
+            <div>
 
               <div class="d-flex">
                 <div class="w-50">
@@ -128,9 +128,8 @@ export default {
         });
         const data = await response.json();
         this.quizzes = data;
-        // console.log(this.quizzes)
       } catch(e) {
-        console.log(e);
+        // console.log(e);
       }
     },
     async loadParticipants() {
@@ -154,10 +153,9 @@ export default {
           this.quizzes[index].total = this.total_point;
           index++;
         } catch(e) {
-          console.log(e);
+          // console.log(e);
         }
       }
-      // console.log(this.participants);
     },
     getAverage(index) {
       let total = 0;
@@ -226,6 +224,12 @@ export default {
 </script>
 
 <style>
+@media only screen and (max-width: 992px) {
+  tr .btn {
+  width: 80% !important;
+}
+}
+
 .modal-container {
   width: 55% !important;
   min-width: 500px;
@@ -273,7 +277,7 @@ p.cheating {
   margin-top: 40px;
   padding: 20px;
   width: auto;
-  height: auto;
+  height: 72%;
   max-height: 72%;
 }
 

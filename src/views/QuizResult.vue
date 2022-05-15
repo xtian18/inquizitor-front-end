@@ -87,14 +87,14 @@ export default {
         this.setUserAnswer();
         
       } catch(e) {
-        console.log(e);
+        // console.log(e);
       }
     }, 
     getCurrentQuiz() {
       try {
         this.current_quiz = this.quizzes.filter(item => item.quiz_code == this.code)[0];
       } catch(e) {
-        console.log(e)
+        // console.log(e)
       }
     },
     setUserAnswer() {
@@ -126,7 +126,7 @@ export default {
           this.questions.push(loadQuestions);
         }
       } catch(e) {
-        console.log(e);
+        // console.log(e);
       }
     },
     computeTotal() {
