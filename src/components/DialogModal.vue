@@ -29,6 +29,7 @@ export default {
 .modal-container {
   padding: 20px 50px;
   width: auto !important;
+  min-width: 560px;
   height: auto;
 }
 .modal-head {
@@ -39,5 +40,10 @@ export default {
 }
 .modal-foot {
   width: 100%;
+}
+@media only screen and (max-width: 576px) {
+  .modal-container {
+    min-width: 500px;
+  }
 }
 </style>

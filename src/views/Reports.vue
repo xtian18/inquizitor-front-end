@@ -2,12 +2,14 @@
   <div>
     <h1>Reports</h1>
 
+    <!-- show of no quizzes -->
     <div v-if="showEmptyPage" class="empty-page text-center">
       <img class="" src="@/assets/empty-page.png" alt="">
       <h3>You haven't created any quizzes yet</h3>
       <h2 class="empty" @click="() => this.$router.push('/my-quizzes')">Go to My Quizzes</h2>
     </div>
 
+    <!-- tabular reports -->
     <div class="report-container" v-else>
       <div class="table-wrapper">
         <table class="table table-striped table-hover">

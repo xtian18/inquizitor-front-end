@@ -3,7 +3,7 @@
     <h1>Take Quiz</h1>
     <div class="form-container">
       <h3>Enter quiz code:</h3>
-      <!-- 4AqLwb -->
+
       <form @submit.prevent="handleSubmit" class="mt-4">
         <div v-if="is_invalid" class="mb-2">
           <ErrorMessage>
@@ -23,6 +23,7 @@
         <input type="text" class="mb-3 text-center" v-model="code" @focus="reset">
         <button type="submit" class="btn btn-main">Enter</button>
       </form>
+      
     </div>
   </div>
 </template>
@@ -85,6 +86,7 @@ export default {
   width: 50%;
   height: auto;
   text-align: center;
+  min-width: 350px;
 }
 .form-container h3 {
   font-weight: 600;

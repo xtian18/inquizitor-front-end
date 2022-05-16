@@ -4,13 +4,17 @@
 
     <a class="help" @click="showHelp=true">Help <font-awesome-icon icon="circle-question" /></a>
 
+    <!-- show if no quizzes -->
     <div v-if="showEmptyPage" class="empty-page text-center">
       <img class="" src="@/assets/empty-page.png" alt="">
       <h3>You haven't created any quizzes yet</h3>
       <h2 class="empty" @click="showModal = true">Create your first one now!</h2>
     </div>
 
+
     <button class="btn btn-main" @click="showModal = true" v-else>Create new</button>
+
+    <!-- quiz list -->
     <div class="exam-list" v-if="!showEmptyPage">
       <div class="exam" v-for="quiz in quizzes" :key="quiz.id">
         <div class="me-auto">
@@ -28,8 +32,7 @@
       </div>
     </div>
 
-
-
+    <!-- delete confirmation modal -->
     <DialogModal :showDialog="showDialog">
       <template v-slot:head>
         <h1>Delete Quiz</h1>
@@ -45,6 +48,7 @@
       </template>
     </DialogModal>
 
+    <!-- help modal -->
     <HelpModal :showHelp="showHelp">
       <template v-slot:head>
         <h1>Need help?</h1>
@@ -112,7 +116,7 @@
       <div class="modal-overlay" v-if="showModal">
         <div class="modal-container d-flex flex-column">
           <div class="modal-head">
-            <h1 class="me-auto">Create New Quiz</h1>
+            <h1 class="me-auto text-center">Create New Quiz</h1>
             <button type="button" class="btn-close action" @click="showModal = !showModal"></button>
           </div>
           <div class="modal-body text-center">
@@ -275,6 +279,7 @@ export default {
 }
 .exam-icon {
   font-size: 2em;
+  min-width: 90px;
 }
 .exam-icon svg {
   color: #93989c;

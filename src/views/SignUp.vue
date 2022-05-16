@@ -10,11 +10,11 @@
       </div>
       <div class="form-group pb-2">
         <label for="username">Username: <span class="text-invalid" v-if="user_missing">(required)</span></label>
-        <input v-model="username" type="text" class="form-control" id="username" placeholder="Enter username" :class="{invalid: user_missing, invalid: user_exist}">
+        <input v-model="username" type="text" class="form-control" id="username" placeholder="Enter username" :class="{invalid: invalid_username}">
       </div>
       <div class="form-group pb-2">
         <label for="email">Email: <span class="text-invalid" v-if="email_missing">(required)</span></label>
-        <input v-model="email" type="email" class="form-control" id="email" placeholder="Enter email" :class="{invalid: email_missing, invalid: email_exist}">
+        <input v-model="email" type="email" class="form-control" id="email" placeholder="Enter email" :class="{invalid: invalid_email}">
       </div>
       <div class="d-flex w-100">
         <div class="flex-fill form-group pb-2">
@@ -29,11 +29,11 @@
       <div class="d-flex w-100">
         <div class="flex-fill form-group pb-2">
           <label for="password">Password: <span class="text-invalid" v-if="password_missing">(required)</span></label>
-          <input v-model="password" type="password" class="form-control" id="password" placeholder="Enter password" :class="{invalid: password_missing, invalid: not_match}">
+          <input v-model="password" type="password" class="form-control" id="password" placeholder="Enter password" :class="{invalid: invalid_pass}">
         </div>
         <div class="flex-fill form-group pb-2 ms-2">
           <label for="confirm_password">Confirm Password: <span class="text-invalid" v-if="confirm_missing">(required)</span></label>
-          <input v-model="confirm_password" type="password" class="form-control" id="confirm_password" placeholder="Confirm password" :class="{invalid: confirm_missing, invalid: not_match}">
+          <input v-model="confirm_password" type="password" class="form-control" id="confirm_password" placeholder="Confirm password" :class="{invalid: invalid_confirm}">
           
         </div>
       </div>
@@ -49,39 +49,6 @@
         <button type="submit" class="btn btn-main">Sign Up</button>
       </div>
     </form>
-    <!-- <form @submit.prevent="handleSubmit">
-      <div class="form-group pb-2">
-        <label for="username">Username:</label>
-        <input v-model="username" type="text" class="form-control" id="username" placeholder="Enter username">
-      </div>
-      <div class="form-group pb-2">
-        <label for="email">Email:</label>
-        <input v-model="email" type="email" class="form-control" id="email" placeholder="Enter email">
-      </div>
-      <div class="form-group pb-2">
-        <label for="first_name">First Name::</label>
-        <input v-model="first_name" type="text" class="form-control" id="first_name" placeholder="Enter first name">
-      </div>
-      <div class="form-group pb-2">
-        <label for="last_name">Last Name:</label>
-        <input v-model="last_name" type="text" class="form-control" id="last_name" placeholder="Enter last name">
-      </div>
-      <div class="form-group pb-2">
-        <label for="password">Password:</label>
-        <input v-model="password" type="password" class="form-control" id="password" placeholder="Enter password">
-      </div>
-      <div class="form-group pb-2">
-        <label for="account">Account Type:</label>
-        <select v-model="accountType" class="form-control" id="account">
-          <option value="" disabled selected>Select account type</option>
-          <option value="0">Student</option>
-          <option value="1">Teacher</option>
-        </select>
-      </div>
-      <div class="text-center pt-2">
-        <button type="submit" class="btn btn-main">Sign Up</button>
-      </div>
-    </form> -->
   </div>
 </div>
 </template>
@@ -113,6 +80,20 @@ export default {
       confirm_missing: false,
       type_missing: false,
       message: ''
+    }
+  },
+  computed: {
+    invalid_username() {
+      return this.user_missing || this.user_exist;
+    },
+    invalid_email() {
+      return this.email_missing || this.email_exist;
+    },
+    invalid_pass() {
+      return this.password_missing || this.not_match;
+    },
+    invalid_confirm() {
+      return this.confirm_missing || this.not_match;
     }
   },
   methods: {

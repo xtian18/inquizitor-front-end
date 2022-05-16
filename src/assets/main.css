@@ -230,3 +230,9 @@ h2.empty:hover {
     color: #3EB489; 
     transform: scale(1.1);
 }
+
+@media only screen and (max-width: 576px) {
+    .btn-secondary, .btn-danger {
+        max-width: 180px;
+    }
+}

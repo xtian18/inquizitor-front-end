@@ -4,10 +4,12 @@
       <h1>Quiz Result:</h1>
     </div>
 
+    <!-- results container -->
     <div class="resultbox">
       <h3 id="results">You got {{ current_quiz.score }} out of {{ current_quiz.total }} for this quiz!</h3>
     </div>
 
+    <!-- show answer key if passed due date -->
     <div class="question-list" v-if="is_due_date">
       <div class="question" v-for="(question,index) in questions" :key="question.id">
         <div class="d-flex">
@@ -26,11 +28,13 @@
       </div>
     </div>
 
+    <!-- show if answer key is not yet available -->
     <div v-else class="empty-page text-center">
       <img class="" src="@/assets/empty-page.png" alt="">
       <h3>Answer key is unvailable until</h3>
       <h2 style="color: #3EB489; font-weight: 700">{{due_date}}</h2>
     </div>
+
   </div>
 </template>
 

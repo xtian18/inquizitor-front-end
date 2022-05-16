@@ -1,8 +1,9 @@
 <template>
 <div class="container">
   <div class="form-container">
-    <!-- <button @click="test">test</button> -->
+
     <h1 class="text-center">Login</h1>
+    
     <form @submit.prevent="handleLogin">
       <div v-if="is_invalid" class="mb-2">
         <ErrorMessage>
@@ -22,6 +23,7 @@
         <button class="btn btn-main" type="submit">Login</button>
       </div>
     </form>
+
   </div>
 </div>
 </template>
@@ -88,6 +90,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.form-container {
+  min-width: 400px;
+}
 </style>

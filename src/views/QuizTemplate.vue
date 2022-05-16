@@ -107,6 +107,7 @@ export default {
           this.questions_id.push(question.id);
         }
         const result = await this.loadQuestions();
+        console.log(loadQuiz);
       } catch (e) {
         // console.log(e);
       }

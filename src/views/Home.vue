@@ -10,7 +10,7 @@
         <router-link :to="{name: 'Activities'}" :class="{active: this.$route.path.slice(0,12) === '/activities/'}"><font-awesome-icon icon="folder-open" title="Activities" /><span>Activities</span></router-link>
       </li>
     </SideBar>
-    <!-- Side bar if account tyoe is teacher -->
+    <!-- Side bar if account type is teacher -->
     <SideBar v-if="user.is_teacher">
       <li>
         <router-link :to="{name: 'MyQuizzes'}" :class="{active: this.$route.path.slice(0,12) === '/my-quizzes/'}"><font-awesome-icon icon="server" title="My Quizzes" /><span>My Quizzes</span></router-link>
@@ -28,7 +28,7 @@
     <div class="container">
       <div class="home-content">
         <p class="title">Welcome!</p>
-        <p class="subtitle">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique distinctio esse corporis consectetur, repellat quis accusantium eveniet sapiente sint dolor!</p>
+        <p class="subtitle">Kweeznuts is a great tool to conduct online quizzes as it offers convenience to both teachers and students. It allows easy creation of quiz for teachers and simple quiz taking for students.</p>
         <button class="btn btn-main" @click="this.$router.push('/signup')">Get Started</button>
       </div>
     </div>
@@ -41,12 +41,6 @@ import SideBar from '@/components/SideBar.vue'
 export default {
   name: 'Home',
   components: { SideBar },
-  data() {
-    return {
-      isLoggedIn: true, //testing
-      accountType: 'teacher' //testing
-    }
-  },
   computed: {
     user() {
       return this.$store.state.user;
@@ -56,37 +50,11 @@ export default {
 </script>
 
 <style>
-@media only screen and (max-width: 992px) {
-    .main-content {
-      width: 100%;
-      padding: 20px 10px !important;
-    }
-}
-
-@media only screen and (max-width: 768px){
-
-    .sidebar{
-      min-width: 80px;
-      font-size: 25px;
-      text-align: center;
-    }
-
-    .sidebar li{
-      margin-left: -50px;
-      margin-top: 30px;
-    }
-
-    .sidebar span{
-      display: none;
-    }
-}
-
 .page-content {
   height: 100%;
 }
 .main-content {
   width: 100%;
-  /* min-width: 800px; */
   position: relative;
   padding: 20px 120px 20px 60px;
 }
@@ -124,5 +92,41 @@ p.title {
 p.subtitle {
   margin-top: -10px;
   color: white;
+}
+@media only screen and (max-width: 992px) {
+  .main-content {
+    width: 100%;
+    padding: 20px 10px !important;
+  }
+  .home-content {
+    text-align: center;
+    width: 60%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+}
+
+@media only screen and (max-width: 768px){
+  .sidebar{
+    min-width: 80px;
+    font-size: 25px;
+    text-align: center;
+  }
+
+  .sidebar li{
+    margin-left: -50px;
+    margin-top: 30px;
+  }
+
+  .sidebar span{
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .home-content {
+    width: 90%;
+  }
 }
 </style>
