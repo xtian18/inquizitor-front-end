@@ -189,10 +189,27 @@
           <div class="modal-body">
             <form @submit.prevent="handleSubmit">
               <div class="form-group pb-2">
-                <!-- points -->
-                <div>
-                  <label for="question" class="mt-3">Points:</label><br>
-                  <input type="number" min="1" v-model="points" @change="enableSave"/>
+                <div class="d-flex align-items-baseline">
+                  <!-- question type -->
+                  <div>
+                    <label>Question Type:</label>
+                    <div class="question-type mt-1 d-flex flex-column flex-lg-row">
+                      <div>
+                        <input type="radio" id="multiple-choice" name="question_type" value="multiple-choice" v-model="question_type"  @change="enableSave">
+                        <label for="multiple-choice" class="ms-2 me-4">Multiple Choice</label>
+                      </div>
+                      <div>
+                        <input type="radio" id="fill-in-the-blank" name="question_type" value="fill-in-the-blank" v-model="question_type" @change="enableSave">
+                        <label for="fill-in-the-blank" class="ms-2 mt-1">Fill in the Blank</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- points -->
+                  <div class="w-auto ms-auto">
+                    <label for="question" class="">Points:</label><br>
+                    <input type="number" min="1" v-model="points" @change="enableSave"/>
+                  </div>
                 </div>
 
                 <!-- question -->
@@ -205,20 +222,31 @@
                 <div>
                   <label class="mt-3">Answer:</label>
                   <!-- multiple choice -->
-                  <div class="w-100" v-if="question_type === 'a'">
-                    <div class="w-100 d-flex" v-for="(item, index) in multiple_choice" :key="index" selected>
+                  <div class="w-100" v-if="question_type === 'multiple-choice'">
+                    <div class="w-100 d-flex" v-for="(item, index) in choices" :key="index" selected>
                       <input type="radio" :id="index" name="choice" :value="index" v-model="selected_choice" @change="enableSave"/>
                       <label for="1" class="ms-2 w-100">
                         <input type="text" v-model="item.content" @keyup="enableSave"/>
                       </label>
-                      <button class="round"  @click="removeChoiceInput(index)" v-if="multiple_choice.length > 1">
+                      <button class="round"  @click="removeChoiceInput(index)" v-if="choices.length > 1">
                         <font-awesome-icon icon="trash-can" />
                       </button>
                     </div>
                     <div class="d-flex w-100">
-                      <button class="round mx-auto" @click="addChoiceInput" v-if="multiple_choice.length < 4">+</button>
+                      <button class="round mx-auto" @click="addChoiceInput" v-if="choices.length < 4">+</button>
                     </div>
                   </div>
+                  <!-- fill-in-the-blank -->
+                  <div v-if="question_type === 'fill-in-the-blank'">
+                    <div class="w-100 d-flex" v-for="(item, index) in choices" :key="index">
+                      <input class="radio" type="text" v-model="item.content">
+                      <button class="round" @click="removeChoiceInput(index)" v-if="choices.length > 1">
+                        <font-awesome-icon icon="trash-can" />
+                      </button>
+                    </div>
+                    <div class="d-flex w-100"><button class="round mx-auto" @click="addChoiceInput" v-if="choices.length < 4">+</button></div>
+                  </div>
+                  
                 </div>
 
               </div>
@@ -244,10 +272,27 @@
           <div class="modal-body">
             <form @submit.prevent="handleSubmit">
               <div class="form-group pb-2">
-                <!-- points -->
-                <div>
-                  <label for="question" class="mt-3">Points:</label><br>
-                  <input type="number" min="1" v-model="points" @change="enableSave"/>
+                <div class="d-flex align-items-baseline">
+                  <!-- question type -->
+                  <div>
+                    <label>Question Type:</label>
+                    <div class="question-type mt-1 d-flex flex-column flex-lg-row">
+                      <div>
+                        <input type="radio" id="multiple-choice" name="question_type" value="multiple-choice" v-model="question_type"  @change="enableSave">
+                        <label for="multiple-choice" class="ms-2 me-4">Multiple Choice</label>
+                      </div>
+                      <div>
+                        <input type="radio" id="fill-in-the-blank" name="question_type" value="fill-in-the-blank" v-model="question_type" @change="enableSave">
+                        <label for="fill-in-the-blank" class="ms-2 mt-1">Fill in the Blank</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- points -->
+                  <div class="w-auto ms-auto">
+                    <label for="question" class="">Points:</label><br>
+                    <input type="number" min="1" v-model="points" @change="enableSave"/>
+                  </div>
                 </div>
 
                 <!-- questions -->
@@ -260,20 +305,30 @@
                 <div>
                   <label class="mt-3">Answer:</label>
                   <!-- multiple choice -->
-                  <div class="w-100" v-if="question_type === 'a'">
-                    <div class="w-100 d-flex" v-for="(item, index) in multiple_choice" :key="index" selected>
+                  <div class="w-100" v-if="question_type === 'multiple-choice'">
+                    <div class="w-100 d-flex" v-for="(item, index) in choices" :key="index" selected>
                       <input type="radio" :id="index" name="choice" :value="index" v-model="selected_choice" :checked="item.is_correct"  @click="enableSave"/>
                       <label for="1" class="ms-2 w-100">
                         <input type="text" v-model="item.content" @keyup="enableSave"/>
                       </label>
 
-                      <button class="round"  @click="removeChoiceInput(index)" v-if="multiple_choice.length > 1">
+                      <button class="round"  @click="removeChoiceInput(index)" v-if="choices.length > 1">
                         <font-awesome-icon icon="trash-can" />
                       </button>
                     </div>
                     <div class="d-flex w-100">
-                      <button class="round mx-auto" @click="addChoiceInput" v-if="multiple_choice.length < 4">+</button>
+                      <button class="round mx-auto" @click="addChoiceInput" v-if="choices.length < 4">+</button>
                     </div>
+                  </div>
+                  <!-- fill-in-the-blank -->
+                  <div v-if="question_type === 'fill-in-the-blank'">
+                    <div class="w-100 d-flex" v-for="(item, index) in choices" :key="index">
+                      <input class="radio" type="text" v-model="item.content">
+                      <button class="round" @click="removeChoiceInput(index)" v-if="choices.length > 1">
+                        <font-awesome-icon icon="trash-can" />
+                      </button>
+                    </div>
+                    <div class="d-flex w-100"><button class="round mx-auto" @click="addChoiceInput" v-if="choices.length < 4">+</button></div>
                   </div>
                 </div>
 
@@ -314,18 +369,18 @@ export default {
       question_num: '',
 
       //question moodal information
-      question_type: 'a',
+      question_type: 'multiple-choice',
       new_question: '',
       points: '1',
       new_choice: '',
       selected_choice: '',
       temp_selected: '',
-      multiple_choice: [
+      choices: [
         {
           content: '',
         }
       ],
-      temp_multiple_choice: [
+      temp_choices: [
         {
           content: '',
         }
@@ -358,6 +413,9 @@ export default {
     }
   },
   methods: {
+    test() {
+      console.log(this.question_type)
+    },
     setOpen(index) {
       this.isOpen = index;
     },
@@ -452,17 +510,18 @@ export default {
     },
     resetValues() {
       this.isSaveEnabled = false;
+      this.question_type = 'multiple-choice'
       this.points = '1';
       this.new_question = '';
       this.new_choice = '';
       this.selected_choice = '';
       this.temp_selected = '';
-      this.multiple_choice = [
+      this.choices = [
         {
           content: '',
         }
       ];
-      this.temp_multiple_choice = [
+      this.temp_choices = [
         {
           content: '',
         }
@@ -473,47 +532,63 @@ export default {
       this.resetValues();
     },
     async cancelUpdate() {
-      const result = await this.addChoice(this.temp_multiple_choice, this.temp_selected);
+      if(this.question_type === 'multiple-choice') {
+        const result = await this.addChoice(this.temp_choices, this.temp_selected);
+      } else {
+        const result = await this.addChoice(this.temp_choices);
+      }
+      
       this.showModalUpdate = false;
       this.resetValues();
       const result2 = await this.loadQuiz();
     },
     enableSave() {
-      if(this.selected_choice === '') {
-        this.isSaveEnabled = false;
-      } else if (this.new_question && this.multiple_choice && this.points) {
-        this.isSaveEnabled = true;
+      if(this.question_type === 'multiple-choice') {
+        if(this.selected_choice === '') {
+          this.isSaveEnabled = false;
+        } else if (this.new_question && this.choices && this.points) {
+          this.isSaveEnabled = true;
+        } else {
+          this.isSaveEnabled = false;
+        }
       } else {
-        this.isSaveEnabled = false;
+        if (this.new_question && this.choices && this.points) {
+          this.isSaveEnabled = true;
+        } else {
+          this.isSaveEnabled = false;
+        }
       }
+
     },
     handleAdd() {
       this.showModal = true;
       this.new_question = '';
-      this.multiple_choice = [{
-          content: '',
-        }];
+      this.choices = [{
+        content: '',
+      }];
     },
     handleDelete(question_id) {
       this.showDialog = true;
       this.current_question_id = question_id;
     },
     handleUpdate(question_id, question_num) {
-      this.temp_multiple_choice = [];
+      this.temp_choices = [];
       this.temp_selected = '',
       this.current_question_id = question_id;
       this.question_num = question_num;
 
       this.current_question = this.questions.filter(item => item.id == question_id)[0];
+      this.question_type = this.current_question.question_type;
       this.points = this.current_question.points;
       this.new_question = this.current_question.content;
-      this.multiple_choice = JSON.parse(JSON.stringify(this.current_question.choices));
+      this.choices = JSON.parse(JSON.stringify(this.current_question.choices));
+      this.temp_choices = JSON.parse(JSON.stringify(this.choices));
 
+      if(this.question_type === 'multiple-choice') {
+        this.temp_selected = this.selected_choice;
+      }
+    
       this.showModalUpdate = true;
-
-      this.temp_multiple_choice = JSON.parse(JSON.stringify(this.multiple_choice));
-      this.temp_selected = this.selected_choice;
-
       this.deleteChoice();
     },
     async deleteQuestion() {
@@ -534,24 +609,33 @@ export default {
     },
     async submitQuestion() {
       const result = await this.addQuestion();
-      const result2 = await this.addChoice(this.multiple_choice, this.selected_choice);
+      if(this.question_type === 'multiple-choice') {
+        const result2 = await this.addChoice(this.choices, this.selected_choice);
+      } else {
+        const result2 = await this.addChoice(this.choices);
+      }
       this.closeAddModal();
       this.loadQuiz();
     },
     async submitUpdate() {
       const result = await this.updateQuestion();
-      const result2 = await this.addChoice(this.multiple_choice, this.selected_choice);
+      if(this.question_type === 'multiple-choice') {
+        const result2 = await this.addChoice(this.choices, this.selected_choice);
+      } else {
+        const result2 = await this.addChoice(this.choices);
+      }
       this.showModalUpdate = false;
       this.resetValues();
       this.loadQuiz();
     },
     async addQuestion() {
       const formData = new FormData();
-
+      
       formData.append("content", this.new_question);
       formData.append("points", this.points);
       formData.append("order", this.order);
       formData.append("quiz_id", this.id);
+      formData.append("question_type", this.question_type);
 
       const data = {};
       formData.forEach((value, key) => (data[key] = value));
@@ -579,6 +663,7 @@ export default {
       formData.append("points", this.points);
       formData.append("order", this.order);
       formData.append("quiz_id", this.id);
+      formData.append("question_type", this.question_type);
 
       const data = {};
       formData.forEach((value, key) => (data[key] = value));
@@ -597,10 +682,12 @@ export default {
         // console.log(e);
       }
     },
-    async addChoice(choices,answer) {
+    async addChoice(choices,answer='all') {
       try {
         for (let index=0; index<choices.length; index++) {
-          if(index == answer) {
+          if (answer === 'all') {
+            choices.is_correct = true;
+          } else if(index == answer) {
             choices.is_correct = true;
           } else {
             choices.is_correct = false;
@@ -631,7 +718,7 @@ export default {
       }
     },
     addChoiceInput() {
-      this.multiple_choice.push({ value: "" });
+      this.choices.push({ value: "" });
     },
     async deleteChoice() {
       try {
@@ -652,10 +739,7 @@ export default {
       }
     },
     removeChoiceInput(index) {
-      this.multiple_choice.splice(index, 1);
-    },
-    addAnswer() {
-      this.fill_in_the_blank.push("");
+      this.choices.splice(index, 1);
     }
   },
   async created() {
@@ -760,12 +844,13 @@ input[type="radio"] {
   position: relative;
   top: 14px;
   left: -1px;
+  visibility: hidden;
 }
 input[type="radio"]:after {
   width: 15px;
   height: 15px;
   border-radius: 15px;
-  top: -4px;
+  top: 6px;
   left: -2px;
   position: relative;
   background-color: #d1d3d1;
@@ -778,7 +863,7 @@ input[type="radio"]:checked:after {
   width: 15px;
   height: 15px;
   border-radius: 15px;
-  top: -4px;
+  top: 6px;
   left: -2px;
   position: relative;
   background-color: #272A3F;
@@ -788,7 +873,7 @@ input[type="radio"]:checked:after {
   border: 2px solid white;
 }
 .question-type input[type="radio"] {
-  top: 2px;
+  top: -20px;
 }
 .round {
   margin-left: 10px;
