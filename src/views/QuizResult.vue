@@ -18,13 +18,29 @@
           <span class="points" v-else>({{ question.points }} points)</span>
         </div>
         <p>{{ question.content }}</p>
-        <div class="ms-3">
+
+        <div class="ms-3" v-if="question.question_type === 'multiple-choice'">
           <div v-for="item in question.choices" :key="item.id">
             <div class="choices" :class="{wrong: item.is_answer, answer: item.is_correct,}">
               {{ item.content }}
             </div>
           </div>
         </div>
+
+        <div class="ms-3" v-else>
+          <div v-if="question.answer" :class="{wrong: !question.is_correct, answer: question.is_correct}" class="choices">
+            {{ question.answer }}
+          </div>
+          <div class="mt-2" v-if="!question.is_correct">
+            <small>Correct Answer(s):</small>
+            <div v-for="item in question.choices" :key="item.id">
+              <div class="choices answer">
+                {{ item.content }}
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -104,10 +120,12 @@ export default {
     setUserAnswer() {
       for(const answer of this.current_quiz.answers) {
         this.current_question = this.questions.filter(question => question.id == answer.question_id)[0];
+        this.current_question.answer = answer.content;
+        this.current_question.is_correct = answer.is_correct;
         for(const choice of this.current_question.choices) {
           const a = choice.id;
           const b = answer.choice_id;
-          if(a == b) {
+          if(a === b) {
             choice.is_answer = true;
           } else {
             choice.is_answer = false;

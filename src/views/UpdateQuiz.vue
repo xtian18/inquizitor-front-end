@@ -272,31 +272,14 @@
           <div class="modal-body">
             <form @submit.prevent="handleSubmit">
               <div class="form-group pb-2">
-                <div class="d-flex align-items-baseline">
-                  <!-- question type -->
-                  <div>
-                    <label>Question Type:</label>
-                    <div class="question-type mt-1 d-flex flex-column flex-lg-row">
-                      <div>
-                        <input type="radio" id="multiple-choice" name="question_type" value="multiple-choice" v-model="question_type"  @change="enableSave">
-                        <label for="multiple-choice" class="ms-2 me-4">Multiple Choice</label>
-                      </div>
-                      <div>
-                        <input type="radio" id="fill-in-the-blank" name="question_type" value="fill-in-the-blank" v-model="question_type" @change="enableSave">
-                        <label for="fill-in-the-blank" class="ms-2 mt-1">Fill in the Blank</label>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- points -->
-                  <div class="w-auto ms-auto">
-                    <label for="question" class="">Points:</label><br>
-                    <input type="number" min="1" v-model="points" @change="enableSave"/>
-                  </div>
+                <!-- points -->
+                <div>
+                  <label for="question" class="">Points:</label><br>
+                  <input type="number" min="1" v-model="points" @change="enableSave"/>
                 </div>
 
                 <!-- questions -->
-                <div>
+                <div class="mt-3">
                   <label for="question" class="mt-3">Question:</label>
                   <textarea name="question" id="question" cols="30" rows="30" v-model="new_question" @keyup="enableSave"></textarea>
                 </div>

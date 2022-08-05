@@ -35,10 +35,16 @@
           </div>
         </div>
 
-        <div class="answer-list">
+        <div class="answer-list" v-if="current_question.question_type === 'multiple-choice'">
           <div class="answers" v-for="(choice,index) in current_question.choices" :key="choice.id">
             <input type="radio" default="none" name="sample" :id="choice.id" :value="index" @click="isAnswered=true" v-model="user_answer"/>
             <label :for="choice.id" class="text-wrap text-break">{{ choice.content }}</label>
+          </div>
+        </div>
+
+        <div class="answer-list" v-if="current_question.question_type === 'fill-in-the-blank'">
+          <div class="answers">
+            <input type="text" v-model="user_answer" @keyup="isEmpty">
           </div>
         </div>
 
@@ -135,17 +141,22 @@ export default {
       this.current_question = this.questions.filter(item => item.order == this.current_question_id)[0];
     },
     isEmpty() {
-      if (this.field != "") {
-        this.quix[this.currentIndex].isAnswered = true;
+      if (this.user_answer) {
+        this.isAnswered = true;
+      } else {
+        this.isAnswered = false;
       }
     },
     async updateAnswer() {
       const formData = new FormData();
 
-      formData.append("content", this.current_question.choices[this.user_answer].content);
-      formData.append("is_correct", this.current_question.choices[this.user_answer].is_correct);
+      if(this.current_question.question_type === 'multiple-choice') {
+        formData.append("content", this.current_question.choices[this.user_answer].content);
+        formData.append("choice_id", this.current_question.choices[this.user_answer].id);
+      } else {
+        formData.append("content", this.user_answer);
+      }
       formData.append("student_id", this.user_id);
-      formData.append("choice_id", this.current_question.choices[this.user_answer].id);
       formData.append("question_id", this.current_question.id);
 
       const data = {};
@@ -186,7 +197,11 @@ export default {
     async checkAnswer(e, name) {   
       const result = await this.updateAnswer();
       this.progress = this.progress + 100 / this.quiz.number_of_questions;
-      this.clearSelection(name);
+
+      if(this.current_question.question_type === 'multiple-choice') {
+        this.clearSelection(name);
+      }
+      this.isAnswered = false;
       this.user_answer = '';
       this.current_question_id++;
       this.setCurrentQuestion();
