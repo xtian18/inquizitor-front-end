@@ -51,8 +51,8 @@
       </div>
 
       <div class="bottom">
-        <input type="submit" v-if:="current_question_id == quiz.number_of_questions - 1" class="btn btn-main" @click="handleSubmit" :disabled="!isAnswered"/>
-        <button class="btn btn-main" v-if="current_question_id < quiz.number_of_questions - 1" @click="checkAnswer($event, currentIndex)" :disabled="!isAnswered">
+        <input type="submit" v-if:="current_question_id == last_question_id" class="btn btn-main" @click="handleSubmit" :disabled="!isAnswered"/>
+        <button class="btn btn-main" v-if="current_question_id < last_question_id" @click="checkAnswer($event, currentIndex)" :disabled="!isAnswered">
           Next
         </button>
       </div>
@@ -76,14 +76,16 @@ export default {
       quiz: [],
       questions_id: [],
       questions: [],
+      question_num: 1,
       current_question: '',
       current_question_id: 0,
+      last_question_id: 0,
     };
   },
   computed: {
-    question_num() {
-      return this.current_question_id + 1;
-    },
+    // question_num() {
+    //   return this.current_question_id + 1;
+    // },
     user_id() {
       return this.$store.state.user.id;
     },
@@ -113,7 +115,7 @@ export default {
           this.questions_id.push(question.id);
         }
         const result = await this.loadQuestions();
-        console.log(loadQuiz);
+        this.last_question_id = this.questions.slice(-1)[0].id;
       } catch (e) {
         // console.log(e);
       }
@@ -131,14 +133,16 @@ export default {
           });
           const loadQuestions = await response.json();
           this.questions.push(loadQuestions);
-          this.setCurrentQuestion();
+          
         }
+        this.current_question_id = this.questions[0].id;
+        this.setCurrentQuestion();
       } catch(e) {
         // console.log(e);
       }
     },
     setCurrentQuestion() {
-      this.current_question = this.questions.filter(item => item.order == this.current_question_id)[0];
+      this.current_question = this.questions.filter(item => item.id == this.current_question_id)[0];
     },
     isEmpty() {
       if (this.user_answer) {
@@ -163,7 +167,8 @@ export default {
       formData.forEach((value, key) => (data[key] = value));
 
       try {
-        const response = await fetch("http://localhost:8000/quizzes/" + this.quiz.id + "/questions/" + this.questions[this.current_question_id].id + "/answer", {
+        
+        const response = await fetch("http://localhost:8000/quizzes/" + this.quiz.id + "/questions/" + this.current_question_id + "/answer", {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -204,6 +209,7 @@ export default {
       this.isAnswered = false;
       this.user_answer = '';
       this.current_question_id++;
+      this.question_num++;
       this.setCurrentQuestion();
     },
     async handleSubmit() {
