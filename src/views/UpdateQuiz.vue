@@ -623,6 +623,8 @@ export default {
       const data = {};
       formData.forEach((value, key) => (data[key] = value));
 
+      console.log(typeof data.quiz_id)
+
       try{
         const response = await fetch("http://localhost:8000/quizzes/" + this.id + "/questions/", {
           method: "POST",

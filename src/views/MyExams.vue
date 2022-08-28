@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- <button @click="test">test</button> -->
     <h1>My Quizzes</h1>
 
     <a class="help" @click="showHelp=true">Help <font-awesome-icon icon="circle-question" /></a>
@@ -172,6 +173,21 @@ export default {
     };
   },
   methods: {
+    async test() {
+      try {
+        const response = await fetch("http://localhost:8000/quizzes/2/actions", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credetials": "true",
+          },
+          credentials: "include",
+        });
+        console.log(await response.json())
+      } catch(e) {
+        // console.log(e)
+      }
+    },
     setOpen(index) {
       this.isOpen = index;
     },
