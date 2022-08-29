@@ -6,7 +6,9 @@ export default createStore({
     state: {
         message: '',
         user: '',
-        authenticated: 'false'
+        authenticated: false,
+        quiz_id: null,
+        question_id: null
     },
     mutations: {
         SET_MSG(state, msg) {
@@ -20,26 +22,6 @@ export default createStore({
         }
     },
     actions: {
-        // async signIn({ dispatch }, credentials) {
-        //     try {
-        //         const check_token = await fetch('http://localhost:8000/login/token', {
-        //             method: 'POST',
-        //             credentials: 'include',
-        //             body: credentials
-        //         });
-
-        //         if(check_token.ok) {
-        //             const login = await check_token.json();
-        //             dispatch('attempt', login);
-        //         } else if(check_token.status == 400) {
-        //             console.log('Incorrect')
-        //         } else if(check_token.status == 422) {
-        //             console.log('missing values')
-        //         }
-        //     } catch (e) {
-        //         console.log(e);
-        //     }
-        // },
         async attempt({ commit }, msg) {
             commit('SET_MSG', msg)
 

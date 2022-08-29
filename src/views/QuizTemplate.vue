@@ -44,7 +44,7 @@
 
         <div class="answer-list" v-if="current_question.question_type === 'fill-in-the-blank'">
           <div class="answers">
-            <input type="text" v-model="user_answer" @keyup="isEmpty">
+            <input type="text" v-model="user_answer" @keyup="isEmpty" @paste="sendPaste">
           </div>
         </div>
 
@@ -83,14 +83,40 @@ export default {
     };
   },
   computed: {
-    // question_num() {
-    //   return this.current_question_id + 1;
-    // },
+    is_taking() {
+      const url = this.$route.path
+      return url.slice(0,11) === '/take-quiz/' && url.length < 18 ? true : false
+    },
     user_id() {
       return this.$store.state.user.id;
     },
   },
+  watch: {
+    current_question_id() {
+      localStorage.setItem('question_id', this.current_question_id)
+    }
+  },
   methods: {
+    async sendPaste() {
+      if(this.is_taking) {
+        const data = {'paste': 1};
+
+        try {
+          const response = await fetch("http://localhost:8000/quizzes/" + localStorage.quiz_id + "/questions/" + localStorage.question_id + "/actions", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Credetials": "true",
+            },
+            credentials: "include",
+            body: JSON.stringify(data)
+          });
+          console.log(await response.json())
+        } catch(e) {
+          // console.log(e)
+        }
+      }
+    },
     async loadQuiz() {
       this.quiz = [];
       this.questions_id = [];
@@ -232,6 +258,7 @@ export default {
   async created() {
     this.code = this.$route.params.id;
     const result = await this.loadQuiz();
+    localStorage.setItem('quiz_id', this.quiz.id)
   },
 };
 </script>
