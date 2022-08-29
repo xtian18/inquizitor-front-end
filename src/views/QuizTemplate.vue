@@ -44,7 +44,7 @@
 
         <div class="answer-list" v-if="current_question.question_type === 'fill-in-the-blank'">
           <div class="answers">
-            <input type="text" v-model="user_answer" @keyup="isEmpty" @paste="sendPaste">
+            <input type="text" v-model="user_answer" @paste="sendPaste">
           </div>
         </div>
 
@@ -94,6 +94,9 @@ export default {
   watch: {
     current_question_id() {
       localStorage.setItem('question_id', this.current_question_id)
+    },
+    user_answer() {
+      this.isEmpty()
     }
   },
   methods: {
