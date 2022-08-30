@@ -1,14 +1,12 @@
 import { createStore } from 'vuex'
-
+import config from '../../config'
 
 
 export default createStore({
     state: {
         message: '',
         user: '',
-        authenticated: false,
-        quiz_id: null,
-        question_id: null
+        authenticated: false
     },
     mutations: {
         SET_MSG(state, msg) {
@@ -22,11 +20,11 @@ export default createStore({
         }
     },
     actions: {
-        async attempt({ commit }, msg) {
+        async attempt({ commit }, msg, state) {
             commit('SET_MSG', msg)
 
             try {
-                const response = await fetch('http://localhost:8000/users/profile', {
+                const response = await fetch(`${config.apiURL}/users/profile`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

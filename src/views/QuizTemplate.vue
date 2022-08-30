@@ -37,7 +37,7 @@
 
         <div class="answer-list" v-if="current_question.question_type === 'multiple-choice'">
           <div class="answers" v-for="(choice,index) in current_question.choices" :key="choice.id">
-            <input type="radio" default="none" name="sample" :id="choice.id" :value="index" @click="isAnswered=true" v-model="user_answer"/>
+            <input type="radio" default="none" name="sample" :id="choice.id" :value="index" @click.stop="isEmpty" v-model="user_answer"/>
             <label :for="choice.id" class="text-wrap text-break">{{ choice.content }}</label>
           </div>
         </div>
@@ -63,6 +63,8 @@
 </template>
 
 <script>
+import config from '../../config'
+
 export default {
   data() {
     return {
@@ -105,7 +107,7 @@ export default {
         const data = {'paste': 1};
 
         try {
-          const response = await fetch("http://localhost:8000/quizzes/" + localStorage.quiz_id + "/questions/" + localStorage.question_id + "/actions", {
+          const response = await fetch(`${config.apiURL}/quizzes/${localStorage.quiz_id}/questions/${localStorage.question_id}/actions`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -126,9 +128,7 @@ export default {
       this.questions = [];
 
       try {
-        const response = await fetch(
-          "http://localhost:8000/quizzes/" + this.code,
-          {
+        const response = await fetch(`${config.apiURL}/quizzes/${this.code}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -152,7 +152,7 @@ export default {
     async loadQuestions() {
       try {
         for (const id of this.questions_id) {
-          const response = await fetch("http://localhost:8000/quizzes/" + this.code + "/questions/" + id, {
+          const response = await fetch(`${config.apiURL}/quizzes/${this.code}/questions/${id}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -174,7 +174,7 @@ export default {
       this.current_question = this.questions.filter(item => item.id == this.current_question_id)[0];
     },
     isEmpty() {
-      if (this.user_answer) {
+      if (this.user_answer || this.user_answer === 0) {
         this.isAnswered = true;
       } else {
         this.isAnswered = false;
@@ -196,15 +196,14 @@ export default {
       formData.forEach((value, key) => (data[key] = value));
 
       try {
-        
-        const response = await fetch("http://localhost:8000/quizzes/" + this.quiz.id + "/questions/" + this.current_question_id + "/answer", {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Credetials": "true",
-            },
-            credentials: "include",
-            body: JSON.stringify(data),
+        const response = await fetch(`${config.apiURL}/quizzes/${this.quiz.id}/questions/${this.current_question_id}/answer`, {
+          method: "PUT",
+          headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Credetials": "true",
+          },
+          credentials: "include",
+          body: JSON.stringify(data),
         });
         const check_answer = await response.json();
       } catch(e) {
@@ -213,16 +212,14 @@ export default {
     },
     async finishQuiz() {
       try {
-        const response = await fetch("http://localhost:8000/quizzes/" + this.quiz.id + "/finish",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Credetials": "true",
-            },
-            credentials: "include",
-          }
-        );
+        const response = await fetch(`${config.apiURL}/quizzes/${this.quiz.id}/finish`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credetials": "true",
+          },
+          credentials: "include",
+        });
         const finish = await response.json();
       } catch (e) {
         // console.log(e);

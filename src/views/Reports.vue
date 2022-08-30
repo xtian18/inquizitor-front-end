@@ -85,7 +85,8 @@
 </template>
 
 <script>
-import { jsPDF } from "jspdf";
+import config from '../../config';
+import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 export default {
@@ -120,7 +121,7 @@ export default {
     },
     async loadQuizzes() {
       try {
-        const response = await fetch("http://localhost:8000/quizzes/", {
+        const response = await fetch(`${config.apiURL}/quizzes/`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -138,7 +139,7 @@ export default {
       let index = 0;
       for(const quiz of this.quizzes) {
         try {
-          const response = await fetch("http://localhost:8000/quizzes/" + quiz.id + "/results", {
+          const response = await fetch(`${config.apiURL}/quizzes/${quiz.id}/results`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",

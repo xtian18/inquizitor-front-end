@@ -331,6 +331,7 @@
 </template>
 
 <script>
+import config from '../../config'
 import DialogModal from "@/components/DialogModal.vue"
 import HelpModal from "@/components/HelpModal.vue"
 
@@ -396,9 +397,6 @@ export default {
     }
   },
   methods: {
-    test() {
-      console.log(this.question_type)
-    },
     setOpen(index) {
       this.isOpen = index;
     },
@@ -408,7 +406,7 @@ export default {
       this.questions = [];
 
       try {
-        const response = await fetch("http://localhost:8000/quizzes/" + this.id, {
+        const response = await fetch(`${config.apiURL}/quizzes/${this.id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -431,7 +429,7 @@ export default {
     async loadQuestions() {
       try {
         for (const id of this.questions_id) {
-          const response = await fetch("http://localhost:8000/quizzes/" + this.id + "/questions/" + id, {
+          const response = await fetch(`${config.apiURL}/quizzes/${this.id}/questions/${id}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -464,7 +462,7 @@ export default {
       formData.forEach((value, key) => (data[key] = value));
 
       try {
-        const response = await fetch("http://localhost:8000/quizzes/" + this.id, {
+        const response = await fetch(`${config.apiURL}/quizzes/${this.id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -576,7 +574,7 @@ export default {
     },
     async deleteQuestion() {
       try {
-        const response = await fetch("http://localhost:8000/quizzes/" + this.id + "/questions/" + this.current_question_id, {
+        const response = await fetch(`${config.apiURL}/quizzes/${this.id}/questions/${this.current_question_id}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -623,10 +621,8 @@ export default {
       const data = {};
       formData.forEach((value, key) => (data[key] = value));
 
-      console.log(typeof data.quiz_id)
-
       try{
-        const response = await fetch("http://localhost:8000/quizzes/" + this.id + "/questions/", {
+        const response = await fetch(`${config.apiURL}/quizzes/${this.id}/questions`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -654,7 +650,7 @@ export default {
       formData.forEach((value, key) => (data[key] = value));
 
       try {
-        const response = await fetch("http://localhost:8000/quizzes/" + this.id + "/questions/" + this.current_question_id, {
+        const response = await fetch(`${config.apiURL}/quizzes/${this.id}/questions/${this.current_question_id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -688,7 +684,7 @@ export default {
         formData.forEach((value, key) => (data[key] = value));
 
 
-        const response = await fetch("http://localhost:8000/quizzes/" + this.id + "/questions/" + this.current_question_id, {
+        const response = await fetch(`${config.apiURL}/quizzes/${this.id}/questions/${this.current_question_id}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -710,7 +706,7 @@ export default {
         const choice_array = this.questions[this.question_num-1].choices;
 
         for (const choice of choice_array) {
-        const response = await fetch("http://localhost:8000/quizzes/" + this.id + "/questions/" + this.current_question_id + "/choices/" + choice.id, {
+        const response = await fetch(`${config.apiURL}/quizzes/${this.id}/questions/${this.current_question_id}/choices/${choice.id}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
