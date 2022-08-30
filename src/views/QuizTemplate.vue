@@ -37,7 +37,7 @@
 
         <div class="answer-list" v-if="current_question.question_type === 'multiple-choice'">
           <div class="answers" v-for="(choice,index) in current_question.choices" :key="choice.id">
-            <input type="radio" default="none" name="sample" :id="choice.id" :value="index" @click="isAnswered=true" v-model="user_answer"/>
+            <input type="radio" default="none" name="sample" :id="choice.id" :value="index" @click.stop="isEmpty" v-model="user_answer"/>
             <label :for="choice.id" class="text-wrap text-break">{{ choice.content }}</label>
           </div>
         </div>
@@ -174,7 +174,7 @@ export default {
       this.current_question = this.questions.filter(item => item.id == this.current_question_id)[0];
     },
     isEmpty() {
-      if (this.user_answer) {
+      if (this.user_answer || this.user_answer === 0) {
         this.isAnswered = true;
       } else {
         this.isAnswered = false;
