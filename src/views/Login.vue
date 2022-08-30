@@ -30,6 +30,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import config from '../../config'
 import ErrorMessage from '@/components/ErrorMessage.vue'
 
 export default {
@@ -55,7 +56,7 @@ export default {
       formData.append('password', this.password)
 
       try {
-        const check_token = await fetch('http://localhost:8000/login/token', {
+        const check_token = await fetch(`${config.apiURL}/login/token`, {
           method: 'POST',
           credentials: 'include',
           body: formData

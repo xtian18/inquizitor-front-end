@@ -55,6 +55,7 @@
 
 <script>
 import ErrorMessage from '@/components/ErrorMessage.vue'
+import config from '../../config'
 
 export default {
   components: { ErrorMessage },
@@ -170,7 +171,7 @@ export default {
       formData.forEach((value, key) => (data[key] = value));
 
       try {
-        const response = await fetch('http://localhost:8000/users/', {
+        const response = await fetch(`${config.apiURL}/users/`, {
           method: 'POST',
           credentials: 'include',
           headers: {'Content-Type': 'application/json'},
@@ -189,7 +190,6 @@ export default {
             this.email_exist = true;
           }
         }
-        console.log(new_user);
       } catch(e) {
 
       }

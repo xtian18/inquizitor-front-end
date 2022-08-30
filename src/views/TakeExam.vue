@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import config from '../../config'
 import ErrorMessage from '@/components/ErrorMessage.vue'
 
 export default {
@@ -46,7 +47,7 @@ export default {
     async handleSubmit() {
       if(this.code) {
         try {
-          const response = await fetch("http://localhost:8000/quizzes/" + this.code, {
+          const response = await fetch(`${config.apiURL}/quizzes/${this.code}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",

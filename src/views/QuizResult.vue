@@ -55,6 +55,8 @@
 </template>
 
 <script>
+import config from '../../config'
+
 export default {
   data() {
     return {
@@ -84,7 +86,7 @@ export default {
     },
     async loadQuizzesResult() {
       try {
-        const response = await fetch("http://localhost:8000/quizzes/", {
+        const response = await fetch(`${config.apiURL}/quizzes/`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -136,7 +138,7 @@ export default {
     async loadQuestions() {
       try {
         for (const id of this.questions_id) {
-          const response = await fetch("http://localhost:8000/quizzes/" + this.id + "/questions/" + id, {
+          const response = await fetch(`${config.apiURL}/quizzes/${this.id}/questions/${id}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",

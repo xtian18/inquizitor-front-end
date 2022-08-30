@@ -148,6 +148,7 @@
 </template>
 
 <script>
+import config from '../../config'
 import DialogModal from "@/components/DialogModal.vue"
 import HelpModal from "@/components/HelpModal.vue"
 
@@ -173,21 +174,6 @@ export default {
     };
   },
   methods: {
-    async test() {
-      try {
-        const response = await fetch("http://localhost:8000/quizzes/2/actions", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Credetials": "true",
-          },
-          credentials: "include",
-        });
-        console.log(await response.json())
-      } catch(e) {
-        // console.log(e)
-      }
-    },
     setOpen(index) {
       this.isOpen = index;
     },
@@ -200,7 +186,7 @@ export default {
     },
     async loadQuizzes() {
       try {
-        const loadQuiz = await fetch("http://localhost:8000/quizzes/", {
+        const loadQuiz = await fetch(`${config.apiURL}/quizzes/`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -224,7 +210,7 @@ export default {
       formData.forEach((value, key) => (data[key] = value));
 
       try {
-        const postQuiz = await fetch("http://localhost:8000/quizzes/", {
+        const postQuiz = await fetch(`${config.apiURL}/quizzes/`, {
           method: "POST",
           credentials: "include",
           headers: {
@@ -245,7 +231,7 @@ export default {
     },
     async deleteQuiz() {
       try {
-        const response = await fetch("http://localhost:8000/quizzes/" + this.selected_quiz_id, {
+        const response = await fetch(`${config.apiURL}/quizzes/${this.selected_quiz_id}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",

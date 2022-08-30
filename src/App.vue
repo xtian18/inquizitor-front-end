@@ -29,7 +29,8 @@
 </template>
 
 <script>
-import "@/assets/main.css"
+import '@/assets/main.css'
+import config from '../config'
 import NavBar from '@/components/NavBar.vue'
 
 export default {
@@ -50,7 +51,7 @@ export default {
       const data = {[event]: 1};
 
       try {
-        const response = await fetch("http://localhost:8000/quizzes/" + localStorage.quiz_id + "/questions/" + localStorage.question_id + "/actions", {
+        const response = await fetch(`${config.apiURL}/quizzes/${localStorage.quiz_id}/questions/${localStorage.question_id}/actions`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -109,7 +110,7 @@ export default {
     },
     async handleLogout() {
       try {
-        const check_token = await fetch('http://localhost:8000/login/logout', {
+        const check_token = await fetch(`${config.apiURL}/login/logout`, {
           method: 'POST',
           credentials: 'include'
           });
@@ -123,7 +124,7 @@ export default {
     },
     async getUser() {
       try {
-        const response = await fetch('http://localhost:8000/users/profile', {
+        const response = await fetch(`${config.apiURL}/users/profile`, {
           method: 'GET',
           headers: {
               'Content-Type': 'application/json',
