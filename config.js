@@ -1,3 +1,3 @@
 export default {
-  apiURL: 'https://localhost:8000'
+  apiURL: 'https://inquizitor-test.herokuapp.com'
 }
