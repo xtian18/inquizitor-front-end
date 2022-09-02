@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand navbar-dark">
     <div class="container">
-        <router-link to="/" class="navbar-brand" aria-current="page"><img src="@/assets/kweeznuts-logo.png" class="logo" alt=""></router-link>
+        <router-link to="/" class="navbar-brand" aria-current="page"><img src="@/assets/logo.png" class="logo" alt=""></router-link>
         <div class="float-end" id="navbarNav">
             <slot></slot>
         </div>
