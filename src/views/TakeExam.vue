@@ -58,7 +58,7 @@ export default {
           const data = await response.json();
           this.quiz = data;
           if(response.ok) {
-            this.$router.push(`/take-quiz/${this.quiz.quiz_code}`);
+            this.$router.push({ name: 'Quiz', params: { id: this.quiz.quiz_code, title: this.quiz.name } });
           } else if(data.detail == 'Quiz not found') {
             this.is_invalid = true;
           } else if(response.status == 400) {

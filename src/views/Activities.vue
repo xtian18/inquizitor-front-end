@@ -12,7 +12,7 @@
     <!-- activity list -->
     <div class="exam-list" v-else>
       <div class="exam" v-for="quiz in quizzes" :key="quiz.id">
-        <router-link :to="`/activities/${quiz.quiz_code}`">
+        <router-link :to="{ name: 'Quiz Result', params: { id: quiz.quiz_code, title: quiz.name } }">
           <div class="w-100 d-flex">
             <div class="me-auto">
               <h2>{{ quiz.name }}</h2>

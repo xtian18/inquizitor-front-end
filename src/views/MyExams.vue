@@ -23,7 +23,7 @@
           <p>{{ quiz.number_of_questions }} Questions</p>
         </div>
         <div class="exam-icon mb-auto">
-          <router-link :to="`/my-quizzes/${quiz.id}`"
+          <router-link :to="{ name: 'Update Quiz', params: { id: quiz.id, title: quiz.name } }"
             ><font-awesome-icon icon="pen-to-square" class="action"
           /></router-link>
           <button class="btn-icon action" @click="handleDelete(quiz.id)">
@@ -220,7 +220,7 @@ export default {
           body: JSON.stringify(data)
         });
         const newQuiz = await postQuiz.json();
-        this.$router.push(`/my-quizzes/${newQuiz.id}`);
+        this.$router.push({ name: 'Update Quiz', params: { id: newQuiz.id, title: newQuiz.name } });
       } catch (e) {
         console.log(e);
       }

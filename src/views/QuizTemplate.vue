@@ -242,7 +242,7 @@ export default {
       const result = await this.updateAnswer();
       this.progress = this.progress + 100 / this.quiz.number_of_questions;
       const result2 = await this.finishQuiz();
-      this.$router.replace({ path: `/take-quiz/${this.code}/result` })
+      this.$router.replace({ path: `/take-quiz/${this.code}/result`})
     },
     clearSelection(name) {
       const radio_btn = document.querySelectorAll(

@@ -26,7 +26,7 @@ const routes = [
       },
       {
         path: '/take-quiz',
-        name: 'TakeQuiz',
+        name: 'Take Quiz',
         component: TakeExam
       },
       {
@@ -36,9 +36,13 @@ const routes = [
       },
       {
         path: '/take-quiz/:id/result',
-        name: 'QuizResult',
+        name: 'Quiz Result ',
         component: QuizResult,
-        alias: '/activities/:id'
+      },
+      {
+        path: '/activities/:id',
+        name: 'Quiz Result',
+        component: QuizResult,
       },
       {
         path: '/activities',
@@ -52,12 +56,12 @@ const routes = [
       },
       {
         path: '/my-quizzes',
-        name: 'MyQuizzes',
+        name: 'My Quizzes',
         component: MyExams,
       },
       {
         path: '/my-quizzes/:id',
-        name: 'UpdateQuiz',
+        name: 'Update Quiz',
         component: UpdateQuiz,
       },
       {
@@ -86,9 +90,13 @@ const router = createRouter({
   linkExactActiveClass: 'exact-active'
 })
 
-router.beforeEach((to, from, next) => {
-  document.title = to.name
-  next()
+router.beforeEach((to, from) => {
+  console.log(to)
+  let documentTitle = to.name
+  if (to.params.title) {
+    documentTitle += ` | ${to.params.title}`
+  } 
+  document.title = documentTitle
 })
 
 export default router

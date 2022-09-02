@@ -4,7 +4,7 @@
     <!-- Side bar if account tyoe is student -->
     <SideBar v-if="user.is_student">
       <li>
-        <router-link :to="{name: 'TakeQuiz'}" :class="{active: this.$route.path.slice(0,11) === '/take-quiz/'}"><font-awesome-icon icon="file-signature" title="Take Quiz" /><span>Take Quiz</span></router-link>
+        <router-link :to="{name: 'Take Quiz'}" :class="{active: this.$route.path.slice(0,11) === '/take-quiz/'}"><font-awesome-icon icon="file-signature" title="Take Quiz" /><span>Take Quiz</span></router-link>
       </li>
       <li>
         <router-link :to="{name: 'Activities'}" :class="{active: this.$route.path.slice(0,12) === '/activities/'}"><font-awesome-icon icon="folder-open" title="Activities" /><span>Activities</span></router-link>
@@ -13,7 +13,7 @@
     <!-- Side bar if account type is teacher -->
     <SideBar v-if="user.is_teacher">
       <li>
-        <router-link :to="{name: 'MyQuizzes'}" :class="{active: this.$route.path.slice(0,12) === '/my-quizzes/'}"><font-awesome-icon icon="server" title="My Quizzes" /><span>My Quizzes</span></router-link>
+        <router-link :to="{name: 'My Quizzes'}" :class="{active: this.$route.path.slice(0,12) === '/my-quizzes/'}"><font-awesome-icon icon="server" title="My Quizzes" /><span>My Quizzes</span></router-link>
       </li>
       <li>
         <router-link :to="{name: 'Reports'}"><font-awesome-icon icon="line-chart" title="Reports" /><span>Reports</span></router-link>
