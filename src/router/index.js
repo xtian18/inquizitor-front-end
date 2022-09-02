@@ -86,4 +86,9 @@ const router = createRouter({
   linkExactActiveClass: 'exact-active'
 })
 
+router.beforeEach((to, from, next) => {
+  document.title = to.name
+  next()
+})
+
 export default router

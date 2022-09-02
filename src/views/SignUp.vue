@@ -172,6 +172,7 @@ export default {
 
       try {
         console.log(`${config.apiURL}/users`)
+        console.log(process.env.Base_URL)
         const response = await fetch(`${config.apiURL}/users`, {
           method: 'POST',
           credentials: 'include',
