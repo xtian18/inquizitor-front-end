@@ -86,7 +86,7 @@ export default {
     },
     async loadQuizzesResult() {
       try {
-        const response = await fetch(`${config.apiURL}/quizzes`, {
+        const response = await fetch(`${config.apiURL}/quizzes/`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

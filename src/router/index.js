@@ -91,7 +91,6 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from) => {
-  console.log(to)
   let documentTitle = to.name
   if (to.params.title) {
     documentTitle += ` | ${to.params.title}`

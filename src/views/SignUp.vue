@@ -171,9 +171,7 @@ export default {
       formData.forEach((value, key) => (data[key] = value));
 
       try {
-        console.log(`${config.apiURL}/users`)
-        console.log(process.env)
-        const response = await fetch(`${config.apiURL}/users`, {
+        const response = await fetch(`${config.apiURL}/users/`, {
           method: 'POST',
           credentials: 'include',
           headers: {'Content-Type': 'application/json'},

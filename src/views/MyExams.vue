@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <button @click="test">test</button> -->
     <h1>My Quizzes</h1>
 
     <a class="help" @click="showHelp=true">Help <font-awesome-icon icon="circle-question" /></a>
@@ -186,7 +185,7 @@ export default {
     },
     async loadQuizzes() {
       try {
-        const loadQuiz = await fetch(`${config.apiURL}/quizzes`, {
+        const loadQuiz = await fetch(`${config.apiURL}/quizzes/`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -210,7 +209,7 @@ export default {
       formData.forEach((value, key) => (data[key] = value));
 
       try {
-        const postQuiz = await fetch(`${config.apiURL}/quizzes`, {
+        const postQuiz = await fetch(`${config.apiURL}/quizzes/`, {
           method: "POST",
           credentials: "include",
           headers: {
