@@ -1,5 +1,9 @@
 <template>
   <div>
+    <!-- <teleport to="#app">
+      <LoadingScreen></LoadingScreen>
+    </teleport> -->
+
     <h1>My Quizzes</h1>
 
     <a class="help" @click="showHelp=true">Help <font-awesome-icon icon="circle-question" /></a>
@@ -150,9 +154,10 @@
 import config from '../../config'
 import DialogModal from "@/components/DialogModal.vue"
 import HelpModal from "@/components/HelpModal.vue"
+import LoadingScreen from "@/components/LoadingScreen.vue"
 
 export default {
-  components: { DialogModal, HelpModal },
+  components: { DialogModal, HelpModal, LoadingScreen },
   data() {
     return {
       selected_quiz_id: '',
