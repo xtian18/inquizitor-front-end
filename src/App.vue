@@ -1,5 +1,5 @@
 <template>
-    <div 
+    <div
       class="app-container" 
       @click="click" 
       @mouseleave="sendBlur"
@@ -25,6 +25,10 @@
           </ul>
         </NavBar>
         <router-view/>
+
+        <teleport to="#app">
+          <LoadingScreen v-if="showLoadingScreen"></LoadingScreen>
+        </teleport>
     </div>
 </template>
 
@@ -32,9 +36,10 @@
 import '@/assets/main.css'
 import config from '../config'
 import NavBar from '@/components/NavBar.vue'
+import LoadingScreen from '@/components/LoadingScreen.vue'
 
 export default {
-  components: { NavBar },
+  components: { NavBar, LoadingScreen },
   data() {
     return {
       counter: 0,
@@ -44,6 +49,9 @@ export default {
     is_taking() {
       const url = this.$route.path
       return url.slice(0,11) === '/take-quiz/' && url.length < 18 ? true : false
+    },
+    showLoadingScreen() {
+      return this.$store.state.showLoadingScreen
     }
   },
   methods: {

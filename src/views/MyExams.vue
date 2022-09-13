@@ -1,9 +1,5 @@
 <template>
   <div>
-    <!-- <teleport to="#app">
-      <LoadingScreen></LoadingScreen>
-    </teleport> -->
-
     <h1>My Quizzes</h1>
 
     <a class="help" @click="showHelp=true">Help <font-awesome-icon icon="circle-question" /></a>
@@ -154,10 +150,9 @@
 import config from '../../config'
 import DialogModal from "@/components/DialogModal.vue"
 import HelpModal from "@/components/HelpModal.vue"
-import LoadingScreen from "@/components/LoadingScreen.vue"
 
 export default {
-  components: { DialogModal, HelpModal, LoadingScreen },
+  components: { DialogModal, HelpModal },
   data() {
     return {
       selected_quiz_id: '',
@@ -177,6 +172,11 @@ export default {
       quizzes: [],
     };
   },
+  computed: {
+    showLoadingScreen() {
+      return this.$store.state.showLoadingScreen
+    }
+  },
   methods: {
     setOpen(index) {
       this.isOpen = index;
@@ -189,6 +189,7 @@ export default {
       }
     },
     async loadQuizzes() {
+      this.$store.commit('SET_SHOW_LOADING_SCREEN', true);
       try {
         const loadQuiz = await fetch(`${config.apiURL}/quizzes/`, {
           method: "GET",
@@ -199,8 +200,10 @@ export default {
           credentials: "include",
         });
         this.quizzes = await loadQuiz.json();
+        this.$store.commit('SET_SHOW_LOADING_SCREEN', false);
       } catch (e) {
         console.log(e);
+        this.$store.commit('SET_SHOW_LOADING_SCREEN', true);
       }
     },
     async createQuiz() {
@@ -273,6 +276,7 @@ export default {
     },
   },
   async created() {
+    // setTimeout(await this.loadQuizzes(), 5000);
     const result = await this.loadQuizzes();
     this.setEmptyPage();
   },

@@ -46,7 +46,10 @@
         </select>
       </div>
       <div class="text-center pt-2">
-        <button type="submit" class="btn btn-main">Sign Up</button>
+        <button type="submit" class="btn btn-main" :disabled="is_loading">
+          <div v-if="is_loading" class="spinner-border spinner-border-sm"></div>
+          Sign Up
+        </button>
       </div>
     </form>
   </div>
@@ -80,7 +83,8 @@ export default {
       password_missing: false,
       confirm_missing: false,
       type_missing: false,
-      message: ''
+      message: '',
+      is_loading: false
     }
   },
   computed: {
@@ -150,6 +154,7 @@ export default {
       }
     },
     async register() {
+      this.is_loading = true;
       const formData = new FormData();
 
       formData.append('username', this.username)
@@ -189,9 +194,10 @@ export default {
           } else if (this.message.charAt(19) == 'e') {
             this.email_exist = true;
           }
+          this.is_loading = false
         }
       } catch(e) {
-
+        this.is_loading = false
       }
     },
     reset() {

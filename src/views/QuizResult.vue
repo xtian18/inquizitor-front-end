@@ -83,8 +83,10 @@ export default {
       } else {
         this.is_due_date = false
       }
+      this.$store.commit('SET_SHOW_LOADING_SCREEN', false);
     },
     async loadQuizzesResult() {
+      this.$store.commit('SET_SHOW_LOADING_SCREEN', true);
       try {
         const response = await fetch(`${config.apiURL}/quizzes/`, {
           method: "GET",

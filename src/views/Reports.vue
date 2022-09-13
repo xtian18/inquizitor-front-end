@@ -115,11 +115,11 @@ export default {
     setEmptyPage() {
       if(this.quizzes.length){
         this.showEmptyPage = false;
-      } else {
-        setTimeout(() => this.showEmptyPage = true, 100)
       }
+      this.$store.commit('SET_SHOW_LOADING_SCREEN', false);
     },
     async loadQuizzes() {
+      this.$store.commit('SET_SHOW_LOADING_SCREEN', true);
       try {
         const response = await fetch(`${config.apiURL}/quizzes/`, {
           method: "GET",

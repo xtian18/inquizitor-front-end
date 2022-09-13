@@ -21,7 +21,10 @@
         
       </div>
       <div class="text-center pt-3">
-        <button class="btn btn-main" type="submit">Login</button>
+        <button class="btn btn-main" type="submit" :disabled="is_loading">
+          <div v-if="is_loading" class="spinner-border spinner-border-sm"></div>
+          Login
+        </button>
       </div>
     </form>
 
@@ -43,7 +46,8 @@ export default {
       is_invalid: false,
       user_missing: false,
       password_missing: false,
-      message: ''
+      message: '',
+      is_loading: false
     }
   },
   methods: {
@@ -51,6 +55,7 @@ export default {
       attempt: 'attempt'
     }),
     async handleLogin() {
+      this.is_loading = true
       this.reset();
       let formData = new FormData();
       formData.append('username', this.username)
@@ -64,11 +69,14 @@ export default {
         });
         const login = await check_token.json();
         if(check_token.ok) {
+          this.$store.commit('SET_SHOW_LOADING_SCREEN', true);
+          this.is_loading = false;
           const response = await this.attempt(login);
           this.$router.push('/');
         } else if(check_token.status == 400) {
           this.is_invalid = true;
           this.message = login.detail;
+          this.is_loading = false;
         } else if(check_token.status == 422) {
           this.is_invalid = true;
           this.message = 'Incomplete details';
@@ -78,8 +86,10 @@ export default {
           if (login.detail.filter(e => e.loc[1] === 'password').length > 0) {
             this.password_missing = true;
           }
+          this.is_loading = false;
         }
       } catch (e) {
+        this.is_loading = false
         // console.log(e);
       }
     },

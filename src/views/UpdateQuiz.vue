@@ -401,6 +401,7 @@ export default {
       this.isOpen = index;
     },
     async loadQuiz() {
+      this.$store.commit('SET_SHOW_LOADING_SCREEN', true);
       this.quiz = [];
       this.questions_id = [];
       this.questions = [];
@@ -441,6 +442,7 @@ export default {
           this.questions.push(loadQuestions);
         }
         const result = await this.updateQuiz();
+        this.$store.commit('SET_SHOW_LOADING_SCREEN', false);
       } catch(e) {
         // console.log(e);
       }
