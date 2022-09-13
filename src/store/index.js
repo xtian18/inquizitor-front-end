@@ -6,7 +6,8 @@ export default createStore({
     state: {
         message: '',
         user: '',
-        authenticated: false
+        authenticated: false,
+        showLoadingScreen: false
     },
     mutations: {
         SET_MSG(state, msg) {
@@ -17,6 +18,9 @@ export default createStore({
         },
         SET_AUTHENTICATED(state, authenticated) {
             state.authenticated = authenticated
+        },
+        SET_SHOW_LOADING_SCREEN(state, showLoadingScreen) {
+            state.showLoadingScreen = showLoadingScreen
         }
     },
     actions: {
@@ -39,8 +43,10 @@ export default createStore({
                 } else {
                     commit('SET_AUTHENTICATED', false);
                 }
+                commit('SET_SHOW_LOADING_SCREEN', false);
             } catch (e) {
                 console.log(e);
+                commit('SET_SHOW_LOADING_SCREEN', false);
             }
         }
     },

@@ -21,7 +21,10 @@
           </ErrorMessage>
         </div>
         <input type="text" class="mb-3 text-center" v-model="code" @focus="reset">
-        <button type="submit" class="btn btn-main">Enter</button>
+        <button type="submit" class="btn btn-main" :disabled="is_loading">
+          <div v-if="is_loading" class="spinner-border spinner-border-sm"></div>
+          Enter
+        </button>
       </form>
       
     </div>
@@ -40,12 +43,14 @@ export default {
       quiz: '',
       is_due_date: false,
       is_empty: false,
-      is_invalid: false
+      is_invalid: false,
+      is_loading: false,
     }
   },
   methods: {
     async handleSubmit() {
       if(this.code) {
+        this.is_loading = true;
         try {
           const response = await fetch(`${config.apiURL}/quizzes/${this.code}`, {
             method: "GET",
@@ -64,6 +69,7 @@ export default {
           } else if(response.status == 400) {
             this.is_due_date = true
           }
+          this.is_loading = false;
         } catch (e) {
           // console.log(e);
         }

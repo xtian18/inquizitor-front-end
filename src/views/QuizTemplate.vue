@@ -126,7 +126,7 @@ export default {
       this.quiz = [];
       this.questions_id = [];
       this.questions = [];
-
+      this.$store.commit('SET_SHOW_LOADING_SCREEN', true);
       try {
         const response = await fetch(`${config.apiURL}/quizzes/${this.code}`, {
             method: "GET",
@@ -145,8 +145,10 @@ export default {
         }
         const result = await this.loadQuestions();
         this.last_question_id = this.questions.slice(-1)[0].id;
+        this.$store.commit('SET_SHOW_LOADING_SCREEN', false);
       } catch (e) {
         // console.log(e);
+        this.$store.commit('SET_SHOW_LOADING_SCREEN', false);
       }
     },
     async loadQuestions() {

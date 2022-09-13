@@ -1,8 +1,8 @@
 <template>
   <div class="loading-screen">
     <div class="loading-image text-center">
-      <img src="@/assets/robot-head.png" alt="" class="icon mb-1">
-      <img src="@/assets/loading.gif" alt="" class="gif mx-auto">
+      <img src="@/assets/loading.gif" alt="" class="icon mb-1">
+      <p>Loading...</p>
     </div>
   </div>
 </template>
@@ -13,7 +13,6 @@ export default {
 </script>
 
 <style scoped>
-
 .loading-screen {
   position: absolute;
   top: 0;
@@ -33,8 +32,10 @@ export default {
 .icon {
   max-width: 100%;
 }
-.gif {
-  max-width: 50%;
+
+p {
+  font-size: 1.3em;
+  font-weight: 500;
 }
 
 @media only screen and (min-width: 768px) {
