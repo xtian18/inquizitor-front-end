@@ -1,7 +1,8 @@
 <template>
     <div
       class="app-container" 
-      @click="click" 
+      @dblclick="sendDoubleClick" 
+      @click="sendLeftClick"
       @mouseleave="sendBlur"
       @mouseenter="sendFocus"
       @copy="sendCopy"
@@ -43,6 +44,7 @@ export default {
   data() {
     return {
       counter: 0,
+      is_double_click: false
     }
   },
   computed: {
@@ -73,22 +75,22 @@ export default {
         // console.log(e)
       }
     },
-    click() {
+    sendLeftClick() {
       if(this.is_taking) {
-        this.counter++;
-        
-        if(this.counter == 1) {
-          this.timer = setTimeout(() => {
-              this.counter = 0;
-              this.sendInputData('left_click')
-          }, 500);
-
-          return;
-        }
-        
-        clearTimeout(this.timer);  
-        this.counter = 0;
-        this.sendInputData('double_click') 
+        this.timer = setTimeout(() => {
+          if(!this.is_double_click) {
+            this.sendInputData('left_click')
+          }
+        }, 500);
+      }
+    },
+    sendDoubleClick() {
+      if(this.is_taking) {
+        this.is_double_click = true
+        this.sendInputData('double_click')
+        const timer = setTimeout(() => {
+          this.is_double_click = false
+        }, 500);
       }
     },
     sendRightClick() {
