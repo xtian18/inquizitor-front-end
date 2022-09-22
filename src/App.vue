@@ -54,6 +54,9 @@ export default {
     },
     showLoadingScreen() {
       return this.$store.state.showLoadingScreen
+    },
+    quizStarted() {
+      return this.$store.state.quizStarted
     }
   },
   methods: {
@@ -70,7 +73,7 @@ export default {
           credentials: "include",
           body: JSON.stringify(data)
         });
-        console.log(await response.json())
+        // console.log(await response.json())
       } catch(e) {
         // console.log(e)
       }
@@ -79,6 +82,7 @@ export default {
       if(this.is_taking) {
         this.timer = setTimeout(() => {
           if(!this.is_double_click) {
+            console.log('left_click')
             this.sendInputData('left_click')
           }
         }, 500);
@@ -87,6 +91,7 @@ export default {
     sendDoubleClick() {
       if(this.is_taking) {
         this.is_double_click = true
+        console.log('double_click')
         this.sendInputData('double_click')
         const timer = setTimeout(() => {
           this.is_double_click = false
@@ -95,27 +100,30 @@ export default {
     },
     sendRightClick() {
       if(this.is_taking) {
+        console.log('right_click')
         this.sendInputData('right_click')
       }
     },
     sendFocus() {
       if(this.is_taking) {
-        this.sendInputData('focus')
+        if (this.quizStarted) {
+          console.log('focus')
+          this.sendInputData('focus')
+        } else {
+          this.$store.commit('SET_QUIZ_STARTED', true);
+        }
       }
     },
     sendBlur() {
       if(this.is_taking) {
+        console.log('blur')
         this.sendInputData('blur')
       }
     },
     sendCopy() {
       if(this.is_taking) {
+        console.log('copy')
         this.sendInputData('copy_')
-      }
-    },
-    sendPaste() {
-      if(this.is_taking) {
-        this.sendInputData('paste')
       }
     },
     async handleLogout() {

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-click-away="handleFocusOut" @click="handleFocus">
 
     <!-- instruction modal -->
     <teleport to="#app">
@@ -28,31 +28,31 @@
           <div class="quiz-progress" :style="{ width: progress + '%' }"></div>
         </div>
 
-        <div class="question">
-          <p>Question {{ question_num }}/{{ quiz.number_of_questions }} </p>
-          <div>
-            <p class="text-wrap text-break">{{ current_question.content }}</p>
+        <div v-for="question in questions" :key="question.id" v-show="current_question.id == question.id">
+          <div class="question">
+            <p>Question {{ question_num }}/{{ quiz.number_of_questions }} </p>
+            <div>
+              <p class="text-wrap text-break">{{ question.content }}</p>
+            </div>
           </div>
-        </div>
-
-        <div class="answer-list" v-if="current_question.question_type === 'multiple-choice'">
-          <div class="answers" v-for="(choice,index) in current_question.choices" :key="choice.id">
-            <input type="radio" default="none" name="sample" :id="choice.id" :value="index" @click.stop="isEmpty" v-model="user_answer"/>
-            <label :for="choice.id" class="text-wrap text-break">{{ choice.content }}</label>
+          <div class="answer-list" v-show="question.question_type === 'multiple-choice'">
+            <div class="answers" v-for="(choice,index) in question.choices" :key="choice.id">
+              <input type="radio" default="none" :name="question.id" :id="choice.id" :value="index" @click.stop="isEmpty" v-model="user_answer"/>
+              <label :for="choice.id" class="text-wrap text-break">{{ choice.content }}</label>
+            </div>
           </div>
-        </div>
-
-        <div class="answer-list" v-if="current_question.question_type === 'fill-in-the-blank'">
-          <div class="answers">
-            <input type="text" v-model="user_answer" @paste="sendPaste">
+          <div class="answer-list" v-show="question.question_type === 'fill-in-the-blank'">
+            <div class="answers">
+              <input type="text" v-model="user_answer" @paste="sendPaste">
+            </div>
           </div>
         </div>
 
       </div>
 
       <div class="bottom">
-        <input type="submit" v-if:="current_question_id == last_question_id" class="btn btn-main" @click="handleSubmit" :disabled="!isAnswered"/>
-        <button class="btn btn-main" v-if="current_question_id < last_question_id" @click="checkAnswer($event, currentIndex)" :disabled="!isAnswered">
+        <input type="submit" v-show="current_question_id == last_question_id" class="btn btn-main" @click="handleSubmit" :disabled="!isAnswered"/>
+        <button class="btn btn-main" v-show="current_question_id < last_question_id" @click="checkAnswer($event, currentIndex)" :disabled="!isAnswered">
           Next
         </button>
       </div>
@@ -102,8 +102,15 @@ export default {
     }
   },
   methods: {
+    handleFocusOut() {
+      this.$store.commit('SET_QUIZ_STARTED', false);
+    },
+    handleFocus() {
+      this.$store.commit('SET_QUIZ_STARTED', true);
+    },
     async sendPaste() {
       if(this.is_taking) {
+        console.log('paste')
         const data = {'paste': 1};
 
         try {
@@ -116,7 +123,7 @@ export default {
             credentials: "include",
             body: JSON.stringify(data)
           });
-          console.log(await response.json())
+          // console.log(await response.json())
         } catch(e) {
           // console.log(e)
         }
@@ -244,6 +251,7 @@ export default {
       const result = await this.updateAnswer();
       this.progress = this.progress + 100 / this.quiz.number_of_questions;
       const result2 = await this.finishQuiz();
+      this.$store.commit('SET_QUIZ_STARTED', false);
       this.$router.replace({ path: `/take-quiz/${this.code}/result`})
     },
     clearSelection(name) {

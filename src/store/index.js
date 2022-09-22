@@ -7,7 +7,8 @@ export default createStore({
         message: '',
         user: '',
         authenticated: false,
-        showLoadingScreen: false
+        showLoadingScreen: false,
+        quizStarted: false
     },
     mutations: {
         SET_MSG(state, msg) {
@@ -21,7 +22,10 @@ export default createStore({
         },
         SET_SHOW_LOADING_SCREEN(state, showLoadingScreen) {
             state.showLoadingScreen = showLoadingScreen
-        }
+        },
+        SET_QUIZ_STARTED(state, quizStarted) {
+          state.quizStarted = quizStarted
+      }
     },
     actions: {
         async attempt({ commit }, msg, state) {

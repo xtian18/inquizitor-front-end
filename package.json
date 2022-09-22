@@ -17,6 +17,7 @@
     "jspdf-autotable": "^3.5.23",
     "vue": "^3.2.33",
     "vue-router": "^4.0.0-0",
+    "vue3-click-away": "^1.2.4",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
