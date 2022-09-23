@@ -82,6 +82,7 @@ export default {
       current_question: '',
       current_question_id: 0,
       last_question_id: 0,
+      attempt: null
     };
   },
   computed: {
@@ -99,6 +100,9 @@ export default {
     },
     user_answer() {
       this.isEmpty()
+    },
+    question_num() {
+      this.progress = this.question_num / this.quiz.number_of_questions * 100
     }
   },
   methods: {
@@ -173,14 +177,37 @@ export default {
           this.questions.push(loadQuestions);
           
         }
-        this.current_question_id = this.questions[0].id;
+        const attempt = await this.getQuizProgress()
+        if(this.attempt.recent_question_id) {
+          this.current_question_id = this.attempt.recent_question_id
+        } else {
+          this.current_question_id = this.questions[0].id;
+        }
+
         this.setCurrentQuestion();
       } catch(e) {
         // console.log(e);
       }
     },
+    async getQuizProgress() {
+      try {
+        const response = await fetch(`${config.apiURL}/quizzes/${this.code}/attempt`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Credetials": "true",
+            },
+            credentials: "include",
+          }
+        );
+        this.attempt = await response.json();
+      } catch (e) {
+        // console.log(e);
+      }
+    },
     setCurrentQuestion() {
       this.current_question = this.questions.filter(item => item.id == this.current_question_id)[0];
+      this.question_num =  this.questions.indexOf(this.current_question) + 1
     },
     isEmpty() {
       if (this.user_answer || this.user_answer === 0) {
@@ -236,7 +263,7 @@ export default {
     },
     async checkAnswer(e, name) {   
       const result = await this.updateAnswer();
-      this.progress = this.progress + 100 / this.quiz.number_of_questions;
+      // this.progress = this.progress + 100 / this.quiz.number_of_questions;
 
       if(this.current_question.question_type === 'multiple-choice') {
         this.clearSelection(name);
@@ -249,7 +276,7 @@ export default {
     },
     async handleSubmit() {
       const result = await this.updateAnswer();
-      this.progress = this.progress + 100 / this.quiz.number_of_questions;
+      // this.progress = this.progress + 100 / this.quiz.number_of_questions;
       const result2 = await this.finishQuiz();
       this.$store.commit('SET_QUIZ_STARTED', false);
       this.$router.replace({ path: `/take-quiz/${this.code}/result`})
