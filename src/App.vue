@@ -44,7 +44,8 @@ export default {
   data() {
     return {
       counter: 0,
-      is_double_click: false
+      is_double_click: false,
+      in_progress: false,
     }
   },
   computed: {
@@ -73,7 +74,7 @@ export default {
           credentials: "include",
           body: JSON.stringify(data)
         });
-        // console.log(await response.json())
+        console.log(await response.json())
       } catch(e) {
         // console.log(e)
       }
@@ -82,7 +83,7 @@ export default {
       if(this.is_taking) {
         this.timer = setTimeout(() => {
           if(!this.is_double_click) {
-            console.log('left_click')
+            // console.log('left_click')
             this.sendInputData('left_click')
           }
         }, 500);
@@ -91,7 +92,7 @@ export default {
     sendDoubleClick() {
       if(this.is_taking) {
         this.is_double_click = true
-        console.log('double_click')
+        // console.log('double_click')
         this.sendInputData('double_click')
         const timer = setTimeout(() => {
           this.is_double_click = false
@@ -100,29 +101,37 @@ export default {
     },
     sendRightClick() {
       if(this.is_taking) {
-        console.log('right_click')
+        // console.log('right_click')
         this.sendInputData('right_click')
       }
     },
-    sendFocus() {
+    async sendFocus() {
       if(this.is_taking) {
-        if (this.quizStarted) {
-          console.log('focus')
-          this.sendInputData('focus')
+        if(this.quizStarted) {
+          if(!this.in_progress) {
+            this.in_progress = true
+            // console.log('focus')
+            const focus = await this.sendInputData('focus')
+            this.in_progress = false
+          }
         } else {
           this.$store.commit('SET_QUIZ_STARTED', true);
         }
       }
     },
-    sendBlur() {
+    async sendBlur() {
       if(this.is_taking) {
-        console.log('blur')
-        this.sendInputData('blur')
+        if(!this.in_progress) {
+          this.in_progress = true
+          // console.log('blur')
+          const blur = await this.sendInputData('blur')
+          this.in_progress = false
+        }
       }
     },
     sendCopy() {
       if(this.is_taking) {
-        console.log('copy')
+        // console.log('copy')
         this.sendInputData('copy_')
       }
     },

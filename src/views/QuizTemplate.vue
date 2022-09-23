@@ -110,7 +110,7 @@ export default {
     },
     async sendPaste() {
       if(this.is_taking) {
-        console.log('paste')
+        // console.log('paste')
         const data = {'paste': 1};
 
         try {
@@ -123,7 +123,7 @@ export default {
             credentials: "include",
             body: JSON.stringify(data)
           });
-          // console.log(await response.json())
+          console.log(await response.json())
         } catch(e) {
           // console.log(e)
         }
