@@ -42,6 +42,8 @@ export default {
     setEmptyPage() {
       if(this.quizzes.length){
         this.showEmptyPage = false;
+      } else {
+        this.showEmptyPage = true;
       }
       this.$store.commit('SET_SHOW_LOADING_SCREEN', false);
     },

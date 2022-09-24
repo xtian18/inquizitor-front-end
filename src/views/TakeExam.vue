@@ -20,6 +20,11 @@
             Empty quiz code. Enter a code.
           </ErrorMessage>
         </div>
+        <div v-if="is_finished" class="mb-2">
+          <ErrorMessage>
+            This quiz has already been taken.
+          </ErrorMessage>
+        </div>
         <input type="text" class="mb-3 text-center" v-model="code" @focus="reset">
         <button type="submit" class="btn btn-main" :disabled="is_loading">
           <div v-if="is_loading" class="spinner-border spinner-border-sm"></div>
@@ -44,6 +49,7 @@ export default {
       is_due_date: false,
       is_empty: false,
       is_invalid: false,
+      is_finished: false,
       is_loading: false,
     }
   },
@@ -51,38 +57,66 @@ export default {
     async handleSubmit() {
       if(this.code) {
         this.is_loading = true;
-        try {
-          const response = await fetch(`${config.apiURL}/quizzes/${this.code}`, {
+        const checkQuizzes = await this.checkAttempts();
+      } else {
+        this.is_empty = true;
+      }
+
+    },
+    async loadQuiz() {
+      try {
+        const response = await fetch(`${config.apiURL}/quizzes/${this.code}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credetials": "true",
+          },
+          credentials: "include",
+        });
+        const data = await response.json();
+        this.quiz = data;
+        if(response.ok) {
+          this.$router.push({ name: 'Quiz', params: { id: this.quiz.quiz_code, title: this.quiz.name } });
+        } else if(data.detail == 'Quiz not found') {
+          this.is_invalid = true;
+        } else if(response.status == 400) {
+          this.is_due_date = true
+        }
+        this.is_loading = false;
+      } catch (e) {
+        // console.log(e);
+      }
+    },
+    async checkAttempts() {
+      try {
+        const response = await fetch(`${config.apiURL}/quizzes/${this.code}/attempt`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
               "Access-Control-Allow-Credetials": "true",
             },
             credentials: "include",
-          });
-          const data = await response.json();
-          this.quiz = data;
-          if(response.ok) {
-            this.$router.push({ name: 'Quiz', params: { id: this.quiz.quiz_code, title: this.quiz.name } });
-          } else if(data.detail == 'Quiz not found') {
-            this.is_invalid = true;
-          } else if(response.status == 400) {
-            this.is_due_date = true
           }
+        );
+        const attempt = await response.json();
+        if(!attempt) {
+          const quiz = await this.loadQuiz();
+        } else if(attempt.is_done) {
+          this.is_finished = true;
           this.is_loading = false;
-        } catch (e) {
-          // console.log(e);
+        } else {
+          const quiz = await this.loadQuiz();
         }
-      } else {
-        this.is_empty = true;
+      } catch (e) {
+        // console.log(e);
       }
-
     },
     reset() {
       this.code = '';
       this.is_invalid = false;
       this.is_empty = false;
       this.is_due_date = false;
+      this.is_finished = false;
     }
   }
 }
