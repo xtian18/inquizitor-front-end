@@ -293,6 +293,7 @@ export default {
     },
   },
   async created() {
+    console.log('Welcome :)')
     this.code = this.$route.params.id;
     const result = await this.loadQuiz();
     localStorage.setItem('quiz_id', this.quiz.id)
