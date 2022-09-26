@@ -113,7 +113,9 @@ export default {
             this.focus_in_progress = true
             // console.log('focus')
             const focus = await this.sendInputData('focus')
-            this.focus_in_progress = false
+            const timer = setTimeout(() => {
+              this.focus_in_progress = false
+            }, 100);
           }
         } else {
           this.$store.commit('SET_QUIZ_STARTED', true);
@@ -126,7 +128,9 @@ export default {
           this.blur_in_progress = true
           // console.log('blur')
           const blur = await this.sendInputData('blur')
-          this.blur_in_progress = false
+          const timer = setTimeout(() => {
+            this.blur_in_progress = false
+          }, 100);
         }
       }
     },
