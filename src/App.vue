@@ -179,7 +179,7 @@ export default {
     }
   },
   created() {
-    console.log('Welcome :)')
+    console.log('Welcome ;)')
     this.getUser();
   }
 }
