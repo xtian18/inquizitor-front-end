@@ -3,8 +3,8 @@
       class="app-container" 
       @dblclick="sendDoubleClick" 
       @click="sendLeftClick"
-      @mouseleave="sendBlur"
-      @mouseenter="sendFocus"
+      @mouseleave.stop="sendBlur"
+      @mouseenter.stop="sendFocus"
       @copy="sendCopy"
       @contextmenu="sendRightClick"
       >
@@ -113,7 +113,10 @@ export default {
             this.focus_in_progress = true
             // console.log('focus')
             const focus = await this.sendInputData('focus')
-            this.focus_in_progress = false
+
+            const timer = setTimeout(() => {
+              this.focus_in_progress = false 
+            }, 100);
           }
         } else {
           this.$store.commit('SET_QUIZ_STARTED', true);
@@ -122,11 +125,13 @@ export default {
     },
     async sendBlur() {
       if(this.is_taking) {
-        if(!this.blur_in_progress && !this.focus_in_progress) {
+        if(!this.blur_in_progress) {
           this.blur_in_progress = true
           // console.log('blur')
           const blur = await this.sendInputData('blur')
-          this.blur_in_progress = false
+          const timer = setTimeout(() => {
+            this.blur_in_progress = false
+          }, 100);
         }
       }
     },
@@ -174,6 +179,7 @@ export default {
     }
   },
   created() {
+    console.log('Welcome :)')
     this.getUser();
   }
 }
