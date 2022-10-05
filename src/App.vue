@@ -179,7 +179,7 @@ export default {
     }
   },
   created() {
-    console.log('Welcome ;)')
+    console.log('Deployment for data gathering')
     this.getUser();
   }
 }

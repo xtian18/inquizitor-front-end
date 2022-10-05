@@ -28,7 +28,7 @@
     <div class="container">
       <div class="home-content">
         <p class="title">Welcome!</p>
-        <p class="subtitle">Kweeznuts is a great tool to conduct online quizzes as it offers convenience to both teachers and students. It allows easy creation of quiz for teachers and simple quiz taking for students.</p>
+        <p class="subtitle">inQuizitor is a great tool to conduct online quizzes as it offers convenience to both teachers and students. It allows easy creation of quiz for teachers and simple quiz taking for students.</p>
         <button class="btn btn-main" @click="this.$router.push('/signup')">Get Started</button>
       </div>
     </div>
