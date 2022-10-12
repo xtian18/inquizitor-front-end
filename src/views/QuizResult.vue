@@ -20,6 +20,9 @@
         <p>{{ question.content }}</p>
 
         <div class="ms-3" v-if="question.question_type === 'multiple-choice'">
+          <div v-if="!question.answer">
+            <span class="no-answer"><font-awesome-icon icon="circle-exclamation" /> Not Answered</span>
+          </div>
           <div v-for="item in question.choices" :key="item.id">
             <div class="choices" :class="{wrong: item.is_answer, answer: item.is_correct,}">
               {{ item.content }}
@@ -30,6 +33,9 @@
         <div class="ms-3" v-else>
           <div v-if="question.answer" :class="{wrong: !question.is_correct, answer: question.is_correct}" class="choices">
             {{ question.answer }}
+          </div>
+          <div v-else>
+            <span class="no-answer"><font-awesome-icon icon="circle-exclamation" /> Not Answered</span>
           </div>
           <div class="mt-2" v-if="!question.is_correct">
             <small>Correct Answer(s):</small>
@@ -238,8 +244,13 @@ export default {
   color: white;
 }
 
-.answer{
+.answer {
   background-color: rgb(105, 210, 105);
   color: white;
+}
+
+.no-answer {
+  font-weight: 500;
+  color: rgb(193, 0, 0);
 }
 </style> 
