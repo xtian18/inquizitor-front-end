@@ -75,7 +75,7 @@ export default {
           this.$router.push('/');
         } else if(check_token.status == 400) {
           this.is_invalid = true;
-          this.message = login.detail;
+          this.message = 'Incorrect username or password';
           this.is_loading = false;
         } else if(check_token.status == 422) {
           this.is_invalid = true;

@@ -9,10 +9,14 @@
             <h1 class="me-auto">Instructions</h1>
             </div>
             <div class="modal-body text-center">
-            <p>Choose the best answer for each question. Once you click next, you can no longer go back to the previous questions. Good Luck!</p>
+            <p>Once you click next, you can no longer go back to the previous questions. By proceeding with the exam, you give consent to the collection of inout device data while in the quiz taking tab.</p>
             </div>
             <div class="modal-foot text-center">
-                <button class="btn btn-main" @click="showInstruction=false">I understand</button>
+                <div class="mb-3">
+                  <input class="form-check-input me-1" type="checkbox" value="true" id="agree" v-model="isAgree">
+                  <label for="agree">I agree</label>
+                </div>
+                <button class="btn btn-main" @click="showInstruction=false" :disabled="!isAgree">Start</button>
             </div>
         </div>
       </div>
@@ -69,6 +73,7 @@ export default {
   data() {
     return {
       showInstruction: true,
+      isAgree: false,
       progress: 0,
       user_answer: '',
       isAnswered: false,
