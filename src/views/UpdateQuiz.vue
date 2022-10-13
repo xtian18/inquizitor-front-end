@@ -417,6 +417,7 @@ export default {
         });
         const loadQuiz = await response.json();
         this.quiz = loadQuiz;
+        this.quiz.due_date = this.quiz.due_date.slice(0,19);
 
         for (const question of this.quiz.questions) {
           await this.questions_id.push(question.id)
