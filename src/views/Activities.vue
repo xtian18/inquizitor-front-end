@@ -97,7 +97,7 @@ export default {
   margin-bottom: 10px;
   margin-right: 10px;
   padding: 20px 30px;
-  height: 120px;
+  min-height: 120px;
   border-radius: 10px;
   transition: 0.3s;
 }

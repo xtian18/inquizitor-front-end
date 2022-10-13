@@ -2,7 +2,7 @@
   <div>
     <h1>My Quizzes</h1>
 
-    <a class="help" @click="showHelp=true">Help <font-awesome-icon icon="circle-question" /></a>
+    <a class="help" @click="showHelp=true"><font-awesome-icon icon="circle-question" /></a>
 
     <!-- show if no quizzes -->
     <div v-if="showEmptyPage" class="empty-page text-center">

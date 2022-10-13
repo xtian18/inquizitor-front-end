@@ -3,7 +3,7 @@
     <!-- header -->
     <h1>My Quizzes > {{ this.name }}</h1>
 
-    <a class="help" @click="showHelp=true">Help <font-awesome-icon icon="circle-question" /></a>
+    <a class="help" @click="showHelp=true"><font-awesome-icon icon="circle-question" /></a>
 
     <button class="btn btn-main" @click="handleAdd">Add Question</button>
 
@@ -568,6 +568,7 @@ export default {
       this.temp_choices = JSON.parse(JSON.stringify(this.choices));
 
       if(this.question_type === 'multiple-choice') {
+        this.selected_choice = this.choices.map(choice => choice.is_correct).indexOf(true)
         this.temp_selected = this.selected_choice;
       }
     

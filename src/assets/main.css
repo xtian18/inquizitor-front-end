@@ -156,6 +156,7 @@ select,textarea,input:focus {
     top: 0;
     right: 0;
     cursor: pointer;
+    font-size: 1.3em !important;
     transition: all .2s ease-in-out;
   
     color: #272A3F;

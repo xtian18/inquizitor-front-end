@@ -1,5 +1,5 @@
 <template>
-  <div class>
+  <div>
     <div class="titlebox">
       <h1>Quiz Result:</h1>
     </div>
