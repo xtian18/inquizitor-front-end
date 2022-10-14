@@ -294,13 +294,6 @@
                       <label for="1" class="ms-2 w-100">
                         <input type="text" v-model="item.content" @keyup="enableSave"/>
                       </label>
-
-                      <button class="round"  @click="removeChoiceInput(index)" v-if="choices.length > 1">
-                        <font-awesome-icon icon="trash-can" />
-                      </button>
-                    </div>
-                    <div class="d-flex w-100">
-                      <button class="round mx-auto" @click="addChoiceInput" v-if="choices.length < 4">+</button>
                     </div>
                   </div>
                   <!-- fill-in-the-blank -->
@@ -358,13 +351,7 @@ export default {
       points: '1',
       new_choice: '',
       selected_choice: '',
-      temp_selected: '',
       choices: [
-        {
-          content: '',
-        }
-      ],
-      temp_choices: [
         {
           content: '',
         }
@@ -499,32 +486,19 @@ export default {
       this.new_question = '';
       this.new_choice = '';
       this.selected_choice = '';
-      this.temp_selected = '';
       this.choices = [
         {
           content: '',
         }
       ];
-      this.temp_choices = [
-        {
-          content: '',
-        }
-      ]
     },
     closeAddModal() {
       this.showModal = false;
       this.resetValues();
     },
     async cancelUpdate() {
-      if(this.question_type === 'multiple-choice') {
-        const result = await this.addChoice(this.temp_choices, this.temp_selected);
-      } else {
-        const result = await this.addChoice(this.temp_choices);
-      }
-      
       this.showModalUpdate = false;
       this.resetValues();
-      const result2 = await this.loadQuiz();
     },
     enableSave() {
       if(this.question_type === 'multiple-choice') {
@@ -556,8 +530,6 @@ export default {
       this.current_question_id = question_id;
     },
     handleUpdate(question_id, question_num) {
-      this.temp_choices = [];
-      this.temp_selected = '',
       this.current_question_id = question_id;
       this.question_num = question_num;
 
@@ -566,15 +538,12 @@ export default {
       this.points = this.current_question.points;
       this.new_question = this.current_question.content;
       this.choices = JSON.parse(JSON.stringify(this.current_question.choices));
-      this.temp_choices = JSON.parse(JSON.stringify(this.choices));
 
       if(this.question_type === 'multiple-choice') {
         this.selected_choice = this.choices.map(choice => choice.is_correct).indexOf(true)
-        this.temp_selected = this.selected_choice;
       }
     
       this.showModalUpdate = true;
-      this.deleteChoice();
     },
     async deleteQuestion() {
       try {
@@ -605,9 +574,11 @@ export default {
     async submitUpdate() {
       const result = await this.updateQuestion();
       if(this.question_type === 'multiple-choice') {
-        const result2 = await this.addChoice(this.choices, this.selected_choice);
+        const result2 = await this.updateChoice(this.choices, this.selected_choice);
       } else {
-        const result2 = await this.addChoice(this.choices);
+        this.deleteChoice();
+        const result2 = await this.deleteChoice();
+        const result3 = await this.addChoice(this.choices);
       }
       this.showModalUpdate = false;
       this.resetValues();
@@ -678,27 +649,60 @@ export default {
             choices.is_correct = false;
           }   
         
-        const formData = new FormData();
-       
-        formData.append("content", choices[index].content)
-        formData.append("is_correct", choices.is_correct)
-        formData.append("question_id", this.current_question_id)
+          const formData = new FormData();
+        
+          formData.append("content", choices[index].content)
+          formData.append("is_correct", choices.is_correct)
+          formData.append("question_id", this.current_question_id)
 
-        const data = {};
-        formData.forEach((value, key) => (data[key] = value));
+          const data = {};
+          formData.forEach((value, key) => (data[key] = value));
 
 
-        const response = await fetch(`${config.apiURL}/quizzes/${this.id}/questions/${this.current_question_id}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Credetials": "true",
-          },
-          credentials: "include",
-          body: JSON.stringify(data),
-        });
+          const response = await fetch(`${config.apiURL}/quizzes/${this.id}/questions/${this.current_question_id}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Credetials": "true",
+            },
+            credentials: "include",
+            body: JSON.stringify(data),
+          });
         }
       } catch(e) {
+        // console.log(e);
+      }
+    },
+    async updateChoice(choices, answer) {
+      try {
+        for (let index=0; index<choices.length; index++) {
+          if(index == answer) {
+            choices.is_correct = true;
+          } else {
+            choices.is_correct = false;
+          } 
+
+          const formData = new FormData();
+       
+          formData.append("content", choices[index].content)
+          formData.append("is_correct", choices.is_correct)
+          formData.append("question_id", this.current_question_id)
+
+          const data = {};
+          formData.forEach((value, key) => (data[key] = value));
+
+
+          const response = await fetch(`${config.apiURL}/quizzes/${this.id}/questions/${this.current_question_id}/choices/${choices[index].id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Credetials": "true",
+            },
+            credentials: "include",
+            body: JSON.stringify(data),
+          });
+        }
+      } catch {
         // console.log(e);
       }
     },
