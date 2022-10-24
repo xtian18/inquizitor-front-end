@@ -46,7 +46,8 @@ export default {
       counter: 0,
       is_double_click: false,
       focus_in_progress: false,
-      blur_in_progress: false
+      blur_in_progress: false,
+      in_progress: false
     }
   },
   computed: {
@@ -109,14 +110,15 @@ export default {
     async sendFocus() {
       if(this.is_taking) {
         if(this.quizStarted) {
-          if(!this.focus_in_progress) {
-            this.focus_in_progress = true
+          if(!this.in_progress) {
+            this.in_progress = true
             // console.log('focus')
             const focus = await this.sendInputData('focus')
 
-            const timer = setTimeout(() => {
-              this.focus_in_progress = false 
-            }, 100);
+            this.in_progress = false 
+            // const timer = setTimeout(() => {
+            //   this.in_progress = false 
+            // }, 100);
           }
         } else {
           this.$store.commit('SET_QUIZ_STARTED', true);
@@ -125,13 +127,13 @@ export default {
     },
     async sendBlur() {
       if(this.is_taking) {
-        if(!this.blur_in_progress) {
-          this.blur_in_progress = true
+        if(!this.in_progress) {
+          // this.in_progress = true
           // console.log('blur')
           const blur = await this.sendInputData('blur')
-          const timer = setTimeout(() => {
-            this.blur_in_progress = false
-          }, 100);
+          // const timer = setTimeout(() => {
+          //   this.in_progress = false
+          // }, 100);
         }
       }
     },
