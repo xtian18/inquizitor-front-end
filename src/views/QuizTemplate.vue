@@ -9,7 +9,7 @@
             <h1 class="me-auto">Instructions</h1>
             </div>
             <div class="modal-body text-center">
-            <p>Once you click next, you can no longer go back to the previous questions. By proceeding with the exam, you give consent to the collection of inout device data while in the quiz taking tab.</p>
+            <p>Once you click next, you can no longer go back to the previous questions. By proceeding with the exam, you give consent to the collection of input device data while in the quiz taking tab.</p>
             </div>
             <div class="modal-foot text-center">
                 <div class="mb-3">
