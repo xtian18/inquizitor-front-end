@@ -38,57 +38,24 @@
       <div class="modal-overlay" v-if="showModal">
         <div class="modal-container">
           <div class="d-flex">
-            <h1 class="me-auto">Quiz #1</h1>
+            <h1 class="me-auto">{{ this.quiz_name }}</h1>
             
             <button type="button" class="btn-close" @click="showModal = !showModal"></button>
           </div>
           <p>Questions where the system detected cheating behavior are marked with <font-awesome-icon icon="circle-exclamation" class="cheating"/> symbol.</p>
           <div class="accordion mt-1" id="report-list">
 
-            <div class="accordion-item">
-              <div class="accordion-header" id="headingOne">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <div class="accordion-item" v-for="(student, index) in this.quizActions" :key="index">
+              <div class="accordion-header" :id="['heading'+index]">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="'#reportCollapse'+index" aria-expanded="true" :aria-controls="['reportCollapse'+index]">
                   <div class="me-auto p-2">
-                    <h3>Nico</h3>
-                    <p>Score: 5/5</p>
+                    <h3>{{ student.student_name }}</h3>
+                    <p>Score: {{ student.score }}</p>
                   </div>
                 </button>
               </div>
-              <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+              <div :id="['reportCollapse'+index]" class="accordion-collapse collapse show" :aria-labelledby="['heading'+index]" data-bs-parent="#report-list">
                 <div class="accordion-body">
-                  <div class="w-100 d-flex p-2">
-                    <div class="me-2"><strong>Time Taken:</strong></div>
-                    <div class="me-auto"> 10 mins</div>
-                  </div>
-                  <table class="table table-bordered table-light mouse-data">
-                    <thead>
-                       <tr>
-                        <th width="20%"></th>
-                        <th>Focus</th>
-                        <th>Blur</th>
-                        <th>Copy</th>
-                        <th>Paste</th>
-                        <th>Left Click</th>
-                        <th>Right CLick</th>
-                        <th>Double Click</th>
-                        <th width="4%" class="hide-cell"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Average Frequency of Non-Cheating</td>
-                        <td>2</td>
-                        <td>2</td>
-                        <td>3</td>
-                        <td>5</td>
-                        <td>75</td>
-                        <td>50</td>
-                        <td>85</td>
-                        <td class="hide-cell"></td>
-                      </tr>
-                    </tbody>
-                  </table>
-
                   <table class="table table-bordered table-light  mouse-data">
                     <thead>
                        <tr>
@@ -98,25 +65,26 @@
                         <th>Copy</th>
                         <th>Paste</th>
                         <th>Left Click</th>
-                        <th>Right CLick</th>
+                        <th>Right Click</th>
                         <th>Double Click</th>
                         <th width="4%" class="hide-cell"></th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>Q3 Frequency</td>
-                        <td>2</td>
-                        <td>2</td>
-                        <td>3</td>
-                        <td>5</td>
-                        <td>75</td>
-                        <td>50</td>
-                        <td>85</td>
+                      <tr v-for="(action, key, index) in student.actions" :key="index">
+                        <td>Q{{ index+1 }} Frequency</td>
+                        <td>{{ action.focus }}</td>
+                        <td>{{ action.blur }}</td>
+                        <td>{{ action.copy_ }}</td>
+                        <td>{{ action.paste }}</td>
+                        <td>{{ action.left_click }}</td>
+                        <td>{{ action.right_click }}</td>
+                        <td>{{ action.double_click }}</td>
                         <td width="5%" class="hide-cell"><font-awesome-icon icon="circle-exclamation" class="cheating"/></td>
                       </tr>
                     </tbody>
                   </table>
+                  <button class="btn btn-main" @click="downloadPDF(index, student.student_name, student.actions)">Download Quiz Logs</button>
                 </div>
               </div>
             </div>
@@ -150,7 +118,8 @@ export default {
       total_point: '',
       total_score: '',
       students: [],
-      quizActions: []
+      quizActions: [],
+      actionLogs: [],
     }
   },
   computed: {
@@ -184,6 +153,22 @@ export default {
         // console.log(e);
       }
     },
+    async loadQuizActions() {
+      try {
+        const response = await fetch(`${config.apiURL}/quizzes/${this.quiz_id}/actions-per-question`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credetials": "true",
+          },
+          credentials: "include",
+        });
+        const data = await response.json();
+        this.quizActions = data;
+      } catch(e) {
+        // console.log(e);
+      }
+    },
     async loadParticipants() {
       let index = 0;
       for(const quiz of this.quizzes) {
@@ -197,94 +182,99 @@ export default {
             credentials: "include",
           });
           const data = await response.json();
-          this.participants[index] = data;
           this.quizzes[index].number_of_participants = data.length;
-          this.getAverage(index);
-          this.quizzes[index].average = this.average;
-          this.computeTotal(index);
-          this.quizzes[index].total = this.total_point;
           index++;
         } catch(e) {
           // console.log(e);
         }
       }
     },
-    async loadQuizActions() {
-      try {
-        const response = await fetch(`${config.apiURL}/quizzes/${this.quiz_id}/actions-per-question`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Credetials": "true",
-          },
-          credentials: "include",
-        });
-        const data = await response.json();
-        this.quizActions = data;
-        console.log(this.quizActions);
-      } catch(e) {
-        // console.log(e);
-      }
-    },
-    getAverage(index) {
-      let total = 0;
-      this.average = 0;
-      this.participants[index].forEach(participant => {
-        total += participant.score;
-      });
-      
-      if(this.participants[index].length) {
-        this.average = Math.round(total/this.participants[index].length);
-      } else {
-        this.average = 0;
-      }
-    },
-    computeTotal(index) {
-      this.total_point = 0;
-      this.quizzes[index].questions.forEach(question => {
-        this.total_point += question.points;
-      });
-    },
     openModal(index){
       this.resetValues();
       this.quiz_id = this.quizzes[index].id;
       this.quiz_name = this.quizzes[index].name;
-      this.subject = this.quizzes[index].desc;
-      this.average_score = this.quizzes[index].average;
-      this.total_score = this.quizzes[index].total;
-      this.date_created = this.quizzes[index].created_at.slice(0,10).replace(/-/g,"/");
-      this.students = this.participants[index];
       this.showModal = true;
       this.loadQuizActions();
     },
     resetValues() {
       this.quiz_id = '',
       this.quiz_name = '';
-      this.subject = '';
-      this.average_score = '';
-      this.total_score = '';
-      this.date_created = '';
-      this.students = [];
     },
-    downloadPDF() {
+    async downloadPDF(id, name, actions) {
+      this.actionLogs = [];
+      const question_ids = Object.keys(actions);
+      let index = 0;
+      for(const question_id of question_ids) {
+        try {
+          const response = await fetch(`${config.apiURL}/quizzes/${this.quiz_id}/questions/${question_id}/${id}/actions`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Credetials": "true",
+            },
+            credentials: "include",
+          });
+          const data = await response.json();
+          
+          const removeZeroes = item => (
+            Object
+              .keys(item)
+              .filter(key => item[key] !== 0)
+              .reduce((newObj, key) => {
+                newObj[key] = item[key];
+                return newObj;
+              }, {})
+          );
+          
+          for(const action of data) {
+            const tempArray =  [];
+            const filtered = removeZeroes(action);
+            tempArray.push(index+1);
+            if(filtered.focus) {
+              tempArray.push("focus");
+            } else if(filtered.blur) {
+              tempArray.push("blur");
+            } else if(filtered.copy_) {
+              tempArray.push("copy");
+            } else if(filtered.paste) {
+              tempArray.push("paste");
+            } else if(filtered.left_click) {
+              tempArray.push("left click");
+            } else if(filtered.right_click) {
+              tempArray.push("right click");
+            } else if(filtered.double_click) {
+              tempArray.push("double click");
+            }
+            tempArray.push(action.time.slice(0,10));
+            tempArray.push(action.time.slice(11,19));
+            this.actionLogs.push(tempArray);
+          }
+
+          index++
+        } catch(e) {
+          // console.log(e);
+        }
+      }
+
       const doc = new jsPDF('p', 'mm', 'letter');
       doc.setFontSize(24);
-      doc.text(this.quiz_name + " Report", 108, 25.4, 'center');
+      doc.text("Input Device Logs", 108, 25.4, 'center');
       
       doc.setFontSize(12);
-      doc.text("Examiner: ", 25.4, 40);
-      doc.text("Average Score: ", 108, 40);
-      doc.text("Subject: ", 25.4, 47);
-      doc.text("Date Created: ", 108, 47);
+      doc.text("Quiz Name: ", 25.4, 40);
+      doc.text("Student Name: ", 25.4, 47);
+      doc.text(this.quiz_name, 48.4, 40);
+      doc.text(name, 54, 47);
 
-      doc.text(this.examiner, 45.4, 40);
-      doc.text(this.average_score + "/" + this.total_score, 138, 40);
-      doc.text(this.subject, 42, 47);
-      doc.text(this.date_created, 135, 47);
+      autoTable(doc, {
+        head: [['Question #', 'Action', 'Date', 'Time']],
+        body: this.actionLogs, styles: { halign: 'center' },
+        startY: 55, 
+        margin: 25.4
+      })
+      // doc.autoTable({ html: '#eventLogsTable', startY: 55, margin: 25.4})
 
-      doc.autoTable({ html: '#table', startY: 55, margin: 25.4})
-
-      doc.save(this.quiz_name + " Report.pdf");
+      doc.save(this.quiz_name + "-" + name + "-logs.pdf");
     }
   },
   async created() {
@@ -416,5 +406,10 @@ table.mouse-data th {
 .cheating {
   color: rgb(202, 3, 3) !important;
   font-size: 1.2em;
+}
+
+.accordion-body button {
+  display: block;
+  margin-left: auto;
 }
 </style>
