@@ -47,14 +47,14 @@
 
             <div class="accordion-item" v-for="(student, index) in this.quizActions" :key="index">
               <div class="accordion-header" :id="['heading'+index]">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="'#reportCollapse'+index" aria-expanded="true" :aria-controls="['reportCollapse'+index]">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#reportCollapse'+index" aria-expanded="false" :aria-controls="['reportCollapse'+index]">
                   <div class="me-auto p-2">
                     <h3>{{ student.student_name }}</h3>
                     <p>Score: {{ student.score }}</p>
                   </div>
                 </button>
               </div>
-              <div :id="['reportCollapse'+index]" class="accordion-collapse collapse show" :aria-labelledby="['heading'+index]" data-bs-parent="#report-list">
+              <div :id="['reportCollapse'+index]" class="accordion-collapse collapse" :aria-labelledby="['heading'+index]" data-bs-parent="#report-list">
                 <div class="accordion-body">
                   <table class="table table-bordered table-light  mouse-data">
                     <thead>
