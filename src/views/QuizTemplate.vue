@@ -119,11 +119,12 @@ export default {
     },
     async sendPaste() {
       if(this.is_taking) {
+        let question_id = localStorage.question_id;
         // console.log('paste')
         const data = {'paste': 1};
 
         try {
-          const response = await fetch(`${config.apiURL}/quizzes/${localStorage.quiz_id}/questions/${localStorage.question_id}/actions`, {
+          const response = await fetch(`${config.apiURL}/quizzes/${localStorage.quiz_id}/questions/${question_id}/actions`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

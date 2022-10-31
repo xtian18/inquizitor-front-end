@@ -64,11 +64,11 @@ export default {
     }
   },
   methods: {
-    async sendInputData(event) {
+    async sendInputData(event, question_id) {
       const data = {[event]: 1};
 
       try {
-        const response = await fetch(`${config.apiURL}/quizzes/${localStorage.quiz_id}/questions/${localStorage.question_id}/actions`, {
+        const response = await fetch(`${config.apiURL}/quizzes/${localStorage.quiz_id}/questions/${question_id}/actions`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -84,19 +84,21 @@ export default {
     },
     sendLeftClick() {
       if(this.is_taking) {
+        let question_id = localStorage.question_id;
         this.timer = setTimeout(() => {
           if(!this.is_double_click) {
             // console.log('left_click')
-            this.sendInputData('left_click')
+            this.sendInputData('left_click', question_id)
           }
         }, 500);
       }
     },
     sendDoubleClick() {
       if(this.is_taking) {
+        let question_id = localStorage.question_id;
         this.is_double_click = true
         // console.log('double_click')
-        this.sendInputData('double_click')
+        this.sendInputData('double_click', question_id)
         const timer = setTimeout(() => {
           this.is_double_click = false
         }, 500);
@@ -104,18 +106,20 @@ export default {
     },
     sendRightClick() {
       if(this.is_taking) {
+        let question_id = localStorage.question_id;
         // console.log('right_click')
-        this.sendInputData('right_click')
+        this.sendInputData('right_click', question_id)
       }
     },
     async sendFocus() {
       if(this.is_taking) {
+        let question_id = localStorage.question_id;
         if(this.quizStarted) {
           if(!this.is_inside) {
             this.is_inside = true
             // this.in_progress = true
             // console.log('focus')
-            const focus = await this.sendInputData('focus')
+            const focus = await this.sendInputData('focus', question_id)
 
             // this.in_progress = false 
             // const timer = setTimeout(() => {
@@ -129,11 +133,12 @@ export default {
     },
     async sendBlur() {
       if(this.is_taking) {
+        let question_id = localStorage.question_id;
         if(this.is_inside) {
           this.is_inside = false
           // this.in_progress = true
           // console.log('blur')
-          const blur = await this.sendInputData('blur')
+          const blur = await this.sendInputData('blur', question_id)
           // const timer = setTimeout(() => {
           //   this.in_progress = false
           // }, 100);
@@ -142,8 +147,9 @@ export default {
     },
     sendCopy() {
       if(this.is_taking) {
+        let question_id = localStorage.question_id;
         // console.log('copy')
-        this.sendInputData('copy_')
+        this.sendInputData('copy_', question_id)
       }
     },
     async handleLogout() {
