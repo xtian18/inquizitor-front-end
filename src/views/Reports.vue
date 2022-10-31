@@ -43,7 +43,12 @@
             <button type="button" class="btn-close" @click="showModal = !showModal"></button>
           </div>
           <p>Questions where the system detected cheating behavior are marked with <font-awesome-icon icon="circle-exclamation" class="cheating"/> symbol.</p>
-          <div class="accordion mt-1" id="report-list">
+
+          <div v-if="isLoading" class="loading-container">
+              <div class="spinner-border"  style="width: 4em;height:4em;"></div>
+          </div>
+          
+          <div v-else class="accordion mt-1" id="report-list">
 
             <div class="accordion-item" v-for="(student, index) in this.quizActions" :key="index">
               <div class="accordion-header" :id="['heading'+index]">
@@ -84,7 +89,10 @@
                       </tr>
                     </tbody>
                   </table>
-                  <button class="btn btn-main" @click="downloadPDF(index, student.student_name, student.actions)">Download Quiz Logs</button>
+                  <button class="btn btn-main" style="width: 250px;" @click="downloadPDF(index, student.student_name, student.actions)" :disabled="isDownloading">
+                    <div v-if="isDownloading" class="spinner-border spinner-border-sm"></div>
+                    Download Activity Logs
+                  </button>
                 </div>
               </div>
             </div>
@@ -107,24 +115,13 @@ export default {
     return {
       showModal: false,
       showEmptyPage: false,
+      isLoading: false,
+      isDownloading: false,
       quizzes: [],
-      participants: [],
       quiz_id: '',
       quiz_name: '',
-      subject: '',
-      date_created: '',
-      average: '',
-      average_score: '',
-      total_point: '',
-      total_score: '',
-      students: [],
       quizActions: [],
       actionLogs: [],
-    }
-  },
-  computed: {
-    examiner() {
-      return this.$store.state.user.full_name;
     }
   },
   methods: {
@@ -168,6 +165,7 @@ export default {
       } catch(e) {
         // console.log(e);
       }
+      this.isLoading = false;
     },
     async loadParticipants() {
       let index = 0;
@@ -194,13 +192,16 @@ export default {
       this.quiz_id = this.quizzes[index].id;
       this.quiz_name = this.quizzes[index].name;
       this.showModal = true;
+      this.isLoading = true;
       this.loadQuizActions();
     },
     resetValues() {
+      this.quizActions = [];
       this.quiz_id = '',
       this.quiz_name = '';
     },
     async downloadPDF(id, name, actions) {
+      this.isDownloading = true;
       this.actionLogs = [];
       const question_ids = Object.keys(actions);
       let index = 0;
@@ -272,9 +273,10 @@ export default {
         startY: 55, 
         margin: 25.4
       })
-      // doc.autoTable({ html: '#eventLogsTable', startY: 55, margin: 25.4})
 
       doc.save(this.quiz_name + "-" + name + "-logs.pdf");
+
+      this.isDownloading = false;
     }
   },
   async created() {
@@ -285,35 +287,35 @@ export default {
 }
 </script>
 
-<style>
-@media only screen and (max-width: 992px) {
-  tr .btn {
-  width: 80% !important;
-}
+<style scoped>
+.loading-container {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 
 .modal-container {
-  /* width: 55% !important;
-  min-width: 500px; */
+  /* overflow: hidden; */
   height: 88% !important;
 }
 .accordion {
   height: 85%;
-  overflow: auto;
+  overflow-y: auto;
 }
 .accordion-item {
   border: 1px solid rgba(0, 0, 0, 0.2) !important;
   box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.2);
   margin-bottom: 10px;
   margin-right: 10px;
-  /* padding: 20px 30px; */
   min-height: 120px;
   border-radius: 10px;
   transition: 0.3s;
 }
 
 .accordion-item:hover {
-  /* background-color: rgba(228, 228, 228, 0.1); */
   box-shadow: 4px 4px 8px 0 rgba(0, 0, 0, 0.2);
   cursor: pointer;
 }
@@ -344,8 +346,9 @@ p.cheating {
   margin-top: 40px;
   padding: 20px;
   width: auto;
-  height: 72%;
+  height: auto;
   max-height: 72%;
+  overflow: hidden;
 }
 
 .report-modal-container {
@@ -354,8 +357,9 @@ p.cheating {
 
 .table-wrapper {
   padding-right: 5px;
-  max-height: 100%;
-  overflow: auto;
+  height: 100%;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .table-wrapper2 {
@@ -411,5 +415,11 @@ table.mouse-data th {
 .accordion-body button {
   display: block;
   margin-left: auto;
+}
+
+@media only screen and (max-width: 992px) {
+  tr .btn {
+    width: 80% !important;
+  }
 }
 </style>
