@@ -253,7 +253,6 @@
             </form>
           </div>
           <div class="bottom">
-             <!-- :disabled="!isSaveEnabled" -->
             <button class="btn btn-main ms-2" @click="submitQuestion" :disabled="!isSaveEnabled">Save</button>
             <button class="btn btn-secondary" @click="closeAddModal">Cancel</button>
           </div>
@@ -299,7 +298,7 @@
                   <!-- fill-in-the-blank -->
                   <div v-if="question_type === 'fill-in-the-blank'">
                     <div class="w-100 d-flex" v-for="(item, index) in choices" :key="index">
-                      <input class="radio" type="text" v-model="item.content">
+                      <input class="radio" type="text" v-model="item.content" @keyup="enableSave">
                       <button class="round" @click="removeChoiceInput(index)" v-if="choices.length > 1">
                         <font-awesome-icon icon="trash-can" />
                       </button>
@@ -312,8 +311,7 @@
             </form>
           </div>
           <div class="bottom">
-             <!-- :disabled="!isSaveEnabled" -->
-            <button class="btn btn-main ms-2" @click="submitUpdate">Save</button>
+            <button class="btn btn-main ms-2" @click="submitUpdate" :disabled="!isSaveEnabled">Save</button>
             <button class="btn btn-secondary" @click="cancelUpdate">Cancel</button>
           </div>
         </div>
@@ -542,6 +540,7 @@ export default {
       this.current_question_id = question_id;
     },
     handleUpdate(question_id, question_num) {
+      this.isSaveEnabled = true;
       this.current_question_id = question_id;
       this.question_num = question_num;
 
@@ -552,7 +551,7 @@ export default {
       this.choices = JSON.parse(JSON.stringify(this.current_question.choices));
 
       if(this.question_type === 'multiple-choice') {
-        this.selected_choice = this.choices.map(choice => choice.is_correct).indexOf(true)
+        this.selected_choice = this.choices.map(choice => choice.is_correct).indexOf(true);
       }
     
       this.showModalUpdate = true;
