@@ -26,7 +26,11 @@
           </ErrorMessage>
         </div>
         <input type="text" class="mb-3 text-center" v-model="code" @focus="reset">
-        <button type="submit" class="btn btn-main" :disabled="is_loading">
+        <div class="d-flex mb-3 text-start">
+          <input class="form-check-input me-1" style="flex: 0 0 16px;" type="checkbox" value="true" id="agree" v-model="isAgree">
+          <label for="agree">By proceeding with the quiz, I agree to the collection of input device data while in the quiz taking tab.</label>
+        </div>
+        <button type="submit" class="btn btn-main" :disabled="is_loading || !isAgree">
           <div v-if="is_loading" class="spinner-border spinner-border-sm"></div>
           Enter
         </button>
@@ -51,6 +55,7 @@ export default {
       is_invalid: false,
       is_finished: false,
       is_loading: false,
+      isAgree: false,
     }
   },
   methods: {
