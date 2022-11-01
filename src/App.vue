@@ -190,7 +190,7 @@ export default {
     }
   },
   created() {
-    console.log('10/24/22 9:16PM')
+    console.log('11/01/22 10:49PM')
     this.getUser();
   }
 }

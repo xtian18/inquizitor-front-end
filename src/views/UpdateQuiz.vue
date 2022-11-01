@@ -239,7 +239,7 @@
                   <!-- fill-in-the-blank -->
                   <div v-if="question_type === 'fill-in-the-blank'">
                     <div class="w-100 d-flex" v-for="(item, index) in choices" :key="index">
-                      <input class="radio" type="text" v-model="item.content">
+                      <input class="radio" type="text" v-model="item.content" @keyup="enableSave">
                       <button class="round" @click="removeChoiceInput(index)" v-if="choices.length > 1">
                         <font-awesome-icon icon="trash-can" />
                       </button>
@@ -504,14 +504,26 @@ export default {
       if(this.question_type === 'multiple-choice') {
         if(this.selected_choice === '') {
           this.isSaveEnabled = false;
-        } else if (this.new_question && this.choices && this.points) {
+        } else if (this.new_question && this.points) {
           this.isSaveEnabled = true;
+          for(const choice of this.choices) {
+            if(!choice.content) {
+              this.isSaveEnabled = false;
+              break;
+            }
+          }
         } else {
           this.isSaveEnabled = false;
         }
       } else {
-        if (this.new_question && this.choices && this.points) {
+        if (this.new_question && this.points) {
           this.isSaveEnabled = true;
+          for(const choice of this.choices) {
+            if(!choice.content) {
+              this.isSaveEnabled = false;
+              break;
+            }
+          }
         } else {
           this.isSaveEnabled = false;
         }
@@ -708,6 +720,7 @@ export default {
     },
     addChoiceInput() {
       this.choices.push({ value: "" });
+      this.enableSave();
     },
     async deleteChoice() {
       try {
@@ -729,6 +742,7 @@ export default {
     },
     removeChoiceInput(index) {
       this.choices.splice(index, 1);
+      this.enableSave();
     }
   },
   async created() {
