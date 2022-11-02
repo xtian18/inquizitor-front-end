@@ -85,7 +85,7 @@
                         <td>{{ action.left_click }}</td>
                         <td>{{ action.right_click }}</td>
                         <td>{{ action.double_click }}</td>
-                        <td width="5%" class="hide-cell"><font-awesome-icon icon="circle-exclamation" class="cheating"/></td>
+                        <td width="5%" class="hide-cell"><font-awesome-icon icon="circle-exclamation" class="cheating" v-if="action.label"/></td>
                       </tr>
                     </tbody>
                   </table>
@@ -162,6 +162,7 @@ export default {
         });
         const data = await response.json();
         this.quizActions = data;
+        console.log(this.quizActions)
       } catch(e) {
         // console.log(e);
       }
