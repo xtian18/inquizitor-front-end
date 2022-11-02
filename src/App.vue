@@ -3,8 +3,6 @@
       class="app-container" 
       @dblclick="sendDoubleClick" 
       @click="sendLeftClick"
-      @mouseleave.stop="sendBlur"
-      @mouseenter.stop="sendFocus"
       @copy="sendCopy"
       @contextmenu="sendRightClick"
       >
@@ -48,7 +46,8 @@ export default {
       focus_in_progress: false,
       blur_in_progress: false,
       in_progress: false,
-      is_inside: true
+      is_inside: true,
+      is_outside: false,
     }
   },
   computed: {
@@ -87,7 +86,6 @@ export default {
         let question_id = localStorage.question_id;
         this.timer = setTimeout(() => {
           if(!this.is_double_click) {
-            // console.log('left_click')
             this.sendInputData('left_click', question_id)
           }
         }, 500);
@@ -97,7 +95,6 @@ export default {
       if(this.is_taking) {
         let question_id = localStorage.question_id;
         this.is_double_click = true
-        // console.log('double_click')
         this.sendInputData('double_click', question_id)
         const timer = setTimeout(() => {
           this.is_double_click = false
@@ -107,48 +104,24 @@ export default {
     sendRightClick() {
       if(this.is_taking) {
         let question_id = localStorage.question_id;
-        // console.log('right_click')
         this.sendInputData('right_click', question_id)
       }
     },
     async sendFocus() {
       if(this.is_taking) {
         let question_id = localStorage.question_id;
-        if(this.quizStarted) {
-          if(!this.is_inside) {
-            this.is_inside = true
-            // this.in_progress = true
-            // console.log('focus')
-            const focus = await this.sendInputData('focus', question_id)
-
-            // this.in_progress = false 
-            // const timer = setTimeout(() => {
-            //   this.in_progress = false 
-            // }, 100);
-          }
-        } else {
-          this.$store.commit('SET_QUIZ_STARTED', true);
-        }
+        const focus = await this.sendInputData('focus', question_id)
       }
     },
     async sendBlur() {
       if(this.is_taking) {
         let question_id = localStorage.question_id;
-        if(this.is_inside) {
-          this.is_inside = false
-          // this.in_progress = true
-          // console.log('blur')
-          const blur = await this.sendInputData('blur', question_id)
-          // const timer = setTimeout(() => {
-          //   this.in_progress = false
-          // }, 100);
-        }
+        const blur = await this.sendInputData('blur', question_id)
       }
     },
     sendCopy() {
       if(this.is_taking) {
         let question_id = localStorage.question_id;
-        // console.log('copy')
         this.sendInputData('copy_', question_id)
       }
     },
@@ -192,6 +165,8 @@ export default {
   created() {
     console.log('11/01/22 10:49PM')
     this.getUser();
+    window.addEventListener('blur', this.sendBlur);
+    window.addEventListener('focus', this.sendFocus);
   }
 }
 </script>
