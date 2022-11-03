@@ -76,7 +76,6 @@ export default {
           credentials: "include",
           body: JSON.stringify(data)
         });
-        console.log(await response.json())
       } catch(e) {
         // console.log(e)
       }
@@ -163,7 +162,7 @@ export default {
     }
   },
   created() {
-    console.log('11/01/22 10:49PM')
+    console.log('Deployment for Evaluation')
     this.getUser();
     window.addEventListener('blur', this.sendBlur);
     window.addEventListener('focus', this.sendFocus);

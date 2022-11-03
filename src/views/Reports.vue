@@ -162,7 +162,6 @@ export default {
         });
         const data = await response.json();
         this.quizActions = data;
-        console.log(this.quizActions)
       } catch(e) {
         // console.log(e);
       }

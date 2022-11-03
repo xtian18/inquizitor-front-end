@@ -116,7 +116,6 @@ export default {
     async sendPaste() {
       if(this.is_taking) {
         let question_id = localStorage.question_id;
-        // console.log('paste')
         const data = {'paste': 1};
 
         try {
@@ -264,13 +263,13 @@ export default {
       }
     },
     async checkAnswer(e, name) {   
+      this.isAnswered = false;
       const result = await this.updateAnswer();
-      // this.progress = this.progress + 100 / this.quiz.number_of_questions;
 
       if(this.current_question.question_type === 'multiple-choice') {
         this.clearSelection(name);
       }
-      this.isAnswered = false;
+      
       this.user_answer = '';
       this.current_question_id++;
       this.question_num++;

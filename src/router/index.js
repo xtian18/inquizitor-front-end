@@ -5,7 +5,6 @@ import SignUp from '../views/SignUp.vue'
 import Dashboard from '../views/Dashboard.vue'
 import TakeExam from '../views/TakeExam.vue'
 import Activities from '../views/Activities.vue'
-import UpdateProfile from '../views/UpdateProfile.vue'
 import MyExams from '../views/MyExams.vue'
 import UpdateQuiz from '../views/UpdateQuiz.vue'
 import Reports from '../views/Reports.vue'
@@ -48,11 +47,6 @@ const routes = [
         path: '/activities',
         name: 'Activities',
         component: Activities
-      },
-      {
-        path: '/update-profile',
-        name: 'UpdateProfile',
-        component: UpdateProfile
       },
       {
         path: '/my-quizzes',

@@ -15,7 +15,7 @@
         <img class="card-img-top" src="@/assets/reports.png" alt="Card image">
         <div class="card-body">
           <h4 class="card-title text-center">Reports</h4>
-          <p class="card-text text-center">View the list of quizzes you have along with each reports including students' scores and avearge score.</p>
+          <p class="card-text text-center">View the list of quizzes you have along with each reports including students' scores and possible cheating detected.</p>
         </div>
       </div>
     </div>
@@ -43,11 +43,6 @@
 
 <script>
 export default {
-  data() {
-    return {
-      accountType: 'teacher',
-    }
-  },
   computed: {
     user() {
       return this.$store.state.user;
