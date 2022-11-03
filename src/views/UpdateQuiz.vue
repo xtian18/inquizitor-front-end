@@ -573,6 +573,7 @@ export default {
       }
     },
     async submitQuestion() {
+      this.isSaveEnabled = false;
       const result = await this.addQuestion();
       if(this.question_type === 'multiple-choice') {
         const result2 = await this.addChoice(this.choices, this.selected_choice);
@@ -583,6 +584,7 @@ export default {
       this.loadQuiz();
     },
     async submitUpdate() {
+      this.isSaveEnabled = false;
       const result = await this.updateQuestion();
       if(this.question_type === 'multiple-choice') {
         const result2 = await this.updateChoice(this.choices, this.selected_choice);
