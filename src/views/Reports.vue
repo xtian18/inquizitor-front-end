@@ -44,7 +44,7 @@
             
             <button type="button" class="btn-close" @click="showModal = !showModal"></button>
           </div>
-          <p>A student will have red border if the system detected atleast one question with cheating behavior. You can see the specific questions the students possibly cheated through a danger mark <font-awesome-icon icon="circle-exclamation" class="cheating"/>.</p>
+          <p>A student will have red border if the system detected atleast one question with cheating behavior. Questions where the system detected cheating behavior are marked with <font-awesome-icon icon="circle-exclamation" class="cheating"/> symbol. (Focus refers to going back to the quiz taking page while blur refers to leaving the quiz taking page)</p>
 
           <div v-if="isLoading" class="loading-container">
               <div class="spinner-border"  style="width: 4em;height:4em;"></div>
@@ -67,8 +67,8 @@
                     <thead>
                        <tr>
                         <th width="20%"></th>
-                        <th>Focus</th>
-                        <th>Blur</th>
+                        <th data-bs-toggle="tooltip" data-bs-placement="bottom" title="Refers to going back to the quiz taking page.">Focus</th>
+                        <th data-bs-toggle="tooltip" data-bs-placement="bottom" title="Refers to leaving the quiz taking page.">Blur</th>
                         <th>Copy</th>
                         <th>Paste</th>
                         <th>Left Click</th>
