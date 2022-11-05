@@ -100,75 +100,83 @@
       </template>
     </DialogModal>
 
+    <!-- help modal -->
     <HelpModal :showHelp="showHelp">
       <template v-slot:head>
-        <h1>Need Help?</h1>
+        <h1>Need help?</h1>
         <button type="button" class="btn-close action" @click="showHelp=false,isOpen=0">
         </button>
       </template>
       <template v-slot:body>
-        <div class="help-body">
-          <div class="help-expand" @click="setOpen(1)">
-            <!-- visible -->
-            <div>
-              <p class="help-question"><font-awesome-icon icon="pen-to-square" /> How to update quiz information?</p>
+        <div class="help-body accordion" id="help-list">
+          <div class="accordion-item">
+            <div class="accordion-header" id="help-heading1">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#help-collapse1" aria-expanded="false" aria-controls="help-collapse1">
+                <span class="help-question">How to update quiz information?</span>
+              </button>
             </div>
-            <!-- hidden -->
-            <div v-if="isOpen==1" class="mt-3">
-              <ol>
-                <li>At the upper part of the page, you will see a box with the quiz information including its name, subject, due date and code.</li><br>
-                <li>You can update the quiz name, subject or due date by clicking the <strong><font-awesome-icon icon="pen-to-square" /> button</strong> beside the text boxes.</li><br>
-                <li>After clicking the button, the corresponding text box will be available where you can change the information written.</li><br>
-                <li>Once you finish changing the information, you can click the <strong><font-awesome-icon icon="thumbs-up" /> button</strong> to save the changes.</li>
-              </ol>
-            </div>
-          </div>
-
-          <div class="help-expand" @click="setOpen(2)">
-            <!-- visible -->
-            <div>
-              <p class="help-question"><font-awesome-icon icon="circle-plus" /> How to add questions?</p>
-            </div>
-            <!-- hidden -->
-            <div v-if="isOpen==2" class="mt-3">
-              <ol>
-                <li>If you want to add questions, click the <strong>"Add Question"</strong> button at the upper right corner.</li><br>
-                <li>After clicking the button, a window will pop-up where you can enter the question information.</li><br>
-                <li>The first text box is where you need the put the equivalent points of the question. The second text box is where you need to put the question itself. Below them is where you need to put the choices and the correct answer.</li><br>
-                <li>If you need more choices, click the <strong><font-awesome-icon icon="circle-plus" /> button</strong> below to add up to four choices. To delete a choice, click <strong><font-awesome-icon icon="trash-can" /> button</strong> on the right side of the choice you want to remove. To select the correct answer, click the <strong>circular button</strong> on the left side of the corresponding choice.</li><br>
-                <li>Once you completed all the necessary information, the <strong>"Save"</strong> button will be available so that you can finally add the question to the quiz.</li>
-              </ol>
+            <div id="help-collapse1" class="accordion-collapse collapse mt-3" aria-labelledby="help-heading1" data-bs-parent="#help-list">
+              <div class="accordion-body">
+                <ol>
+                  <li>At the upper part of the page, you will see a box with the quiz information including its name, subject, due date and code.</li><br>
+                  <li>You can update the quiz name, subject or due date by clicking the <strong><font-awesome-icon icon="pen-to-square" /> button</strong> beside the text boxes.</li><br>
+                  <li>After clicking the button, the corresponding text box will be available where you can change the information written.</li><br>
+                  <li>Once you finish changing the information, you can click the <strong><font-awesome-icon icon="thumbs-up" /> button</strong> to save the changes.</li>
+                </ol>
+              </div>
             </div>
           </div>
 
-          <div class="help-expand" @click="setOpen(3)">
-            <!-- visible -->
-            <div>
-              <p class="help-question"><font-awesome-icon icon="pen-to-square" /> How to update a question?</p>
+          <div class="accordion-item">
+            <div class="accordion-header" id="help-heading2">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#help-collapse2" aria-expanded="false" aria-controls="help-collapse2">
+                <span class="help-question">How to add questions?</span>
+              </button>
             </div>
-            <!-- hidden -->
-            <div v-if="isOpen==3" class="mt-3">
-              <ol>
-                <li>In each question, there will be two buttons on the upper right corner of the box. Just click the <strong><font-awesome-icon icon="pen-to-square" /> button</strong> if you want to update or edit a particular question.</li><br>
-                <li>After clicking the button, a window will pop-up (similar when adding questions) containing the question information. Here you will be able to the edit points, question, choices and correct answer. Just change the particular question information in the corresponding text boxes you want to update.</li><br>
-                <li>Once you are finished, click the <strong>"Save"</strong> button to save the changes.</li>
-
-              </ol>
+            <div id="help-collapse2" class="accordion-collapse collapse mt-3" aria-labelledby="help-heading2" data-bs-parent="#help-list">
+              <div class="accordion-body">
+                <ol>
+                  <li>If you want to add questions, click the <strong>"Add Question"</strong> button at the upper right corner.</li><br>
+                  <li>After clicking the button, a window will pop-up where you can enter the question information.</li><br>
+                  <li>You can select between multiple choice or fill-in-the-blank type of question. The first text box is where you need the put the equivalent points of the question. The second text box is where you need to put the question itself. Below them is where you need to put the choices/possible answers.</li><br>
+                  <li>If you need more choices/answers, click the <strong><font-awesome-icon icon="circle-plus" /> button</strong> below to add up to four choices/answers. To delete a choice/answer, click <strong><font-awesome-icon icon="trash-can" /> button</strong> on the right side to remove it. To select the correct answer for multiple choice questions, click the <strong>circular button</strong> on the left side of the corresponding choice.</li><br>
+                  <li>Once you completed all the necessary information, the <strong>"Save"</strong> button will be available so that you can finally add the question to the quiz.</li>
+                </ol>
+              </div>
             </div>
           </div>
 
-          <div class="help-expand" @click="setOpen(4)">
-            <!-- visible -->
-            <div>
-              <p class="help-question"><font-awesome-icon icon="trash-can" /> How to delete a question?</p>
+          <div class="accordion-item">
+            <div class="accordion-header" id="help-heading3">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#help-collapse3" aria-expanded="false" aria-controls="help-collapse3">
+                <span class="help-question">How to update a question?</span>
+              </button>
             </div>
-            <!-- hidden -->
-            <div v-if="isOpen==4" class="mt-3">
-              <ol>
-                <li>In each question, there will be two buttons on the upper right corner of the box. Just click the <strong><font-awesome-icon icon="trash-can" /> button</strong> if you want to delete a particular question.</li><br>
-                <li>After clicking the button, a dialog box will pop-up asking for a confirmation before deleting the question.</li><br>
-                <li>Click the <strong>"Delete"</strong> button if you are sure you want to delete the question.</li>
-              </ol>
+            <div id="help-collapse3" class="accordion-collapse collapse mt-3" aria-labelledby="help-heading3" data-bs-parent="#help-list">
+              <div class="accordion-body">
+                <ol>
+                  <li>In each question, there will be two buttons on the upper right corner of the box. Just click the <strong><font-awesome-icon icon="pen-to-square" /> button</strong> if you want to update or edit a particular question.</li><br>
+                  <li>After clicking the button, a window will pop-up  containing the question information. Here, you will be able to the edit points, question, choices and correct answer. Just change the particular question information in the corresponding text boxes you want to update.</li><br>
+                  <li>Once you are finished, click the <strong>"Save"</strong> button to save the changes.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" id="help-heading4">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#help-collapse4" aria-expanded="false" aria-controls="help-collapse4">
+                <span class="help-question">How to delete a question?</span>
+              </button>
+            </div>
+            <div id="help-collapse4" class="accordion-collapse collapse mt-3" aria-labelledby="help-heading4" data-bs-parent="#help-list">
+              <div class="accordion-body">
+                <ol>
+                  <li>In each question, there will be two buttons on the upper right corner of the box. Just click the <strong><font-awesome-icon icon="trash-can" /> button</strong> if you want to delete a particular question.</li><br>
+                  <li>After clicking the button, a dialog box will pop-up asking for a confirmation before deleting the question.</li><br>
+                  <li>Click the <strong>"Delete"</strong> button if you are sure you want to delete the question.</li>
+                </ol>
+              </div>
             </div>
           </div>
         </div>
@@ -360,7 +368,6 @@ export default {
       showModalUpdate: false,
       showDialog: false,
       showHelp: false,
-      isOpen: 0,
       isSaveEnabled: false,
       isNameEnabled: false,
       isDescEnabled: false,
@@ -382,9 +389,6 @@ export default {
     }
   },
   methods: {
-    setOpen(index) {
-      this.isOpen = index;
-    },
     async loadQuiz() {
       this.$store.commit('SET_SHOW_LOADING_SCREEN', true);
       this.quiz = [];

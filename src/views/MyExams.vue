@@ -56,52 +56,58 @@
         </button>
       </template>
       <template v-slot:body>
-        <div class="help-body">
-          <div class="help-expand" @click="setOpen(1)">
-            <!-- visible -->
-            <div>
-              <p class="help-question"><font-awesome-icon icon="circle-plus" /> How to create a quiz?</p>
+        <div class="help-body accordion" id="help-list">
+          <div class="accordion-item">
+            <div class="accordion-header" id="help-heading1">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#help-collapse1" aria-expanded="false" aria-controls="help-collapse1">
+                <span class="help-question">How to create a quiz?</span>
+              </button>
             </div>
-            <!-- hidden -->
-            <div v-if="isOpen==1" class="mt-3">
-              <ol>
-                <li>If you haven't created any quizzes yet, click the <strong>"Create your first quiz now"</strong> below. If you already have existing quizzes, just click the <strong>"Create new"</strong> button at the upper right corner.</li><br>
-                <li>A window will pop-up where you need to input the quiz name, subject and due date. The <strong>"Create new"</strong> button below the window will be available once all the necessary information have been filled out.</li><br>
-                <li>After clicking the button, you will be taken to the quiz page where you can update quiz information or add, update and delete questions.</li>
-              </ol>
-            </div>
-          </div>
-
-          <div class="help-expand" @click="setOpen(2)">
-            <!-- visible -->
-            <div>
-              <p class="help-question"><font-awesome-icon icon="pen-to-square" /> How to update a quiz?</p>
-            </div>
-            <!-- hidden -->
-            <div v-if="isOpen==2" class="mt-3">
-              <ol>
-                <li>In each quiz listed, there will be two buttons on the right side of the box. Just click the <strong>
-                  <font-awesome-icon icon="pen-to-square" /> button
-                </strong> if you want to update or edit a particular quiz.</li><br>
-                <li>After clicking the button, you will be taken to the quiz page where you can update quiz information or add, update and delete questions.</li>
-              </ol>
+            <div id="help-collapse1" class="accordion-collapse collapse mt-3" aria-labelledby="help-heading1" data-bs-parent="#help-list">
+              <div class="accordion-body">
+                <ol>
+                    <li>If you haven't created any quizzes yet, click the <strong>"Create your first quiz now"</strong> below. If you already have existing quizzes, just click the <strong>"Create new"</strong> button at the upper right corner.</li><br>
+                    <li>A window will pop-up where you need to input the quiz name, subject and due date. The <strong>"Create new"</strong> button below the window will be available once all the necessary information have been filled out.</li><br>
+                    <li>After clicking the button, you will be taken to the quiz page where you can update quiz information or add, update and delete questions.</li>
+                </ol>
+              </div>
             </div>
           </div>
 
-          <div class="help-expand" @click="setOpen(3)">
-            <!-- visible -->
-            <div>
-              <p class="help-question"><font-awesome-icon icon="trash-can" /> How to delete a quiz?</p>
+          <div class="accordion-item">
+            <div class="accordion-header" id="help-heading2">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#help-collapse2" aria-expanded="false" aria-controls="help-collapse2">
+                <span class="help-question">How to update a quiz?</span>
+              </button>
             </div>
-            <!-- hidden -->
-            <div v-if="isOpen==3" class="mt-3">
-              <ol>
-                <li>In each quiz listed, there will be two buttons on the right side of the box. Just click the <strong>
-                  <font-awesome-icon icon="trash-can" /> button
-                </strong> if you want to delete a particular quiz.</li><br>
-                <li>After clicking the button, a dialog box will pop-up asking for a confirmation before deleting the quiz.</li><br>
-                <li>Click the <strong>"Delete"</strong> button if you are sure you want to delete the quiz.</li>
-              </ol>
+            <div id="help-collapse2" class="accordion-collapse collapse mt-3" aria-labelledby="help-heading2" data-bs-parent="#help-list">
+              <div class="accordion-body">
+                <ol>
+                    <li>In each quiz listed, there will be two buttons on the right side of the box. Just click the <strong>
+                      <font-awesome-icon icon="pen-to-square" /> button
+                    </strong> if you want to update or edit a particular quiz.</li><br>
+                    <li>After clicking the button, you will be taken to the quiz page where you can update quiz information or add, update and delete questions.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" id="help-heading3">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#help-collapse3" aria-expanded="false" aria-controls="help-collapse3">
+                <span class="help-question">How to delete a quiz?</span>
+              </button>
+            </div>
+            <div id="help-collapse3" class="accordion-collapse collapse mt-3" aria-labelledby="help-heading3" data-bs-parent="#help-list">
+              <div class="accordion-body">
+                <ol>
+                  <li>In each quiz listed, there will be two buttons on the right side of the box. Just click the <strong>
+                    <font-awesome-icon icon="trash-can" /> button
+                  </strong> if you want to delete a particular quiz.</li><br>
+                  <li>After clicking the button, a dialog box will pop-up asking for a confirmation before deleting the quiz.</li><br>
+                  <li>Click the <strong>"Delete"</strong> button if you are sure you want to delete the quiz.</li>
+                </ol>
+              </div>
             </div>
           </div>
         </div>
@@ -156,7 +162,6 @@ export default {
   data() {
     return {
       selected_quiz_id: '',
-      isOpen: 0,
       showModal: false,
       showDialog: false,
       showHelp: false,
@@ -178,9 +183,6 @@ export default {
     }
   },
   methods: {
-    setOpen(index) {
-      this.isOpen = index;
-    },
     setEmptyPage() {
       if(this.quizzes.length){
         this.showEmptyPage = false;

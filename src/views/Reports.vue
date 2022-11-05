@@ -2,6 +2,8 @@
   <div>
     <h1>Reports</h1>
 
+    <a class="help" @click="showHelp=true"><font-awesome-icon icon="circle-question" /></a>
+
     <!-- show of no quizzes -->
     <div v-if="showEmptyPage" class="empty-page text-center">
       <img class="" src="@/assets/empty-page.png" alt="">
@@ -42,7 +44,7 @@
             
             <button type="button" class="btn-close" @click="showModal = !showModal"></button>
           </div>
-          <p>Questions where the system detected cheating behavior are marked with <font-awesome-icon icon="circle-exclamation" class="cheating"/> symbol.</p>
+          <p>A student will have red border if the system detected atleast one question with cheating behavior. You can see the specific questions the students possibly cheated through a danger mark <font-awesome-icon icon="circle-exclamation" class="cheating"/>.</p>
 
           <div v-if="isLoading" class="loading-container">
               <div class="spinner-border"  style="width: 4em;height:4em;"></div>
@@ -50,7 +52,7 @@
           
           <div v-else class="accordion mt-1" id="report-list">
 
-            <div class="accordion-item" v-for="(student, index) in this.quizActions" :key="index">
+            <div class="accordion-item" :class="{ detected: student.cheated }" v-for="(student, index) in this.quizActions" :key="index">
               <div class="accordion-header" :id="['heading'+index]">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#reportCollapse'+index" aria-expanded="false" :aria-controls="['reportCollapse'+index]">
                   <div class="me-auto p-2">
@@ -60,7 +62,7 @@
                 </button>
               </div>
               <div :id="['reportCollapse'+index]" class="accordion-collapse collapse" :aria-labelledby="['heading'+index]" data-bs-parent="#report-list">
-                <div class="accordion-body">
+                <div class="accordion-body py-1 px-2">
                   <table class="table table-bordered table-light  mouse-data">
                     <thead>
                        <tr>
@@ -91,7 +93,7 @@
                   </table>
                   <button class="btn btn-main" style="width: 250px;" @click="downloadPDF(index, student.student_name, student.actions)" :disabled="isDownloading">
                     <div v-if="isDownloading" class="spinner-border spinner-border-sm"></div>
-                    Download Activity Logs
+                    Download Actions Logs
                   </button>
                 </div>
               </div>
@@ -102,6 +104,81 @@
       </div>
     </teleport>
 
+    <!-- help modal -->
+    <HelpModal :showHelp="showHelp">
+      <template v-slot:head>
+        <h1>Need help?</h1>
+        <button type="button" class="btn-close action" @click="showHelp=false,isOpen=0">
+        </button>
+      </template>
+      <template v-slot:body>
+        <div class="help-body accordion" id="help-list">
+          <div class="accordion-item">
+            <div class="accordion-header" id="help-heading1">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#help-collapse1" aria-expanded="false" aria-controls="help-collapse1">
+                <span class="help-question">What can I see here?</span>
+              </button>
+            </div>
+            <div id="help-collapse1" class="accordion-collapse collapse mt-3" aria-labelledby="help-heading1" data-bs-parent="#help-list">
+              <div class="accordion-body">
+                <ol>
+                    <li>In the reports page, you can view all the quizzes you have created in a tabular format. Each row contains the quiz name, code, number of participants and a <strong>"View"</strong> button.</li><br>
+                    <li>When you click the view button, a window will pop out showing the reports from each student who took the quiz and their scores. A student will have red border if the system detected atleast one question with cheating behavior.</li><br>
+                    <li>You can click each student to show more information. Once expanded, you can see a table summarizing every input device events/actions. </li><br>
+                    <li>You can also see a <font-awesome-icon icon="circle-exclamation" class="cheating"/> danger mark for questions where the system detected a cheating behavior. </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" id="help-heading2">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#help-collapse2" aria-expanded="false" aria-controls="help-collapse2">
+                <span class="help-question">What does each event/action mean?</span>
+              </button>
+            </div>
+            <div id="help-collapse2" class="accordion-collapse collapse mt-3" aria-labelledby="help-heading2" data-bs-parent="#help-list">
+              <div class="accordion-body">
+                <ol>
+                    <li>The table you can see for every student contains the total count of each input device events per question done by the student while taking the quiz. </li><br>
+                    <ul>
+                        <li><strong>Focus</strong> is when the student goes back to the quiz taking page.</li>
+                        <li><strong>Blur</strong>, on the contrary, is when the student leaves the quiz taking page. This can be a switching window, opening a new tab, or clicking outside the page.</li>
+                        <li><strong>Copy</strong> is when the student copied a text inside the quiz taking page through a keyboard shortcut (crtl+c) or from the context menu when right clicking.</li>
+                        <li><strong>Paste</strong> is when the student pasted a text in the text box for fill-in-the-blank type questions. This can be done through a keyboard shortcut (crtl+v) or from the context menu when right clicking.</li>
+                        <li><strong>Left Click</strong> is simply left clicking using the mouse or touchpad.</li>
+                        <li><strong>Right Click</strong> is simply right clicking using the mouse or touchpad.</li>
+                        <li><strong>Double Click</strong> is clicking the mouse or touchpad twice in quick succession.</li>
+                    </ul><br>
+                    <li>These events/actions are used by system to detect cheating behavior of students while taking a quiz.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" id="help-heading3">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#help-collapse3" aria-expanded="false" aria-controls="help-collapse3">
+                <span class="help-question">How to view the input device logs?</span>
+              </button>
+            </div>
+            <div id="help-collapse3" class="accordion-collapse collapse mt-3" aria-labelledby="help-heading3" data-bs-parent="#help-list">
+              <div class="accordion-body">
+                <ol>
+                  <li>Open the reports modal and click the name of the student. Below the summary of events table, you can see the <strong>"Download Actions Log"</strong> button.</li><br>
+                  <li>Once clicked, it will download a PDF file containing all the input device events done by the student while taking the quiz.</li><br>
+                  <li>Inside the file, you can see a table containing the question number, what kind of event/action is done, date, and the time it is fired. </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+      <template v-slot:foot>
+        <button class="btn btn-main float-end" @click="showHelp=false">OK</button>
+      </template>
+    </HelpModal>
+
   </div>
 </template>
 
@@ -109,10 +186,13 @@
 import config from '../../config';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import HelpModal from "@/components/HelpModal.vue";
 
 export default {
+  components: { HelpModal },
   data() {
     return {
+      showHelp: false,
       showModal: false,
       showEmptyPage: false,
       isLoading: false,
@@ -161,6 +241,18 @@ export default {
           credentials: "include",
         });
         const data = await response.json();
+        
+        for(const student in data) {
+          let cheated = false;
+          for(const action in data[student].actions) {
+            if(data[student].actions[action].label) {
+              cheated = true;
+              break;
+            }
+          }
+          data[student].cheated = cheated;
+        }
+
         this.quizActions = data;
       } catch(e) {
         // console.log(e);
@@ -302,27 +394,12 @@ export default {
   height: 88% !important;
 }
 .accordion {
-  height: 85%;
+  height: 80%;
   overflow-y: auto;
-}
-.accordion-item {
-  border: 1px solid rgba(0, 0, 0, 0.2) !important;
-  box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.2);
-  margin-bottom: 10px;
-  margin-right: 10px;
-  min-height: 120px;
-  border-radius: 10px;
-  transition: 0.3s;
-}
-
-.accordion-item:hover {
-  box-shadow: 4px 4px 8px 0 rgba(0, 0, 0, 0.2);
-  cursor: pointer;
 }
 
 .detected {
-  border: 1px solid #950000;
-  background-color: rgb(255, 212, 212);
+  border: 3px solid #950000;
 }
 
 p {

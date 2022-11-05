@@ -149,6 +149,38 @@ select,textarea,input:focus {
     outline: none !important;
 }
 
+.accordion-button:focus {
+    box-shadow: none !important;
+}
+
+.accordion-button:not(.collapsed){
+    color: #212529 !important;
+    background-color: #fff !important;
+}
+
+.accordion-item {
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+    margin-right: 5px;
+    padding: 20px 30px;
+    border-radius: 10px;
+}
+
+.accordion-item:hover {
+    box-shadow: 4px 4px 8px 0 rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.accordion-body {
+    padding: 0 !important;
+}
+
+.accordion-button {
+    background-color: rgba(0, 0, 0, 0) !important;
+}
+
 .help {
     position: absolute;
     padding: inherit;
