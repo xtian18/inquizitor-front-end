@@ -231,7 +231,7 @@
                   <label class="mt-3">Answer:</label>
                   <!-- multiple choice -->
                   <div class="w-100" v-if="question_type === 'multiple-choice'">
-                    <div class="w-100 d-flex" v-for="(item, index) in choices" :key="index" selected>
+                    <div class="w-100 d-flex multiple-choice" v-for="(item, index) in choices" :key="index" selected>
                       <input type="radio" :id="index" name="choice" :value="index" v-model="selected_choice" @change="enableSave"/>
                       <label for="1" class="ms-2 w-100">
                         <input type="text" v-model="item.content" @keyup="enableSave"/>
@@ -296,7 +296,7 @@
                   <label class="mt-3">Answer:</label>
                   <!-- multiple choice -->
                   <div class="w-100" v-if="question_type === 'multiple-choice'">
-                    <div class="w-100 d-flex" v-for="(item, index) in choices" :key="index" selected>
+                    <div class="w-100 d-flex multiple-choice" v-for="(item, index) in choices" :key="index" selected>
                       <input type="radio" :id="index" name="choice" :value="index" v-model="selected_choice" :checked="item.is_correct"  @click="enableSave"/>
                       <label for="1" class="ms-2 w-100">
                         <input type="text" v-model="item.content" @keyup="enableSave"/>
@@ -847,42 +847,23 @@ input[type="text"] {
   margin-bottom: 10px;
   height: 40px;
 }
-input[type="radio"] {
+
+.question-type input[type="radio"] {
   transform: scale(2);
   position: relative;
-  top: 14px;
+  accent-color: #272A3F;
+}
+
+.multiple-choice input[type="radio"] {
+  transform: scale(2);
+  height: 15px !important;
+  margin: 0 auto !important;
+  position: relative;
+  top: 12px;
   left: -1px;
-  visibility: hidden;
+  accent-color: #272A3F;
 }
-input[type="radio"]:after {
-  width: 15px;
-  height: 15px;
-  border-radius: 15px;
-  top: 6px;
-  left: -2px;
-  position: relative;
-  background-color: #d1d3d1;
-  content: "";
-  display: inline-block;
-  visibility: visible;
-  border: 2px solid white;
-}
-input[type="radio"]:checked:after {
-  width: 15px;
-  height: 15px;
-  border-radius: 15px;
-  top: 6px;
-  left: -2px;
-  position: relative;
-  background-color: #272A3F;
-  content: "";
-  display: inline-block;
-  visibility: visible;
-  border: 2px solid white;
-}
-.question-type input[type="radio"] {
-  top: -20px;
-}
+
 .round {
   margin-left: 10px;
   background-color: #272A3F;
