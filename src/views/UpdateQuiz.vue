@@ -432,6 +432,7 @@ export default {
           this.questions.push(loadQuestions);
         }
         const result = await this.updateQuiz();
+        console.log(this.questions)
         this.$store.commit('SET_SHOW_LOADING_SCREEN', false);
       } catch(e) {
         // console.log(e);
