@@ -338,8 +338,9 @@ export default {
             } else if(filtered.double_click) {
               tempArray.push("double click");
             }
-            tempArray.push(action.time.slice(0,10));
-            tempArray.push(action.time.slice(11,19));
+            let localTime = new Date(action.time);
+            tempArray.push(localTime.toString().slice(4,16));
+            tempArray.push(localTime.toString().slice(16,24));
             this.actionLogs.push(tempArray);
           }
 
@@ -360,7 +361,7 @@ export default {
       doc.text(name, 54, 47);
 
       autoTable(doc, {
-        head: [['Question #', 'Action', 'Date', 'Time']],
+        head: [['Question #', 'Action', 'Date', 'Time (HH:mm:ss)']],
         body: this.actionLogs, styles: { halign: 'center' },
         startY: 55, 
         margin: 25.4
