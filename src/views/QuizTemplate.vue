@@ -82,6 +82,7 @@ export default {
       question_num: 1,
       current_question: '',
       current_question_id: 0,
+      current_question_id_index: 0,
       last_question_id: 0,
       attempt: null
     };
@@ -271,7 +272,13 @@ export default {
       }
       
       this.user_answer = '';
-      this.current_question_id++;
+
+      let index = this.questions_id.indexOf(this.current_question_id);
+      if(index >= 0 && index < this.questions_id.length - 1) {
+        this.current_question_id = this.questions_id[index + 1]
+      }     
+
+    //   this.current_question_id++;
       this.question_num++;
       this.setCurrentQuestion();
     },
