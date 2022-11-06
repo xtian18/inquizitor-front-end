@@ -53,7 +53,7 @@
     <!-- show if answer key is not yet available -->
     <div v-else class="empty-page text-center">
       <img class="" src="@/assets/empty-page.png" alt="">
-      <h3>Answer key is unvailable until</h3>
+      <h3>Answer key is unavailable until</h3>
       <h2 style="color: #3EB489; font-weight: 700">{{due_date}}</h2>
     </div>
 

@@ -28,7 +28,7 @@
     <div class="container">
       <div class="home-content">
         <p class="title">Welcome!</p>
-        <p class="subtitle">inQuizitor is a platform for conducting online assessments that allows easy creation of quiz for teachers and simple quiz taking for students. It also has a built-in cheating detection using machine learning.</p>
+        <p class="subtitle">inQuizitor is a platform that allows you to create quizzes to send out to students. It also offers cheating behavior detection among those who took the quiz.</p>
         <button class="btn btn-main" @click="this.$router.push('/signup')">Get Started</button>
       </div>
     </div>

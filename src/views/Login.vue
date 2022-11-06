@@ -65,7 +65,8 @@ export default {
         const check_token = await fetch(`${config.apiURL}/login/token`, {
           method: 'POST',
           credentials: 'include',
-          body: formData
+          body: formData,
+          async: false
         });
         const login = await check_token.json();
         if(check_token.ok) {
