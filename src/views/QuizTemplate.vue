@@ -156,6 +156,7 @@ export default {
         for (const question of this.quiz.questions) {
           this.questions_id.push(question.id);
         }
+        this.questions_id = this.questions_id.sort();
         const result = await this.loadQuestions();
         this.last_question_id = this.questions.slice(-1)[0].id;
         this.$store.commit('SET_SHOW_LOADING_SCREEN', false);

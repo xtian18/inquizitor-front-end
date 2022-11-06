@@ -111,6 +111,7 @@ export default {
         for (const question of this.current_quiz.questions) {
           this.questions_id.push(question.id);
         }
+        this.questions_id = this.questions_id.sort();
 
         const result = await this.loadQuestions();
 
