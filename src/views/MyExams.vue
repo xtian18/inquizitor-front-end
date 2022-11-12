@@ -208,7 +208,6 @@ export default {
         this.quizzes.sort((a, b) => {
           return a.id - b.id;
         })
-        console.log(this.quizzes);
         this.showLoadingScreen = false;
       } catch (e) {
         console.log(e);

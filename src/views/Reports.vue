@@ -237,6 +237,9 @@ export default {
         });
         const data = await response.json();
         this.quizzes = data;
+        this.quizzes.sort((a, b) => {
+          return a[0].id - b[0].id;
+        })
       } catch(e) {
         // console.log(e);
       }

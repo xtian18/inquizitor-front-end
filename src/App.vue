@@ -157,7 +157,7 @@ export default {
     }
   },
   created() {
-    console.log('Deployment for Thesis Defense')
+    console.log('Deployment for Thesis Defense (test 11/12 11:11)')
     this.getUser();
     window.addEventListener('blur', this.sendBlur);
     window.addEventListener('focus', this.sendFocus);

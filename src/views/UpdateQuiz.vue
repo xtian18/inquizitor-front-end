@@ -433,6 +433,10 @@ export default {
             credentials: "include"
           });
           const loadQuestions = await response.json();
+          loadQuestions.choices.sort((a, b) => {
+            return a.id - b.id;
+          })
+          console.log(loadQuestions);
           this.questions.push(loadQuestions);
         }
         const result = await this.updateQuiz();

@@ -114,12 +114,6 @@ export default {
       this.showInstruction = false;
       this.$store.commit('SET_QUIZ_STARTED', true);
     },
-    // handleFocusOut() {
-    //   this.$store.commit('SET_QUIZ_STARTED', false);
-    // },
-    // handleFocus() {
-    //   this.$store.commit('SET_QUIZ_STARTED', true);
-    // },
     async sendPaste() {
       if(this.is_taking) {
         let question_id = localStorage.question_id;
@@ -183,6 +177,10 @@ export default {
             credentials: "include"
           });
           const loadQuestions = await response.json();
+          loadQuestions.choices.sort((a, b) => {
+            return a.id - b.id;
+          })
+          console.log(loadQuestions);
           this.questions.push(loadQuestions);
           
         }
