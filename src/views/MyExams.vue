@@ -205,6 +205,9 @@ export default {
           credentials: "include",
         });
         this.quizzes = await loadQuiz.json();
+        this.quizzes.sort((a, b) => {
+          return a.id - b.id;
+        })
         console.log(this.quizzes);
         this.showLoadingScreen = false;
       } catch (e) {
