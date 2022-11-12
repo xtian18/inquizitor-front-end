@@ -1,5 +1,6 @@
 <template>
   <div>
+    <LoadingScreen v-if="showLoadingScreen"></LoadingScreen>
     <div class="titlebox">
       <h1>Quiz Result:</h1>
     </div>
@@ -61,21 +62,24 @@
 </template>
 
 <script>
-import config from '../../config'
+import config from '../../config';
+import LoadingScreen from '@/components/LoadingScreen.vue';
 
 export default {
+  components: { LoadingScreen },
   data() {
     return {
-        id: '',
-        code: '',
-        total_point: '',
-        quizzes: [],
-        current_quiz: [],
-        questions_id: [],
-        questions: [],
-        current_question : [],
-        is_due_date: false,
-        due_date: ''
+      showLoadingScreen: false,
+      id: '',
+      code: '',
+      total_point: '',
+      quizzes: [],
+      current_quiz: [],
+      questions_id: [],
+      questions: [],
+      current_question : [],
+      is_due_date: false,
+      due_date: ''
     };
   },
   methods: {
@@ -85,14 +89,14 @@ export default {
       var currentDate = new Date();
 
       if(currentDate >= due) {
-        this.is_due_date = true
+        this.is_due_date = true;
       } else {
-        this.is_due_date = false
+        this.is_due_date = false;
       }
-      this.$store.commit('SET_SHOW_LOADING_SCREEN', false);
+      this.showLoadingScreen = false;
     },
     async loadQuizzesResult() {
-      this.$store.commit('SET_SHOW_LOADING_SCREEN', true);
+      this.showLoadingScreen = true;
       try {
         const response = await fetch(`${config.apiURL}/quizzes/`, {
           method: "GET",

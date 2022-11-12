@@ -7,7 +7,6 @@ export default createStore({
         message: '',
         user: '',
         authenticated: false,
-        showLoadingScreen: false,
         quizStarted: false
     },
     mutations: {
@@ -19,9 +18,6 @@ export default createStore({
         },
         SET_AUTHENTICATED(state, authenticated) {
             state.authenticated = authenticated
-        },
-        SET_SHOW_LOADING_SCREEN(state, showLoadingScreen) {
-            state.showLoadingScreen = showLoadingScreen
         },
         SET_QUIZ_STARTED(state, quizStarted) {
           state.quizStarted = quizStarted
@@ -47,10 +43,8 @@ export default createStore({
                 } else {
                     commit('SET_AUTHENTICATED', false);
                 }
-                commit('SET_SHOW_LOADING_SCREEN', false);
             } catch (e) {
                 console.log(e);
-                commit('SET_SHOW_LOADING_SCREEN', false);
             }
         }
     },

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <LoadingScreen v-if="showLoadingScreen"></LoadingScreen>
     <h1>Activities</h1>
 
     <!-- show if no activites -->
@@ -28,12 +29,15 @@
 </template>
 
 <script>
-import config from '../../config'
+import config from '../../config';
+import LoadingScreen from '@/components/LoadingScreen.vue';
 
 export default {
+  components: { LoadingScreen },
   data() {
     return {
       showEmptyPage: false,
+      showLoadingScreen: false,
       total_point: 0,
       quizzes: []
     }
@@ -45,10 +49,10 @@ export default {
       } else {
         this.showEmptyPage = true;
       }
-      this.$store.commit('SET_SHOW_LOADING_SCREEN', false);
+      this.showLoadingScreen = false;
     },
     async loadQuizzes() {
-      this.$store.commit('SET_SHOW_LOADING_SCREEN', true);
+      this.showLoadingScreen = true;
       try {
         const response = await fetch(`${config.apiURL}/quizzes/`, {
           method: "GET",

@@ -69,7 +69,6 @@ export default {
         });
         const login = await check_token.json();
         if(check_token.ok) {
-          this.$store.commit('SET_SHOW_LOADING_SCREEN', true);
           this.is_loading = false;
           const response = await this.attempt(login);
           this.$router.push('/');

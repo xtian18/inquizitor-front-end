@@ -1,5 +1,6 @@
 <template>
   <div>
+    <LoadingScreen v-if="showLoadingScreen"></LoadingScreen>
     <!-- header -->
     <h1>My Quizzes > {{ this.name }}</h1>
 
@@ -330,12 +331,13 @@
 </template>
 
 <script>
-import config from '../../config'
-import DialogModal from "@/components/DialogModal.vue"
-import HelpModal from "@/components/HelpModal.vue"
+import config from '../../config';
+import DialogModal from "@/components/DialogModal.vue";
+import HelpModal from "@/components/HelpModal.vue";
+import LoadingScreen from '@/components/LoadingScreen.vue';
 
 export default {
-  components: { DialogModal, HelpModal },
+  components: { DialogModal, HelpModal, LoadingScreen },
   data() {
     return {
       //current quiz information
@@ -368,6 +370,7 @@ export default {
       showModalUpdate: false,
       showDialog: false,
       showHelp: false,
+      showLoadingScreen: false,
       isSaveEnabled: false,
       isNameEnabled: false,
       isDescEnabled: false,
@@ -390,7 +393,7 @@ export default {
   },
   methods: {
     async loadQuiz() {
-      this.$store.commit('SET_SHOW_LOADING_SCREEN', true);
+      this.showLoadingScreen = true;
       this.quiz = [];
       this.questions_id = [];
       this.questions = [];
@@ -412,7 +415,6 @@ export default {
           await this.questions_id.push(question.id)
         }
         this.questions_id = this.questions_id.sort();
-        console.log(this.questions_id)
         this.loadQuestions();
 
       } catch(e) {
@@ -434,8 +436,7 @@ export default {
           this.questions.push(loadQuestions);
         }
         const result = await this.updateQuiz();
-        console.log(this.questions)
-        this.$store.commit('SET_SHOW_LOADING_SCREEN', false);
+        this.showLoadingScreen = false;
       } catch(e) {
         // console.log(e);
       }

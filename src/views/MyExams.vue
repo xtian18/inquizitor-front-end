@@ -1,5 +1,6 @@
 <template>
   <div>
+    <LoadingScreen v-if="showLoadingScreen"></LoadingScreen>
     <h1>My Quizzes</h1>
 
     <a class="help" @click="showHelp=true"><font-awesome-icon icon="circle-question" /></a>
@@ -153,12 +154,13 @@
 </template>
 
 <script>
-import config from '../../config'
-import DialogModal from "@/components/DialogModal.vue"
-import HelpModal from "@/components/HelpModal.vue"
+import config from '../../config';
+import DialogModal from "@/components/DialogModal.vue";
+import HelpModal from "@/components/HelpModal.vue";
+import LoadingScreen from '@/components/LoadingScreen.vue';
 
 export default {
-  components: { DialogModal, HelpModal },
+  components: { DialogModal, HelpModal, LoadingScreen },
   data() {
     return {
       selected_quiz_id: '',
@@ -166,6 +168,7 @@ export default {
       showDialog: false,
       showHelp: false,
       showEmptyPage: false,
+      showLoadingScreen: false,
       isButtonEnabled: false,
       name: "",
       desc: "",
@@ -191,7 +194,7 @@ export default {
       }
     },
     async loadQuizzes() {
-      this.$store.commit('SET_SHOW_LOADING_SCREEN', true);
+      this.showLoadingScreen = true;
       try {
         const loadQuiz = await fetch(`${config.apiURL}/quizzes/`, {
           method: "GET",
@@ -202,10 +205,11 @@ export default {
           credentials: "include",
         });
         this.quizzes = await loadQuiz.json();
-        this.$store.commit('SET_SHOW_LOADING_SCREEN', false);
+        console.log(this.quizzes);
+        this.showLoadingScreen = false;
       } catch (e) {
         console.log(e);
-        this.$store.commit('SET_SHOW_LOADING_SCREEN', true);
+        this.showLoadingScreen = false;
       }
     },
     async createQuiz() {

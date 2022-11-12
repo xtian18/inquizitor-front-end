@@ -24,10 +24,6 @@
           </ul>
         </NavBar>
         <router-view/>
-
-        <teleport to="#app">
-          <LoadingScreen v-if="showLoadingScreen"></LoadingScreen>
-        </teleport>
     </div>
 </template>
 
@@ -35,19 +31,12 @@
 import '@/assets/main.css'
 import config from '../config'
 import NavBar from '@/components/NavBar.vue'
-import LoadingScreen from '@/components/LoadingScreen.vue'
 
 export default {
-  components: { NavBar, LoadingScreen },
+  components: { NavBar },
   data() {
     return {
-      counter: 0,
       is_double_click: false,
-      focus_in_progress: false,
-      blur_in_progress: false,
-      in_progress: false,
-      is_inside: true,
-      is_outside: false,
     }
   },
   computed: {
@@ -81,47 +70,53 @@ export default {
       }
     },
     sendLeftClick() {
-      if(this.is_taking) {
+      if(this.is_taking && this.quizStarted) {
         let question_id = localStorage.question_id;
         this.timer = setTimeout(() => {
           if(!this.is_double_click) {
-            this.sendInputData('left_click', question_id)
+            this.sendInputData('left_click', question_id);
+            console.log("left click");
           }
         }, 500);
       }
     },
     sendDoubleClick() {
-      if(this.is_taking) {
+      if(this.is_taking && this.quizStarted) {
         let question_id = localStorage.question_id;
         this.is_double_click = true
-        this.sendInputData('double_click', question_id)
+        this.sendInputData('double_click', question_id);
+        console.log("double click");
         const timer = setTimeout(() => {
           this.is_double_click = false
         }, 500);
       }
     },
     sendRightClick() {
-      if(this.is_taking) {
+      if(this.is_taking && this.quizStarted) {
         let question_id = localStorage.question_id;
-        this.sendInputData('right_click', question_id)
+        this.sendInputData('right_click', question_id);
+        console.log("right click");
       }
     },
     async sendFocus() {
-      if(this.is_taking) {
+      if(this.is_taking && this.quizStarted) {
         let question_id = localStorage.question_id;
-        const focus = await this.sendInputData('focus', question_id)
+        const focus = await this.sendInputData('focus', question_id);
+        console.log("focus");
       }
     },
     async sendBlur() {
-      if(this.is_taking) {
+      if(this.is_taking && this.quizStarted) {
         let question_id = localStorage.question_id;
-        const blur = await this.sendInputData('blur', question_id)
+        const blur = await this.sendInputData('blur', question_id);
+        console.log("blur");
       }
     },
     sendCopy() {
-      if(this.is_taking) {
+      if(this.is_taking && this.quizStarted) {
         let question_id = localStorage.question_id;
-        this.sendInputData('copy_', question_id)
+        this.sendInputData('copy_', question_id);
+        console.log("copy");
       }
     },
     async handleLogout() {
@@ -162,7 +157,7 @@ export default {
     }
   },
   created() {
-    console.log('Deployment for Evaluation')
+    console.log('Deployment for Thesis Defense')
     this.getUser();
     window.addEventListener('blur', this.sendBlur);
     window.addEventListener('focus', this.sendFocus);

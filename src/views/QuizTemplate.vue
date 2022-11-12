@@ -1,6 +1,6 @@
 <template>
-  <div class="container" v-click-away="handleFocusOut" @click="handleFocus">
-
+  <div class="container">
+    <LoadingScreen v-if="showLoadingScreen"></LoadingScreen>
     <!-- instruction modal -->
     <teleport to="#app">
       <div class="modal-overlay" v-if="showInstruction">
@@ -12,7 +12,7 @@
             <p>Read and answer each question carefully. Once you click next, you can no longer go back to the previous questions. Good Luck!</p>
             </div>
             <div class="modal-foot text-center">
-                <button class="btn btn-main" @click="showInstruction=false">I understand</button>
+                <button class="btn btn-main" @click="closeInstruction">I understand</button>
             </div>
         </div>
       </div>
@@ -63,12 +63,15 @@
 </template>
 
 <script>
-import config from '../../config'
+import config from '../../config';
+import LoadingScreen from '@/components/LoadingScreen.vue';
 
 export default {
+  components: { LoadingScreen },
   data() {
     return {
-      showInstruction: true,
+      showInstruction: false,
+      showLoadingScreen: false,
       isAgree: false,
       progress: 0,
       user_answer: '',
@@ -82,7 +85,6 @@ export default {
       question_num: 1,
       current_question: '',
       current_question_id: 0,
-      current_question_id_index: 0,
       last_question_id: 0,
       attempt: null
     };
@@ -108,12 +110,16 @@ export default {
     }
   },
   methods: {
-    handleFocusOut() {
-      this.$store.commit('SET_QUIZ_STARTED', false);
-    },
-    handleFocus() {
+    closeInstruction() {
+      this.showInstruction = false;
       this.$store.commit('SET_QUIZ_STARTED', true);
     },
+    // handleFocusOut() {
+    //   this.$store.commit('SET_QUIZ_STARTED', false);
+    // },
+    // handleFocus() {
+    //   this.$store.commit('SET_QUIZ_STARTED', true);
+    // },
     async sendPaste() {
       if(this.is_taking) {
         let question_id = localStorage.question_id;
@@ -129,7 +135,6 @@ export default {
             credentials: "include",
             body: JSON.stringify(data)
           });
-          console.log(await response.json())
         } catch(e) {
           // console.log(e)
         }
@@ -139,7 +144,7 @@ export default {
       this.quiz = [];
       this.questions_id = [];
       this.questions = [];
-      this.$store.commit('SET_SHOW_LOADING_SCREEN', true);
+      this.showLoadingScreen = true;
       try {
         const response = await fetch(`${config.apiURL}/quizzes/${this.code}`, {
             method: "GET",
@@ -159,10 +164,11 @@ export default {
         this.questions_id = this.questions_id.sort();
         const result = await this.loadQuestions();
         this.last_question_id = this.questions.slice(-1)[0].id;
-        this.$store.commit('SET_SHOW_LOADING_SCREEN', false);
+        this.showLoadingScreen = false;
+        this.showInstruction = true;
       } catch (e) {
         // console.log(e);
-        this.$store.commit('SET_SHOW_LOADING_SCREEN', false);
+        this.showLoadingScreen = false;
       }
     },
     async loadQuestions() {

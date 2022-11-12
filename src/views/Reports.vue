@@ -1,11 +1,12 @@
 <template>
   <div>
+    <LoadingScreen v-if="showLoadingScreen"></LoadingScreen>
     <h1>Reports</h1>
 
     <a class="help" @click="showHelp=true"><font-awesome-icon icon="circle-question" /></a>
 
     <!-- show of no quizzes -->
-    <div v-if="showEmptyPage" class="empty-page text-center">
+    <div v-if="showEmptyPage" class="empty-modal text-center">
       <img class="" src="@/assets/empty-page.png" alt="">
       <h3>You haven't created any quizzes yet</h3>
       <h2 class="empty" @click="() => this.$router.push('/my-quizzes')">Go to My Quizzes</h2>
@@ -25,10 +26,10 @@
           </thead>
           <tbody>
             <tr v-for="(quiz,index) in quizzes" :key="quiz.id">
-              <td>{{ quiz.name }}</td>
-              <td>{{ quiz.quiz_code }}</td>
-              <td>{{ quiz.number_of_participants }}</td>
-              <td><button class="btn btn-main" @click="openModal(index, quiz.id)">View</button></td>
+              <td>{{ quiz[0].name }}</td>
+              <td>{{ quiz[0].quiz_code }}</td>
+              <td>{{ quiz.length - 1 }}</td>
+              <td><button class="btn btn-main" @click="openModal(index)">View</button></td>
             </tr>
           </tbody>
         </table>
@@ -38,7 +39,7 @@
     <!-- reports modal -->
     <teleport to="#app">
       <div class="modal-overlay" v-if="showModal">
-        <div class="modal-container">
+        <div class="modal-container d-flex flex-column">
           <div class="d-flex">
             <h1 class="me-auto">{{ this.quiz_name }}</h1>
             
@@ -46,11 +47,18 @@
           </div>
           <p>A student will have red border if the system detected atleast one question with cheating behavior. Questions where the system detected cheating behavior are marked with <font-awesome-icon icon="circle-exclamation" class="cheating"/> symbol. (Focus refers to going back to the quiz taking page while blur refers to leaving the quiz taking page)</p>
 
-          <div v-if="isLoading" class="loading-container">
-              <div class="spinner-border"  style="width: 4em;height:4em;"></div>
+          <div v-if="isLoading" class="loading-container flex-grow-1">
+            <div class="spinner-border"  style="width: 4em;height:4em;"></div>
+          </div>
+
+          <div v-else-if="isEmpty" class="empty-modal text-center flex-grow-1">
+            <div>
+              <img class="" src="@/assets/empty-page.png" alt="">
+              <h3>No participants yet</h3>
+            </div>
           </div>
           
-          <div v-else class="accordion mt-1" id="report-list">
+          <div v-else class="accordion mt-1 flex-grow-1" id="report-list">
 
             <div class="accordion-item" :class="{ detected: student.cheated }" v-for="(student, index) in this.quizActions" :key="index">
               <div class="accordion-header" :id="['heading'+index]">
@@ -63,7 +71,7 @@
               </div>
               <div :id="['reportCollapse'+index]" class="accordion-collapse collapse" :aria-labelledby="['heading'+index]" data-bs-parent="#report-list">
                 <div class="accordion-body py-1 px-2">
-                  <table class="table table-bordered table-light  mouse-data">
+                  <table class="table table-bordered table-light mouse-data">
                     <thead>
                        <tr>
                         <th width="20%"></th>
@@ -187,16 +195,19 @@ import config from '../../config';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import HelpModal from "@/components/HelpModal.vue";
+import LoadingScreen from '@/components/LoadingScreen.vue';
 
 export default {
-  components: { HelpModal },
+  components: { HelpModal, LoadingScreen },
   data() {
     return {
       showHelp: false,
       showModal: false,
       showEmptyPage: false,
+      showLoadingScreen: false,
       isLoading: false,
       isDownloading: false,
+      isEmpty: true,
       quizzes: [],
       quiz_id: '',
       quiz_name: '',
@@ -211,12 +222,12 @@ export default {
       } else {
         this.showEmptyPage = true;
       }
-      this.$store.commit('SET_SHOW_LOADING_SCREEN', false);
+    this.showLoadingScreen = false;
     },
     async loadQuizzes() {
-      this.$store.commit('SET_SHOW_LOADING_SCREEN', true);
+    this.showLoadingScreen = true;
       try {
-        const response = await fetch(`${config.apiURL}/quizzes/`, {
+        const response = await fetch(`${config.apiURL}/quizzes/results`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -259,30 +270,13 @@ export default {
       }
       this.isLoading = false;
     },
-    async loadParticipants() {
-      let index = 0;
-      for(const quiz of this.quizzes) {
-        try {
-          const response = await fetch(`${config.apiURL}/quizzes/${quiz.id}/results`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Credetials": "true",
-            },
-            credentials: "include",
-          });
-          const data = await response.json();
-          this.quizzes[index].number_of_participants = data.length;
-          index++;
-        } catch(e) {
-          // console.log(e);
-        }
-      }
-    },
     openModal(index){
       this.resetValues();
-      this.quiz_id = this.quizzes[index].id;
-      this.quiz_name = this.quizzes[index].name;
+      this.quiz_id = this.quizzes[index][0].id;
+      this.quiz_name = this.quizzes[index][0].name;
+      if(this.quizzes[index].length > 1) {
+        this.isEmpty = false;
+      }
       this.showModal = true;
       this.isLoading = true;
       this.loadQuizActions();
@@ -291,6 +285,7 @@ export default {
       this.quizActions = [];
       this.quiz_id = '',
       this.quiz_name = '';
+      this.isEmpty = true;
     },
     async downloadPDF(id, name, actions) {
       this.isDownloading = true;
@@ -374,13 +369,31 @@ export default {
   },
   async created() {
     const result = await this.loadQuizzes();
-    const result2 = await this.loadParticipants();
     this.setEmptyPage();
   }
 }
 </script>
 
 <style scoped>
+.empty-modal {
+  width: 100%;
+  position: relative;
+}
+
+.empty-modal > div {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
+}
+
+.empty-modal img {
+  width: 40%;
+  min-width: 200px;
+}
+
 .loading-container {
   margin: 0;
   position: absolute;
@@ -391,11 +404,10 @@ export default {
 }
 
 .modal-container {
-  /* overflow: hidden; */
   height: 88% !important;
 }
+
 .accordion {
-  height: 80%;
   overflow-y: auto;
 }
 
@@ -440,16 +452,6 @@ p.cheating {
   overflow-y: auto;
 }
 
-.table-wrapper2 {
-  width: 100%;
-  margin-top: 10px;
-  padding-right: 5px;
-  height: auto;
-  max-height: 400px;
-  margin-bottom: 10px;
-  overflow: auto;
-}
-
 table {
   table-layout: fixed;
   word-wrap: break-word;
@@ -482,7 +484,6 @@ table.mouse-data th {
 .hide-cell {
   background: transparent !important;
   border-style: hidden;
-  /* color: black !important; */
 }
 
 .cheating {
@@ -496,6 +497,15 @@ table.mouse-data th {
 }
 
 @media only screen and (max-width: 992px) {
+  table.mouse-data {
+    display: block;
+    max-width: -moz-fit-content;
+    max-width: fit-content;
+    margin: 0 auto;
+    overflow-x: auto;
+    white-space: nowrap;
+    margin-bottom: 10px;
+  }
   tr .btn {
     width: 80% !important;
   }
