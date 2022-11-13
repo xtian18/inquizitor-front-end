@@ -180,7 +180,6 @@ export default {
           loadQuestions.choices.sort((a, b) => {
             return a.id - b.id;
           })
-          console.log(loadQuestions);
           this.questions.push(loadQuestions);
           
         }

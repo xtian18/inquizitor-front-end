@@ -1,6 +1,6 @@
 <template>
-    <div class="error">
-        <p class="text-center"><slot></slot></p>   
+    <div class="error text-center">
+        <span><slot></slot></span>   
     </div>
 </template>
 
@@ -13,11 +13,9 @@ export default {
 .error {
     background-color: #f5cfcf;
     padding: 10px;
-    /* border: 1px solid #740505; */
-    /* border-radius: 5px; */
 }
 
-.error p {
+.error span {
     color: #db3743;
     font-weight: 500;
 }

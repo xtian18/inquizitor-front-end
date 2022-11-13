@@ -180,11 +180,6 @@ export default {
       quizzes: [],
     };
   },
-  computed: {
-    showLoadingScreen() {
-      return this.$store.state.showLoadingScreen
-    }
-  },
   methods: {
     setEmptyPage() {
       if(this.quizzes.length){
@@ -192,6 +187,7 @@ export default {
       } else {
         setTimeout(() => this.showEmptyPage = true, 100)
       }
+      this.showLoadingScreen = false;
     },
     async loadQuizzes() {
       this.showLoadingScreen = true;
@@ -208,10 +204,9 @@ export default {
         this.quizzes.sort((a, b) => {
           return a.id - b.id;
         })
-        this.showLoadingScreen = false;
+        
       } catch (e) {
         console.log(e);
-        this.showLoadingScreen = false;
       }
     },
     async createQuiz() {
@@ -284,7 +279,6 @@ export default {
     },
   },
   async created() {
-    // setTimeout(await this.loadQuizzes(), 5000);
     const result = await this.loadQuizzes();
     this.setEmptyPage();
   },
