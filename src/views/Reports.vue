@@ -338,9 +338,12 @@ export default {
             }
             console.log(action.time)
             let localTime = new Date(action.time);
-            console.log(localTime)
-            tempArray.push(localTime.toString().slice(4,16));
-            tempArray.push(localTime.toString().slice(16,24));
+            console.log(localTime.toLocaleString())
+            let dateSplitted = localTime.toLocaleString().split(", ")
+            tempArray.push(dateSplitted[0]);
+            tempArray.push(dateSplitted[1]);
+            // tempArray.push(localTime.toString().slice(4,16));
+            // tempArray.push(localTime.toString().slice(16,24));
             this.actionLogs.push(tempArray);
           }
 
@@ -361,7 +364,7 @@ export default {
       doc.text(name, 54, 47);
 
       autoTable(doc, {
-        head: [['Question #', 'Action', 'Date', 'Time (HH:mm:ss)']],
+        head: [['Question #', 'Action', 'Date', 'Time']],
         body: this.actionLogs, styles: { halign: 'center' },
         startY: 55, 
         margin: 25.4

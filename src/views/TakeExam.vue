@@ -12,7 +12,7 @@
         </div>
         <div v-if="is_due_date" class="mb-2">
           <ErrorMessage>
-            The quiz is passed due date.
+            The quiz is past the due date.
           </ErrorMessage>
         </div>
         <div v-if="is_empty" class="mb-2">
