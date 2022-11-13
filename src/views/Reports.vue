@@ -336,7 +336,9 @@ export default {
             } else if(filtered.double_click) {
               tempArray.push("double click");
             }
+            console.log(action.time)
             let localTime = new Date(action.time);
+            console.log(localTime)
             tempArray.push(localTime.toString().slice(4,16));
             tempArray.push(localTime.toString().slice(16,24));
             this.actionLogs.push(tempArray);
