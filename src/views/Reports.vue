@@ -45,7 +45,7 @@
             
             <button type="button" class="btn-close" @click="showModal = !showModal"></button>
           </div>
-          <p>A student will have red border if the system detected atleast one question with cheating behavior. Questions where the system detected cheating behavior are marked with <font-awesome-icon icon="circle-exclamation" class="cheating"/> symbol. (Focus refers to going back to the quiz taking page while blur refers to leaving the quiz taking page)</p>
+          <p>A student will have red border if the system detected atleast one question with cheating behavior. Questions where the system detected cheating behavior are marked with <font-awesome-icon icon="circle-exclamation" class="cheating"/> symbol.</p>
 
           <div v-if="isLoading" class="loading-container flex-grow-1">
             <div class="spinner-border"  style="width: 4em;height:4em;"></div>
@@ -336,14 +336,11 @@ export default {
             } else if(filtered.double_click) {
               tempArray.push("double click");
             }
-            console.log(action.time)
-            let localTime = new Date(action.time);
-            console.log(localTime.toLocaleString())
-            let dateSplitted = localTime.toLocaleString().split(", ")
+            let datetime = new Date(action.time);
+            let localTime = datetime.toLocaleString('en-US', { timeZone: 'Asia/Manila' });
+            let dateSplitted = localTime.toLocaleString().split(", ");
             tempArray.push(dateSplitted[0]);
             tempArray.push(dateSplitted[1]);
-            // tempArray.push(localTime.toString().slice(4,16));
-            // tempArray.push(localTime.toString().slice(16,24));
             this.actionLogs.push(tempArray);
           }
 
