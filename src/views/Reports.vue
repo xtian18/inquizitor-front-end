@@ -337,7 +337,9 @@ export default {
               tempArray.push("double click");
             }
             let datetime = new Date(action.time);
+            console.log(datetime)
             let localTime = datetime.toLocaleString('en-US', { timeZone: 'Asia/Manila' });
+            console.log(localTime)
             let dateSplitted = localTime.toLocaleString().split(", ");
             tempArray.push(dateSplitted[0]);
             tempArray.push(dateSplitted[1]);
