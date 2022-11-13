@@ -336,7 +336,10 @@ export default {
             } else if(filtered.double_click) {
               tempArray.push("double click");
             }
-            let datetime = new Date(action.time);
+            console.log(action.time)
+            let date = action.time.slice(0,10)
+            let time = action.time.slice(11,19)
+            let datetime = new Date(Date.parse(date + " " + time + " GMT+0000"))
             console.log(datetime)
             let localTime = datetime.toLocaleString('en-US', { timeZone: 'Asia/Manila' });
             console.log(localTime)
