@@ -1,11 +1,12 @@
 <template>
   <div class="sidebar">
     <div>
+      <slot name="sidebar-profile"></slot>
       <ul>
         <li>   
           <router-link :to="{name: 'Dashboard'}"><font-awesome-icon icon="house-chimney" /><span>Dashboard</span></router-link>
         </li>
-        <slot></slot>
+        <slot name="sidebar-items"></slot>
         </ul>
     </div>
   </div>
@@ -27,25 +28,25 @@ export default {
     transition-property: min-width font-size;
 }
 
-@media only screen and (max-width: 768px){
-    .sidebar{
-        min-width: 80px;
-        font-size: 20px;
-    }
-    .sidebar span{
-        display: none;
-    }
-}
-
-.sidebar img {
+.sidebar .profile img {
     width: 150px;
     height: 150px;
-    border-radius: 100px;
+    border-radius: 50%;
     margin-bottom: 10px;
+    border: 8px solid #FFFFFF;
 }
 
-.sidebar h5 {
+.sidebar .profile h5 {
     color: white;
+    margin-bottom: -5px;
+}
+
+.sidebar .profile span {
+    color: white;
+    font-size: 0.9em;
+}
+
+.sidebar .profile {
     margin-bottom: 50px;
 }
 
@@ -79,5 +80,17 @@ export default {
 
 .sidebar .active {
     background-color: #363A59;
+}
+@media only screen and (max-width: 768px){
+    .sidebar{
+        min-width: 80px;
+        font-size: 20px;
+    }
+    .sidebar span{
+        display: none;
+    }
+    .sidebar .profile {
+        display: none;
+    }
 }
 </style>

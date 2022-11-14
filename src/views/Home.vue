@@ -3,21 +3,39 @@
   <div v-if="this.$store.state.authenticated" class="w-100 d-flex page-content">
     <!-- Side bar if account tyoe is student -->
     <SideBar v-if="user.is_student">
-      <li>
-        <router-link :to="{name: 'Take Quiz'}" :class="{active: this.$route.path.slice(0,11) === '/take-quiz/'}"><font-awesome-icon icon="file-signature" title="Take Quiz" /><span>Take Quiz</span></router-link>
-      </li>
-      <li>
-        <router-link :to="{name: 'Activities'}" :class="{active: this.$route.path.slice(0,12) === '/activities/'}"><font-awesome-icon icon="folder-open" title="Activities" /><span>Activities</span></router-link>
-      </li>
+      <template v-slot:sidebar-profile>
+        <div class="profile text-center">
+          <img src="@/assets/student-icon.png" alt="">
+          <h5>{{ user.full_name }}</h5>
+          <span>Student</span>
+        </div>
+      </template>
+      <template v-slot:sidebar-items>
+        <li>
+          <router-link :to="{name: 'Take Quiz'}" :class="{active: this.$route.path.slice(0,11) === '/take-quiz/'}"><font-awesome-icon icon="file-signature" title="Take Quiz" /><span>Take Quiz</span></router-link>
+        </li>
+        <li>
+          <router-link :to="{name: 'Activities'}" :class="{active: this.$route.path.slice(0,12) === '/activities/'}"><font-awesome-icon icon="folder-open" title="Activities" /><span>Activities</span></router-link>
+        </li>
+      </template>
     </SideBar>
     <!-- Side bar if account type is teacher -->
     <SideBar v-if="user.is_teacher">
-      <li>
-        <router-link :to="{name: 'My Quizzes'}" :class="{active: this.$route.path.slice(0,12) === '/my-quizzes/'}"><font-awesome-icon icon="server" title="My Quizzes" /><span>My Quizzes</span></router-link>
-      </li>
-      <li>
-        <router-link :to="{name: 'Reports'}"><font-awesome-icon icon="line-chart" title="Reports" /><span>Reports</span></router-link>
-      </li>
+      <template v-slot:sidebar-profile>
+        <div class="profile text-center">
+          <img src="@/assets/teacher-icon.png" alt="">
+          <h5>{{ user.full_name }}</h5>
+          <span>Teacher</span>
+        </div>
+      </template>
+      <template v-slot:sidebar-items>
+        <li>
+          <router-link :to="{name: 'My Quizzes'}" :class="{active: this.$route.path.slice(0,12) === '/my-quizzes/'}"><font-awesome-icon icon="server" title="My Quizzes" /><span>My Quizzes</span></router-link>
+        </li>
+        <li>
+          <router-link :to="{name: 'Reports'}"><font-awesome-icon icon="line-chart" title="Reports" /><span>Reports</span></router-link>
+        </li>
+      </template>
     </SideBar>
     <router-view class="main-content"/>
   </div>
